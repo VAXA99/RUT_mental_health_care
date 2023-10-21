@@ -2,8 +2,10 @@ package com.rut_mental_health_care;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 @SpringBootApplication
+@EnableJpaAuditing
 public class RutMentalHealthCareApplication {
 
     public static void main(String[] args) {

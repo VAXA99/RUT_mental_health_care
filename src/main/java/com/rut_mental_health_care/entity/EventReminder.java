@@ -9,10 +9,19 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Tag {
+public class EventReminder {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true)
-    private String description;
+    @ManyToOne
+    private User user;
+
+    @ManyToOne
+    private EventNotification eventNotification;
+
+    @Column(nullable = false)
+    private Integer reminderCount;
+
+    @Column(nullable = false)
+    private Integer reminder_interval;
 }

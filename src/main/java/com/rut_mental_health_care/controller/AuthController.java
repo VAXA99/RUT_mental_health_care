@@ -1,10 +1,10 @@
 package com.rut_mental_health_care.controller;
 
-import com.rut_mental_health_care.entity.user.User;
+import com.rut_mental_health_care.entity.User;
 import com.rut_mental_health_care.security.JwtService;
 import com.rut_mental_health_care.security.request.AuthRequest;
 import com.rut_mental_health_care.security.request.SignUpRequest;
-import com.rut_mental_health_care.service.user.UserDetailsServiceImpl;
+import com.rut_mental_health_care.service.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -42,14 +42,14 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Choose different email");
         }
 
-        User u = new User();
-        u.setUsername(signUpRequest.getUsername());
-        u.setEmail(signUpRequest.getEmail());
-        u.setPassword(signUpRequest.getPassword());
-        u.setRoles(signUpRequest.getRoles());
+        User user = new User();
+        user.setUsername(signUpRequest.getUsername());
+        user.setEmail(signUpRequest.getEmail());
+        user.setPassword(signUpRequest.getPassword());
+        user.setRoles(signUpRequest.getRoles());
 
 
-        service.addUser(u);
+        service.addUser(user);
 
         return ResponseEntity.ok("Success, User Signed Up Successfully");
     }

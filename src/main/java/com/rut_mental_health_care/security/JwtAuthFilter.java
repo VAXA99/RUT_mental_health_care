@@ -1,6 +1,6 @@
 package com.rut_mental_health_care.security;
 
-import com.rut_mental_health_care.service.user.UserDetailsServiceImpl;
+import com.rut_mental_health_care.service.UserDetailsServiceImpl;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

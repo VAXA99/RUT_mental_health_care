@@ -1,6 +1,6 @@
 package com.rut_mental_health_care.security;
 
-import com.rut_mental_health_care.service.user.UserDetailsServiceImpl;
+import com.rut_mental_health_care.service.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -35,7 +35,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http.csrf().disable()
                 .authorizeHttpRequests()
-                .requestMatchers("/auth/welcome", "/auth/signUp", "/auth/signIn").permitAll()
+                .requestMatchers("/auth/welcome", "/auth/signUp", "/auth/signIn", "/consultations/new"   ).permitAll()
                 .and()
                 .authorizeHttpRequests().requestMatchers("/auth/user/**").authenticated()
                 .and()

@@ -1,6 +1,6 @@
 package com.rut_mental_health_care.security;
 
-import com.rut_mental_health_care.entity.user.User;
+import com.rut_mental_health_care.entity.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

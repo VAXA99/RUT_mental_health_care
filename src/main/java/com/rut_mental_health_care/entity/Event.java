@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 
@@ -12,23 +11,22 @@ import java.time.LocalDateTime;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Comment {
+public class Event {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    private User user;
+    @Column(unique = true, nullable = false)
+    private String name;
 
     @ManyToOne
-    private Post post;
+    private EventType eventType;
 
     @ManyToOne
-    private Comment parrentComment;
+    private Location eventLocation;
 
     @Column(nullable = false)
-    private String content;
+    private LocalDateTime eventStartsAt;
 
-    @CreationTimestamp
-    @Column(updatable = false)
-    private LocalDateTime createdAt;
+    @Column(nullable = false)
+    private LocalDateTime eventEndsAt;
 }
