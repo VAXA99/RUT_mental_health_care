@@ -17,12 +17,15 @@ public class Comment {
     private Long id;
 
     @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     @ManyToOne
+    @JoinColumn(name = "post_id", nullable = false)
     private Post post;
 
     @ManyToOne
+    @JoinColumn(name = "parrent_comment_id", nullable = false)
     private Comment parrentComment;
 
     @Column(nullable = false)

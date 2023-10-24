@@ -14,9 +14,11 @@ public class EventReminder {
     private Long id;
 
     @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     @ManyToOne
+    @JoinColumn(name = "event_notification_id", nullable = false)
     private EventNotification eventNotification;
 
     @Column(nullable = false)

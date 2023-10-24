@@ -19,9 +19,11 @@ public class Event {
     private String name;
 
     @ManyToOne
+    @JoinColumn(name = "event_type_id", nullable = false)
     private EventType eventType;
 
     @ManyToOne
+    @JoinColumn(name = "event_location_id", nullable = false)
     private Location eventLocation;
 
     @Column(nullable = false)
