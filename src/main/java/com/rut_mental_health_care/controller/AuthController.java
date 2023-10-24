@@ -4,7 +4,7 @@ import com.rut_mental_health_care.entity.User;
 import com.rut_mental_health_care.security.JwtService;
 import com.rut_mental_health_care.security.request.AuthRequest;
 import com.rut_mental_health_care.security.request.SignUpRequest;
-import com.rut_mental_health_care.service.UserDetailsServiceImpl;
+import com.rut_mental_health_care.service.user.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

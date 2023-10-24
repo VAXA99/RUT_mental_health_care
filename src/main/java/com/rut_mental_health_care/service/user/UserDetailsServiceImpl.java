@@ -1,7 +1,7 @@
-package com.rut_mental_health_care.service;
+package com.rut_mental_health_care.service.user;
 
 import com.rut_mental_health_care.entity.User;
-import com.rut_mental_health_care.repository.user.UserRepository;
+import com.rut_mental_health_care.repository.UserRepository;
 import com.rut_mental_health_care.security.UserDetailsImpl;
 import org.springframework.security.core.userdetails.UserDetailsService;
 

@@ -1,6 +1,6 @@
 package com.rut_mental_health_care.security;
 
-import com.rut_mental_health_care.service.UserDetailsServiceImpl;
+import com.rut_mental_health_care.service.user.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
