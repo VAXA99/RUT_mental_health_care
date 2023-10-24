@@ -34,7 +34,7 @@ public class AuthController {
     }
 
     @PostMapping("/signUp")
-    ResponseEntity<?> signup(@RequestBody SignUpRequest signUpRequest) {
+    public ResponseEntity<?> signup(@RequestBody SignUpRequest signUpRequest) {
         if (service.existsUserByUsername(signUpRequest.getUsername())) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Choose different name");
         }

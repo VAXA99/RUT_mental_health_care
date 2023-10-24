@@ -51,14 +51,13 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<Comment> getComments(Long postId) {
-        return null;
+    public List<Comment> getComments(Post post) {
+        return commentRepository.findCommentByPost(post);
     }
 
     @Override
     @Async
-    public void likePost(Post post, Long userId) {
-        User user = userRepository.findById(userId).orElse(null);
+    public void likePost(Post post, User user) {
         Like existingLike = likeRepository.findByPostAndUser(post, user);
         if (hasUserLikedPost(post, user)) {
             likeRepository.delete(existingLike);
@@ -78,8 +77,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     @Async
-    public void dislikePost(Post post, Long userId) {
-        User user = userRepository.findById(userId).orElse(null);
+    public void dislikePost(Post post, User user) {
         Like existingLike = likeRepository.findByPostAndUser(post, user);
         if (hasUserLikedPost(post, user)) {
             likeRepository.delete(existingLike);
@@ -100,5 +98,9 @@ public class PostServiceImpl implements PostService {
         commentRepository.save(comment);
     }
 
-
+    @Override
+    @Async
+    public void writePost(Post post) {
+        postRepository.save(post);
+    }
 }

@@ -21,10 +21,10 @@ public class Post {
     @ManyToOne
     private User user;
 
-    @Column(nullable = false)
+    @Column
     private String title;
 
-    @Column(nullable = false)
+    @Column
     private String content;
 
     @CreationTimestamp
