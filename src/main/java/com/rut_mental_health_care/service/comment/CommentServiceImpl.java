@@ -59,5 +59,6 @@ public class CommentServiceImpl implements CommentService {
         Post post = comment.getPost();
         reply.setPost(post);
         reply.setParrentComment(comment);
+        commentRepository.save(reply);
     }
 }
