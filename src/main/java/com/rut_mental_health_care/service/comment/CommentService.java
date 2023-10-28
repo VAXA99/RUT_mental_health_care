@@ -7,12 +7,8 @@ import org.springframework.stereotype.Service;
 @Service
 public interface CommentService {
 
-    void writeComment(Comment comment);
+    void writeComment(Comment comment, Long postId);
 
-    void likeComment(Comment comment, User user);
-
-    void dislikeComment(Comment comment, User user);
-
-    void replyToComment(Comment comment, Comment newComment);
+    void replyToComment(Comment comment, Comment reply);
 
 }
