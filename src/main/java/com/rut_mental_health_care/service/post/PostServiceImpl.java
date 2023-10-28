@@ -10,6 +10,7 @@ import com.rut_mental_health_care.repository.PostRepository;
 import com.rut_mental_health_care.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -51,49 +52,31 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<Comment> getComments(Post post) {
-        return commentRepository.findCommentByPost(post);
+    public List<Comment> getComments(Long postId) {
+        return commentRepository.findCommentByPostId(postId);
     }
 
     @Override
     @Async
-    public void likePost(Post post, User user) {
-        Like existingLike = likeRepository.findByPostAndUser(post, user);
-        if (hasUserLikedPost(post, user)) {
+    public void likePost(Long postId, String username, Boolean isLike) {
+        Like existingLike = likeRepository.findByPostIdAndUserUsername(postId, username);
+        if (existingLike != null) {
             likeRepository.delete(existingLike);
         }
-
         Like like = new Like();
+        Post post = postRepository.findById(postId).orElse(null); // TODO rework with handling exception
+        User user = userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("User not found " + username));
         like.setUser(user);
         like.setPost(post);
-        like.setIsLike(true);
-
-        likeRepository.save(like);
-    }
-
-    private boolean hasUserLikedPost(Post post, User user) {
-        return likeRepository.existsByPostAndUser(post, user);
-    }
-
-    @Override
-    @Async
-    public void dislikePost(Post post, User user) {
-        Like existingLike = likeRepository.findByPostAndUser(post, user);
-        if (hasUserLikedPost(post, user)) {
-            likeRepository.delete(existingLike);
-        }
-
-        Like like = new Like();
-        like.setUser(user);
-        like.setPost(post);
-        like.setIsLike(false);
+        like.setIsLike(isLike);
 
         likeRepository.save(like);
     }
 
     @Override
     @Async
-    public void commentPost(Post post, Comment comment) {
+    public void commentPost(Long postId, Comment comment) {
+        Post post =  postRepository.findById(postId).orElse(null);
         comment.setPost(post);
         commentRepository.save(comment);
     }
