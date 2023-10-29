@@ -35,28 +35,29 @@ public class CommentServiceImpl implements CommentService {
         this.userRepository = userRepository;
     }
 
-
-
     @Override
     @Async
     public void writeComment(Comment comment, Long postId) {
-        Post post = postRepository.findById(postId).orElse(null); // TODO implementation of orElse
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new IllegalArgumentException("Post with ID " + postId + " not found"));
         comment.setPost(post);
         commentRepository.save(comment);
     }
 
     @Override
     @Async
-    public void replyToComment(Comment comment, Comment reply) {
-        Post post = comment.getPost();
-        reply.setPost(post);
-        reply.setParentComment(comment);
+    public void replyToComment(Long parentCommentId, Comment reply) {
+        Comment parentComment = commentRepository.findById(parentCommentId)
+                .orElseThrow(() -> new IllegalArgumentException("Parent comment with ID " + parentCommentId + " not found"));
+        reply.setParentComment(parentComment);
         commentRepository.save(reply);
     }
 
     @Override
     @Async
-    public void editComment(Comment comment, String newContent) {
+    public void editComment(Long commentId, String newContent) {
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new IllegalArgumentException("Comment with ID " + commentId + " not found"));
         comment.setContent(newContent);
         comment.setIsEdited(true);
         commentRepository.save(comment);
@@ -64,7 +65,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     @Async
-    public void deleteComment(Comment comment) {
-        commentRepository.delete(comment);
+    public void deleteComment(Long commentId) {
+        commentRepository.deleteById(commentId);
     }
 }

@@ -6,9 +6,9 @@ public interface CommentService {
 
     void writeComment(Comment comment, Long postId);
 
-    void replyToComment(Comment comment, Comment reply);
+    void replyToComment(Long parentCommentId, Comment reply);
 
-    void editComment(Comment comment, String newContent);
+    void editComment(Long commentId, String newContent);
 
-    void deleteComment(Comment comment);
+    void deleteComment(Long commentId);
 }

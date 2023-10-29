@@ -16,8 +16,7 @@ public interface PostService {
 
     void commentPost(Long postId, Comment comment);
 
-    void editPost(Post post, String newContent);
+    void editPost(Long postId, String newContent);
 
-    void deletePost(Post post);
-
+    void deletePost(Long postId);
 }

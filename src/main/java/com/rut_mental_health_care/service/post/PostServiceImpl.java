@@ -14,6 +14,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PostServiceImpl implements PostService {
@@ -63,22 +64,28 @@ public class PostServiceImpl implements PostService {
         if (existingLike != null) {
             likeRepository.delete(existingLike);
         }
-        Like like = new Like();
-        Post post = postRepository.findById(postId).orElse(null); // TODO rework with handling exception
-        User user = userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("User not found " + username));
-        like.setUser(user);
-        like.setPost(post);
-        like.setIsLike(isLike);
-
-        likeRepository.save(like);
+        Optional<Post> postOptional = postRepository.findById(postId);
+        if (postOptional.isPresent()) {
+            Post post = postOptional.get();
+            User user = userRepository.findByUsername(username)
+                    .orElseThrow(() -> new UsernameNotFoundException("User not found " + username));
+            Like like = new Like();
+            like.setUser(user);
+            like.setPost(post);
+            like.setIsLike(isLike);
+            likeRepository.save(like);
+        }
     }
 
     @Override
     @Async
     public void commentPost(Long postId, Comment comment) {
-        Post post =  postRepository.findById(postId).orElse(null);
-        comment.setPost(post);
-        commentRepository.save(comment);
+        Optional<Post> postOptional = postRepository.findById(postId);
+        if (postOptional.isPresent()) {
+            Post post = postOptional.get();
+            comment.setPost(post);
+            commentRepository.save(comment);
+        }
     }
 
     @Override
@@ -89,15 +96,19 @@ public class PostServiceImpl implements PostService {
 
     @Override
     @Async
-    public void editPost(Post post, String newContent) {
-        post.setContent(newContent);
-        post.setIsEdited(true);
-        postRepository.save(post);
+    public void editPost(Long postId, String newContent) {
+        Optional<Post> postOptional = postRepository.findById(postId);
+        if (postOptional.isPresent()) {
+            Post post = postOptional.get();
+            post.setContent(newContent);
+            post.setIsEdited(true);
+            postRepository.save(post);
+        }
     }
 
     @Override
     @Async
-    public void deletePost(Post post) {
-        postRepository.delete(post);
+    public void deletePost(Long postId) {
+        postRepository.deleteById(postId);
     }
 }
