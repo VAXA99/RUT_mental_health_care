@@ -20,16 +20,19 @@ public class Comment {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.REMOVE, CascadeType.PERSIST})
     @JoinColumn(name = "post_id", nullable = false)
     private Post post;
 
-    @ManyToOne
-    @JoinColumn(name = "parrent_comment_id", nullable = false)
-    private Comment parrentComment;
+    @ManyToOne(cascade = {CascadeType.REMOVE, CascadeType.PERSIST})
+    @JoinColumn(name = "parent_comment_id", nullable = false)
+    private Comment parentComment;
 
     @Column(nullable = false)
     private String content;
+
+    @Column(nullable = false)
+    private Boolean isEdited;
 
     @CreationTimestamp
     @Column(updatable = false)

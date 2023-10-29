@@ -86,4 +86,18 @@ public class PostServiceImpl implements PostService {
     public void writePost(Post post) {
         postRepository.save(post);
     }
+
+    @Override
+    @Async
+    public void editPost(Post post, String newContent) {
+        post.setContent(newContent);
+        post.setIsEdited(true);
+        postRepository.save(post);
+    }
+
+    @Override
+    @Async
+    public void deletePost(Post post) {
+        postRepository.delete(post);
+    }
 }

@@ -32,6 +32,9 @@ public class Post {
     @Column(updatable = false)
     private LocalDateTime createdAt;
 
+    @Column(nullable = false)
+    private Boolean isEdited;
+
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "post_tags",
             joinColumns = @JoinColumn(name = "post_id"),

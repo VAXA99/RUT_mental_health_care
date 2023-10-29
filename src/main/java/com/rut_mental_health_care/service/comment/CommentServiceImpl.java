@@ -5,7 +5,6 @@ import com.rut_mental_health_care.entity.Comment;
 import com.rut_mental_health_care.entity.Post;
 import com.rut_mental_health_care.entity.User;
 import com.rut_mental_health_care.repository.CommentRepository;
-import com.rut_mental_health_care.repository.LikeRepository;
 import com.rut_mental_health_care.repository.PostRepository;
 import com.rut_mental_health_care.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,8 +20,6 @@ public class CommentServiceImpl implements CommentService {
 
     private PostRepository postRepository;
 
-    private LikeRepository likeRepository;
-
     @Autowired
     public void setPostRepository(PostRepository postRepository) {
         this.postRepository = postRepository;
@@ -31,11 +28,6 @@ public class CommentServiceImpl implements CommentService {
     @Autowired
     public void setCommentRepository(CommentRepository commentRepository) {
         this.commentRepository = commentRepository;
-    }
-
-    @Autowired
-    public void setLikeRepository(LikeRepository likeRepository) {
-        this.likeRepository = likeRepository;
     }
 
     @Autowired
@@ -58,7 +50,21 @@ public class CommentServiceImpl implements CommentService {
     public void replyToComment(Comment comment, Comment reply) {
         Post post = comment.getPost();
         reply.setPost(post);
-        reply.setParrentComment(comment);
+        reply.setParentComment(comment);
         commentRepository.save(reply);
+    }
+
+    @Override
+    @Async
+    public void editComment(Comment comment, String newContent) {
+        comment.setContent(newContent);
+        comment.setIsEdited(true);
+        commentRepository.save(comment);
+    }
+
+    @Override
+    @Async
+    public void deleteComment(Comment comment) {
+        commentRepository.delete(comment);
     }
 }
