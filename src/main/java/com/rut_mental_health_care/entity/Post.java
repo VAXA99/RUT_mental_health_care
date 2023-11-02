@@ -40,4 +40,13 @@ public class Post {
             joinColumns = @JoinColumn(name = "post_id"),
             inverseJoinColumns = @JoinColumn(name = "tag_id"))
     private Set<Tag> tags = new HashSet<>();
+
+    @Transient
+    private long likeCount;
+
+    @Transient
+    private long dislikeCount;
+
+    @Transient
+    private long commentCount;
 }

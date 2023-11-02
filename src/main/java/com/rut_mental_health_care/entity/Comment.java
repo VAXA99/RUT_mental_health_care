@@ -25,7 +25,7 @@ public class Comment {
     private Post post;
 
     @ManyToOne(cascade = {CascadeType.REMOVE, CascadeType.PERSIST})
-    @JoinColumn(name = "parent_comment_id", nullable = false)
+    @JoinColumn(name = "parent_comment_id")
     private Comment parentComment;
 
     @Column(nullable = false)

@@ -65,17 +65,29 @@ public class PostServiceImpl implements PostService {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found " + username));
 
-        // Perform like operation
-        // For example, you can create a Like entity and save it
-        Like like = new Like();
-        like.setUser(user);
-        like.setPost(post);
-        like.setIsLike(isLike);
-        // Save the like entity
-        likeRepository.save(like);
+        // Find the existing like, if any
+        Like existingLike = likeRepository.findByPostIdAndUserUsername(postId, username);
 
-        // Save post
-        // postRepository.save(post);
+        if (existingLike != null) {
+
+            if (existingLike.getIsLike().equals(isLike)) {
+                likeRepository.delete(existingLike);
+            }
+            else {
+                existingLike.setIsLike(isLike);
+            }
+        }
+        else {
+            // If no existing like is found, create a new Like entity and save it
+            Like like = new Like();
+            like.setUser(user);
+            like.setPost(post);
+            like.setIsLike(isLike);
+            // Save the like entity
+            likeRepository.save(like);
+        }
+
+        postRepository.save(post);
     }
 
     @Override
@@ -122,15 +134,34 @@ public class PostServiceImpl implements PostService {
             UserDto userDto = modelMapper.map(post.getUser(), UserDto.class);
             postDto.setUserDto(userDto);
         }
+        postDto.setLikeCount(postRepository.getLikeCount(post));
+        postDto.setDislikeCount(postRepository.getDislikeCount(post));
+        postDto.setCommentCount(postRepository.getCommentCount(post));
+
         return postDto;
     }
 
-    private CommentDto convertToCommentDTO(Comment comment) {
+    public CommentDto convertToCommentDTO(Comment comment) {
         CommentDto commentDto = modelMapper.map(comment, CommentDto.class);
         if (comment.getUser() != null) {
             UserDto userDto = modelMapper.map(comment.getUser(), UserDto.class);
             commentDto.setUserDto(userDto);
         }
+        commentDto.setId(comment.getId());
+        commentDto.setIsEdited(comment.getIsEdited());
+        commentDto.setContent(comment.getContent());
+        commentDto.setCreatedAt(comment.getCreatedAt());
+
+        // Set the postDto based on the relationships in Comment
+        commentDto.setPostDto(convertToPostDTO(comment.getPost()));
+
+        // Check if there is a parent comment and avoid infinite recursion
+        if (comment.getParentComment() != null) {
+            commentDto.setParentCommentDto(convertToCommentDTO(comment.getParentComment()));
+        }
+
         return commentDto;
     }
+
+
 }

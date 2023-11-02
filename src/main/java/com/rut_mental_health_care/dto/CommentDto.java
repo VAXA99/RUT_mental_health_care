@@ -15,7 +15,7 @@ public class CommentDto {
     private UserDto userDto;
     private Boolean isEdited;
     private PostDto postDto;
-    private Comment parentComment;
+    private CommentDto parentCommentDto;
     private String content;
     private LocalDateTime createdAt;
 }

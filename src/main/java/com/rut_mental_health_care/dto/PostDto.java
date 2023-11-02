@@ -18,4 +18,7 @@ public class PostDto {
     private Boolean isEdited;
     private UserDto userDto;
     private Set<String> tagNames;
+    private long likeCount;
+    private long dislikeCount;
+    private long commentCount;
 }

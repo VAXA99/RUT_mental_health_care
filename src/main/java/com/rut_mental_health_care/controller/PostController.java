@@ -4,6 +4,9 @@ import com.rut_mental_health_care.dto.CommentDto;
 import com.rut_mental_health_care.dto.PostDto;
 import com.rut_mental_health_care.service.post.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -30,7 +33,10 @@ public class PostController {
     }
 
     @PostMapping("/{postId}/like")
-    public void likePost(@PathVariable Long postId, @RequestParam String username, @RequestParam Boolean isLike) {
+    @PreAuthorize("hasAuthority('ROLE_USER')")
+    public void likePost(@PathVariable Long postId, @RequestParam Boolean isLike) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
         postService.likePost(postId, username, isLike);
     }
 
