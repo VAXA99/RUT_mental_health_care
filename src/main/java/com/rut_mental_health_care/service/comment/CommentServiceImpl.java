@@ -1,12 +1,11 @@
 package com.rut_mental_health_care.service.comment;
 
-
+import com.rut_mental_health_care.dto.CommentDto;
 import com.rut_mental_health_care.entity.Comment;
 import com.rut_mental_health_care.entity.Post;
-import com.rut_mental_health_care.entity.User;
 import com.rut_mental_health_care.repository.CommentRepository;
 import com.rut_mental_health_care.repository.PostRepository;
-import com.rut_mental_health_care.repository.UserRepository;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -15,29 +14,20 @@ import org.springframework.stereotype.Service;
 public class CommentServiceImpl implements CommentService {
 
     private CommentRepository commentRepository;
-
-    private UserRepository userRepository;
-
     private PostRepository postRepository;
+    private ModelMapper modelMapper;
 
     @Autowired
-    public void setPostRepository(PostRepository postRepository) {
-        this.postRepository = postRepository;
-    }
-
-    @Autowired
-    public void setCommentRepository(CommentRepository commentRepository) {
+    public CommentServiceImpl(CommentRepository commentRepository, PostRepository postRepository, ModelMapper modelMapper) {
         this.commentRepository = commentRepository;
-    }
-
-    @Autowired
-    public void setUserRepository(UserRepository userRepository) {
-        this.userRepository = userRepository;
+        this.postRepository = postRepository;
+        this.modelMapper = modelMapper;
     }
 
     @Override
     @Async
-    public void writeComment(Comment comment, Long postId) {
+    public void writeComment(CommentDto commentDto, Long postId) {
+        Comment comment = modelMapper.map(commentDto, Comment.class);
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new IllegalArgumentException("Post with ID " + postId + " not found"));
         comment.setPost(post);
@@ -46,9 +36,10 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     @Async
-    public void replyToComment(Long parentCommentId, Comment reply) {
+    public void replyToComment(Long parentCommentId, CommentDto replyDto) {
         Comment parentComment = commentRepository.findById(parentCommentId)
                 .orElseThrow(() -> new IllegalArgumentException("Parent comment with ID " + parentCommentId + " not found"));
+        Comment reply = modelMapper.map(replyDto, Comment.class);
         reply.setParentComment(parentComment);
         commentRepository.save(reply);
     }
