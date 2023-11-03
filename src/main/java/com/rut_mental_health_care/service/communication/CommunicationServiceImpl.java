@@ -1,42 +1,38 @@
-package com.rut_mental_health_care.service.post;
+package com.rut_mental_health_care.service.communication;
 
 
 import com.rut_mental_health_care.dto.CommentDto;
 import com.rut_mental_health_care.dto.PostDto;
 import com.rut_mental_health_care.dto.UserDto;
-import com.rut_mental_health_care.entity.Comment;
-import com.rut_mental_health_care.entity.Like;
-import com.rut_mental_health_care.entity.Post;
-import com.rut_mental_health_care.entity.User;
-import com.rut_mental_health_care.repository.CommentRepository;
-import com.rut_mental_health_care.repository.LikeRepository;
-import com.rut_mental_health_care.repository.PostRepository;
-import com.rut_mental_health_care.repository.UserRepository;
+import com.rut_mental_health_care.entity.*;
+import com.rut_mental_health_care.repository.*;
+import jakarta.persistence.EntityNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
-public class PostServiceImpl implements PostService {
+public class CommunicationServiceImpl implements CommunicationService {
 
     private PostRepository postRepository;
     private CommentRepository commentRepository;
     private UserRepository userRepository;
     private LikeRepository likeRepository;
+    private TagRepository tagRepository;
     private ModelMapper modelMapper;
 
     @Autowired
-    public PostServiceImpl(PostRepository postRepository, CommentRepository commentRepository, UserRepository userRepository,LikeRepository likeRepository, ModelMapper modelMapper) {
+    public CommunicationServiceImpl(PostRepository postRepository, CommentRepository commentRepository, UserRepository userRepository, LikeRepository likeRepository, TagRepository tagRepository, ModelMapper modelMapper) {
         this.postRepository = postRepository;
         this.commentRepository = commentRepository;
         this.userRepository = userRepository;
         this.likeRepository = likeRepository;
+        this.tagRepository = tagRepository;
         this.modelMapper = modelMapper;
     }
 
@@ -58,9 +54,10 @@ public class PostServiceImpl implements PostService {
 
     @Override
     @Async
+    //todo rework
     public void likePost(Long postId, String username, Boolean isLike) {
-        Optional<Post> postOptional = postRepository.findById(postId);
-        Post post = postOptional.orElseThrow(() -> new IllegalArgumentException("Post not found with ID: " + postId));
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new EntityNotFoundException("Post not found with ID: " + postId));
 
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found " + username));
@@ -93,11 +90,10 @@ public class PostServiceImpl implements PostService {
     @Override
     @Async
     public void commentPost(Long postId, CommentDto commentDto) {
-        Optional<Post> postOptional = postRepository.findById(postId);
-        Post post = postOptional.orElseThrow(() -> new IllegalArgumentException("Post not found with ID: " + postId));
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new EntityNotFoundException("Post not found with ID: " + postId));
 
         Comment comment = modelMapper.map(commentDto, Comment.class);
-
         comment.setPost(post);
 
         commentRepository.save(comment);
@@ -105,16 +101,57 @@ public class PostServiceImpl implements PostService {
 
     @Override
     @Async
-    public void writePost(PostDto postDto) {
-        Post post = modelMapper.map(postDto, Post.class);
-        postRepository.save(post);
+    public void replyToComment(Long parentCommentId, CommentDto replyDto) {
+        Comment parentComment = commentRepository.findById(parentCommentId)
+                .orElseThrow(() -> new EntityNotFoundException("Parent comment with ID " + parentCommentId + " not found"));
+        Comment reply = modelMapper.map(replyDto, Comment.class);
+        reply.setParentComment(parentComment);
+        commentRepository.save(reply);
     }
 
     @Override
     @Async
+    public void editComment(Long commentId, String newContent) {
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new EntityNotFoundException("Comment with ID " + commentId + " not found"));
+        comment.setContent(newContent);
+        comment.setIsEdited(true);
+        commentRepository.save(comment);
+    }
+
+    @Override
+    @Async
+    public void deleteComment(Long commentId) {
+        commentRepository.deleteById(commentId);
+    }
+
+    @Override
+    @Async
+    public void writePost(PostDto postDto) {
+        Post post = modelMapper.map(postDto, Post.class);
+        postRepository.save(post);
+
+        List<Tag> tags = new ArrayList<>();
+        for (String tagName : postDto.getTagNames()) {
+            Tag tag = tagRepository.findByDescription(tagName).orElseGet(() -> {
+                Tag newTag = new Tag();
+                newTag.setDescription(tagName);
+                return tagRepository.save(newTag);
+            });
+            tags.add(tag);
+        }
+
+        // Add the tags to the post and save the relationship in the post_tags table
+        post.setTags(tags);
+        postRepository.save(post);
+    }
+
+
+    @Override
+    @Async
     public void editPost(Long postId, String newContent) {
-        Optional<Post> postOptional = postRepository.findById(postId);
-        Post post = postOptional.orElseThrow(() -> new IllegalArgumentException("Post not found with ID: " + postId));
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new EntityNotFoundException("Post not found with ID: " + postId));
 
         post.setContent(newContent);
         post.setIsEdited(true);

@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Set;
 
 @Data
@@ -17,7 +18,7 @@ public class PostDto {
     private LocalDateTime createdAt;
     private Boolean isEdited;
     private UserDto userDto;
-    private Set<String> tagNames;
+    private List<String> tagNames;
     private long likeCount;
     private long dislikeCount;
     private long commentCount;
