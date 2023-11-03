@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Data
 @NoArgsConstructor
@@ -26,4 +28,5 @@ public class EventReminder {
 
     @Column(nullable = false)
     private Integer reminder_interval;
+
 }
