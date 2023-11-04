@@ -6,7 +6,6 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Set;
 
 @Data
 @NoArgsConstructor
@@ -19,6 +18,7 @@ public class PostDto {
     private Boolean isEdited;
     private UserDto userDto;
     private List<String> tagNames;
+    private List<CommentDto> commentDtos;
     private long likeCount;
     private long dislikeCount;
     private long commentCount;

@@ -26,9 +26,9 @@ public class CommunicationController {
         return communicationService.getFeed();
     }
 
-    @GetMapping("/{postId}/comments")
-    public List<CommentDto> getComments(@PathVariable Long postId) {
-        return communicationService.getComments(postId);
+    @GetMapping("/{postId}/post")
+    public PostDto getPostById(@PathVariable Long postId) {
+        return communicationService.getPostWithComments(postId);
     }
 
     @PostMapping("/{postId}/like")

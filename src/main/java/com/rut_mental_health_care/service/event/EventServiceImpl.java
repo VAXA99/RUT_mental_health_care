@@ -1,13 +1,18 @@
-package com.rut_mental_health_care.service;
+package com.rut_mental_health_care.service.event;
 
+import com.rut_mental_health_care.dto.UserDto;
 import com.rut_mental_health_care.entity.Event;
 import com.rut_mental_health_care.entity.EventNotification;
 import com.rut_mental_health_care.entity.EventReminder;
+import com.rut_mental_health_care.entity.User;
 import com.rut_mental_health_care.repository.EventNotificationRepository;
 import com.rut_mental_health_care.repository.EventReminderRepository;
 import com.rut_mental_health_care.repository.EventRepository;
-import com.rut_mental_health_care.service.event.EventService;
+import com.rut_mental_health_care.repository.UserRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -20,83 +25,65 @@ public class EventServiceImpl implements EventService {
     private final EventRepository eventRepository;
     private final EventNotificationRepository eventNotificationRepository;
     private final EventReminderRepository eventReminderRepository;
+    private final UserRepository userRepository;
 
     @Autowired
     public EventServiceImpl(
             EventRepository eventRepository,
             EventNotificationRepository eventNotificationRepository,
-            EventReminderRepository eventReminderRepository
+            EventReminderRepository eventReminderRepository,
+            UserRepository userRepository
     ) {
         this.eventRepository = eventRepository;
         this.eventNotificationRepository = eventNotificationRepository;
         this.eventReminderRepository = eventReminderRepository;
+        this.userRepository = userRepository;
     }
 
     public List<Event> getAllEvents() {
         return eventRepository.findAll();
     }
 
-    public Optional<Event> getEventById(Long eventId) {
-        return eventRepository.findById(eventId);
+    public Event getEventById(Long eventId) {
+        return eventRepository.findById(eventId)
+                .orElseThrow(() -> new EntityNotFoundException("Event not found with ID: " + eventId));
     }
 
-    public Event createEvent(Event event) {
-        return eventRepository.save(event);
+    public void createEvent(Event event) {
+        eventRepository.save(event);
+        createEventNotification(event);
     }
 
-    public Event updateEvent(Long eventId, Event updatedEvent) {
-        Optional<Event> existingEvent = eventRepository.findById(eventId);
+    public void updateEvent(Long eventId, Event updatedEvent) {
+        Event existingEvent = eventRepository.findById(eventId)
+                .orElseThrow(() -> new EntityNotFoundException("Event not found with ID: " + eventId));
 
-        if (existingEvent.isPresent()) {
-            updatedEvent.setId(existingEvent.get().getId());
-            return eventRepository.save(updatedEvent);
-        } else {
-            // Handle error or throw an exception if the event doesn't exist.
-            // You can decide the appropriate behavior here.
-            return null;
-        }
+        updatedEvent.setId(existingEvent.getId());
+        eventRepository.save(updatedEvent);
     }
 
     public void deleteEvent(Long eventId) {
         eventRepository.deleteById(eventId);
     }
 
-    public EventNotification createEventNotificationAndResend(EventReminder eventReminder) {
-        Optional<Event> event = eventReminder.getEventNotification().getEvent();
-        if (event.isPresent()) {
-            // Create a new EventNotification
-            EventNotification eventNotification = new EventNotification();
-            eventNotification.setEvent(event.get());
-            eventNotification.setUser(eventReminder.getUser());
-            eventNotification.setRead(false);
-            eventNotification.setTrash(false);
-            eventNotification.setDescription("New Event Notification");
+    public
 
-            // Save the new EventNotification
-            eventNotification = eventNotificationRepository.save(eventNotification);
 
-            // Update the reminderCount and reminder_interval
-            int newReminderCount = eventReminder.getReminderCount() - 1;
-            eventReminder.setReminderCount(newReminderCount);
 
-            if (newReminderCount > 0) {
-                LocalDateTime now = LocalDateTime.now();
-                LocalDateTime newReminderTime = now.plusMinutes(eventReminder.getReminder_interval());
-                eventReminder.setReminder_interval(newReminderTime);
-            } else {
-                // If reminderCount is zero, no more reminders are needed.
-                // You can choose to delete the EventReminder or mark it as completed, depending on your design.
-            }
 
-            // Save the updated EventReminder
-            eventReminderRepository.save(eventReminder);
 
-            // Send the notification (e.g., through email, push notification, etc.)
 
-            return eventNotification;
-        } else {
-            // Handle error or throw an exception if the associated event doesn't exist.
-            return null;
-        }
+    //todo rethink and maybe use Dtos
+    private EventNotification createEventNotification(Event event) {
+
+
+        EventNotification eventNotification = new EventNotification();
+        eventNotification.setEvent(event);
+        eventNotification.setUser(user);
+
+        // Set other properties as needed
+        eventNotificationRepository.save(eventNotification);
+        return eventNotification;
     }
+
 }

@@ -7,7 +7,7 @@ import java.util.List;
 public interface CommunicationService {
 
     List<PostDto> getFeed();
-    List<CommentDto> getComments(Long postId);
+    PostDto getPostWithComments(Long postId);
     void likePost(Long postId, String username, Boolean isLike);
     void commentPost(Long postId, CommentDto commentDto);
     void replyToComment(Long parentCommentId, CommentDto replyDto);
