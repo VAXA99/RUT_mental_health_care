@@ -5,18 +5,21 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
-
 @Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class EventReminder {
+public class ConsultationNotification {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "event_notification_id", nullable = false)
-    private EventNotification eventNotification;
+    @JoinColumn(nullable = false)
+    private Consultation consultation;
+
+    @Column(nullable = false)
+    private Boolean read;
+
+    private String description;
 }

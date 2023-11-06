@@ -11,24 +11,21 @@ import java.time.LocalDateTime;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Event {
+public class Consultation {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true, nullable = false)
-    private String name;
+    @ManyToOne
+    @JoinColumn(nullable = false)
+    private User patient;
 
     @ManyToOne
-    @JoinColumn(name = "event_type_id", nullable = false)
-    private EventType eventType;
-
-    @ManyToOne
-    @JoinColumn(name = "event_location_id", nullable = false)
-    private Location eventLocation;
+    @JoinColumn(nullable = false)
+    private User psychologist;
 
     @Column(nullable = false)
-    private LocalDateTime eventStartsAt;
+    private LocalDateTime startsAt;
 
     @Column(nullable = false)
-    private LocalDateTime eventEndsAt;
+    private LocalDateTime endsAt;
 }

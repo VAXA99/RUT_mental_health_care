@@ -19,12 +19,12 @@ import java.util.stream.Collectors;
 @Service
 public class CommunicationServiceImpl implements CommunicationService {
 
-    private PostRepository postRepository;
-    private CommentRepository commentRepository;
-    private UserRepository userRepository;
-    private LikeRepository likeRepository;
-    private TagRepository tagRepository;
-    private ModelMapper modelMapper;
+    private final PostRepository postRepository;
+    private final CommentRepository commentRepository;
+    private final UserRepository userRepository;
+    private final LikeRepository likeRepository;
+    private final TagRepository tagRepository;
+    private final ModelMapper modelMapper;
 
     @Autowired
     public CommunicationServiceImpl(PostRepository postRepository, CommentRepository commentRepository, UserRepository userRepository, LikeRepository likeRepository, TagRepository tagRepository, ModelMapper modelMapper) {
@@ -39,9 +39,18 @@ public class CommunicationServiceImpl implements CommunicationService {
     @Override
     public List<PostDto> getFeed() {
         List<Post> posts = postRepository.findAll();
-        return posts.stream()
+        List<PostDto> postDtos = posts.stream()
                 .map(this::convertToPostDTO)
                 .collect(Collectors.toList());
+        for (PostDto postDto: postDtos) {
+            List<Tag> tags = tagRepository.findTagsByPostId(postDto.getId());
+            List<String> tagNames = new ArrayList<>();
+            for (Tag tag: tags ) {
+                tagNames.add(tag.getDescription());
+            }
+            postDto.setTagNames(tagNames);
+        }
+        return postDtos;
     }
 
     @Override
@@ -79,12 +88,10 @@ public class CommunicationServiceImpl implements CommunicationService {
 
             if (existingLike.getIsLike().equals(isLike)) {
                 likeRepository.delete(existingLike);
-            }
-            else {
+            } else {
                 existingLike.setIsLike(isLike);
             }
-        }
-        else {
+        } else {
             // If no existing like is found, create a new Like entity and save it
             Like like = new Like();
             like.setUser(user);
