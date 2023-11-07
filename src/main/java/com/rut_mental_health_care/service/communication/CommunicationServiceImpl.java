@@ -46,6 +46,7 @@ public class CommunicationServiceImpl implements CommunicationService {
             List<String> tagNames = tagRepository.findTagsByPostId(postDto.getId());
             postDto.setTagNames(tagNames);
         }
+
         return postDtos;
     }
 
