@@ -43,11 +43,7 @@ public class CommunicationServiceImpl implements CommunicationService {
                 .map(this::convertToPostDTO)
                 .collect(Collectors.toList());
         for (PostDto postDto: postDtos) {
-            List<Tag> tags = tagRepository.findTagsByPostId(postDto.getId());
-            List<String> tagNames = new ArrayList<>();
-            for (Tag tag: tags ) {
-                tagNames.add(tag.getDescription());
-            }
+            List<String> tagNames = tagRepository.findTagsByPostId(postDto.getId());
             postDto.setTagNames(tagNames);
         }
         return postDtos;
