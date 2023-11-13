@@ -9,15 +9,10 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "consultation_notification")
-public class ConsultationNotification {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+@Table(name = "psych_problem")
+public class PsychProblem {
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @ManyToOne
-    @JoinColumn(nullable = false)
-    private Consultation consultation;
 
     private String description;
 }

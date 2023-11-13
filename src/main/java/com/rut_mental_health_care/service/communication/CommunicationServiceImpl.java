@@ -70,7 +70,6 @@ public class CommunicationServiceImpl implements CommunicationService {
 
     @Override
     @Async
-    //todo rework
     public void likePost(Long postId, String username, Boolean isLike) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new EntityNotFoundException("Post not found with ID: " + postId));
@@ -143,7 +142,6 @@ public class CommunicationServiceImpl implements CommunicationService {
     @Async
     public void writePost(PostDto postDto) {
         Post post = modelMapper.map(postDto, Post.class);
-        postRepository.save(post);
 
         List<Tag> tags = new ArrayList<>();
         for (String tagName : postDto.getTagNames()) {

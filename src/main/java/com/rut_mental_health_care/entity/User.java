@@ -34,5 +34,8 @@ public class User {
     private String roles;
 
     private String phoneNumber;
-    
+
+    private Integer sex;
+
+    private String information;
 }

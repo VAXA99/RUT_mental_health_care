@@ -14,7 +14,7 @@ import java.util.List;
 @RequestMapping("/consultations")
 public class ConsultationController {
 
-    private ConsultationServiceImpl consultationService;
+    private final ConsultationServiceImpl consultationService;
 
     @Autowired
     public ConsultationController(ConsultationServiceImpl consultationService) {
@@ -46,8 +46,4 @@ public class ConsultationController {
         consultationService.cancelConsultation(consultationId);
     }
 
-    @PostMapping("/remind")
-    public void remindConsultationParticipants() {
-        consultationService.remindConsultationParticipants();
-    }
 }

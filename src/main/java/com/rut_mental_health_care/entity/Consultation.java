@@ -6,13 +6,15 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class Consultation {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
@@ -28,4 +30,14 @@ public class Consultation {
 
     @Column(nullable = false)
     private LocalDateTime endsAt;
+
+    @ManyToOne
+    @JoinColumn(nullable = false)
+    private Location location;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "consultation_psychproblems",
+            joinColumns = @JoinColumn(name = "consultation_id"),
+            inverseJoinColumns = @JoinColumn(name = "psychproblem_id"))
+    private List<PsychProblem> psychProblems;
 }

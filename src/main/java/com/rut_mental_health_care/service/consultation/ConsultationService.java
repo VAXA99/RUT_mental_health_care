@@ -12,5 +12,4 @@ public interface ConsultationService {
     void setUpConsultation(ConsultationDto consultationDto);
     void updateConsultation(Long consultationId, ConsultationDto consultationDto);
     void cancelConsultation(Long consultationId);
-    void remindConsultationParticipants();
 }

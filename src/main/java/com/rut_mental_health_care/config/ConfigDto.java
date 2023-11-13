@@ -1,4 +1,4 @@
-package com.rut_mental_health_care.dto;
+package com.rut_mental_health_care.config;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
