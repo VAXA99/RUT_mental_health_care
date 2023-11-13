@@ -1,6 +1,5 @@
 package com.rut_mental_health_care.service.mail;
 
-import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
@@ -13,6 +12,7 @@ public class MailService {
 
     public void send(String targetEmail, String message, String subject) {
         SimpleMailMessage mailMessage = new SimpleMailMessage();
+        mailMessage.setFrom("schedania.vahtang@yandex.ru"); // Your authenticated sender email
         mailMessage.setTo(targetEmail);
         mailMessage.setSubject(subject);
         mailMessage.setText(message);

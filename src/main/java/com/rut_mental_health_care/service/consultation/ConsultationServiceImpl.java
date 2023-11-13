@@ -22,6 +22,8 @@ import java.util.stream.Collectors;
 import com.rut_mental_health_care.entity.Consultation;
 import com.rut_mental_health_care.repository.ConsultationRepository;
 
+import javax.management.relation.Role;
+
 @Service
 public class ConsultationServiceImpl {
     private final ConsultationRepository consultationRepository;
@@ -68,17 +70,34 @@ public class ConsultationServiceImpl {
 
     @Async
     public void setUpConsultation(ConsultationDto consultationDto) {
+        Long patientId = consultationDto.getPatient().getId();
+        Long psychologistId = consultationDto.getPsychologist().getId();
+
         Consultation consultation = modelMapper.map(consultationDto, Consultation.class);
-        User patient = userRepository.findById(consultationDto.getPatient().getId())
-                        .orElseThrow(()->new EntityNotFoundException("User not found with id:" + consultationDto.getPatient().getId()));
 
-        User psychologist = userRepository.findById(consultationDto.getPsychologist().getId())
-                .orElseThrow(()->new EntityNotFoundException("User not found with id:" + consultationDto.getPatient().getId()));
+        User patient = userRepository.findById(patientId)
+                .orElseThrow(() -> new EntityNotFoundException("Patient not found with id: " + consultationDto.getPatient().getId()));
 
+        User psychologist = userRepository.findById(psychologistId)
+                .orElseThrow(() -> new EntityNotFoundException("Psychologist not found with id: " + consultationDto.getPsychologist().getId()));
+
+        // Ensure roles are correctly assigned
+        if (!patient.getRoles().equals("ROLE_USER")) {
+            throw new IllegalArgumentException("User with ID " + patient.getId() + " is not a patient.");
+        }
+
+        if (!psychologist.getRoles().equals("ROLE_PSYCHOLOGIST")) {
+            throw new IllegalArgumentException("User with ID " + psychologist.getId() + " is not a psychologist.");
+        }
+
+        // Set the correct patient and psychologist in the consultation
         consultation.setPatient(patient);
         consultation.setPsychologist(psychologist);
 
-        List<PsychProblem> psychProblems = new ArrayList<>();
+        System.out.println(consultation.getPatient());
+        System.out.println(consultation.getPsychologist());
+
+    List<PsychProblem> psychProblems = new ArrayList<>();
         for (String psychProblem: consultationDto.getPsychProblems()) {
             PsychProblem psychProblem_ = psychProblemRepository.findByDescription(psychProblem).orElseGet(() -> {
                 PsychProblem newPsychProblem = new PsychProblem();
