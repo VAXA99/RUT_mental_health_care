@@ -15,6 +15,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.time.Period;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -116,39 +120,76 @@ public class ConsultationServiceImpl {
     private void sendNotificationOnConsultation(Long consultationId, int status) {
         Consultation consultation = consultationRepository.findById(consultationId)
                 .orElseThrow(() -> new EntityNotFoundException("Consultation not found with id:" + consultationId));
-        String notificationDescription = "";
+        String patientNotificationDescription = "";
+        String psychologistNotificationDescription = "";
         String subject = "";
+
+        DateTimeFormatter formatterToDate = DateTimeFormatter.ofPattern("dd MM yyyy");
+        DateTimeFormatter formatterToTime = DateTimeFormatter.ofPattern( "HH:mm:ss");
+
+        LocalDateTime startsAt = consultation.getStartsAt();
+        LocalDateTime endsAt = consultation.getEndsAt();
+
+        User patient = consultation.getPatient();
+        User psychologist = consultation.getPsychologist();
+
+        String location = consultation.getLocation().toString();
+        String date = consultation.getStartsAt().format(formatterToDate);
+        String timeStartsAt = startsAt.format(formatterToTime);
+        String timeEndsAt = endsAt.format(formatterToTime);
+
+        String psychologistSurname = psychologist.getSurname();
+        String psychologistName = psychologist.getName();
+
+        String patientName = patient.getName();
+        String patientSurname = patient.getSurname();
+
+        String psychProblems = consultation.getPsychProblems().toString();
+
+        long hours = ChronoUnit.HOURS.between(startsAt, endsAt);
+        long minutes = ChronoUnit.MINUTES.between(startsAt, endsAt);
+
+        String descriptionForPatient = "Ваш врач: " + psychologistSurname + " " + psychologistName + "\n"
+                + "Телефон связи с врачом: " + psychologist.getPhoneNumber() + "\n"
+                + "Место: " + location + "\n"
+                + "Дата: " + date + "\n"
+                + "Время: " + timeStartsAt + " - " + timeEndsAt + "  (" + hours + "," + minutes + ")";
+
+        String descriptionForPsychologist = "Ваш пациент: " + patientSurname + " " + patientName + "\n"
+                + "Место: " + location + "\n"
+                + "Дата: " + date + "\n"
+                + "Время: " + timeStartsAt + " - " + timeEndsAt + "  (" + hours + "," + minutes + ")" + "\n"
+                + "Данные о проблеме: " + psychProblems;
+
         if (status == cancel) {
             subject = "Ваша консультация была отменена";
-            notificationDescription = "Ваша консультация была отменена:"
-                    + consultation.getLocation() + " "
-                    + consultation.getStartsAt() + " "
-                    + consultation.getPsychologist().getSurname() + " "
-                    + consultation.getPsychologist().getName();
+            patientNotificationDescription = "Здравствуйте, " + patientName + ", Ваша консультация была отменена: \n"
+                    + descriptionForPatient;
+            psychologistNotificationDescription = "Здравствуйте, " + psychologistName + ", Ваша консультация была отменена: \n"
+                    + descriptionForPsychologist;
         }
         else if (status == setUp) {
             subject = "Вам назначена консультация";
-            notificationDescription = "Вам назначена консультация:"
-                    + consultation.getLocation() + " "
-                    + consultation.getStartsAt() + " "
-                    + consultation.getPsychologist().getSurname() + " "
-                    + consultation.getPsychologist().getName();
+            patientNotificationDescription = "Здравствуйте, " + patientName + ", Вам назначена консультация: \n"
+                    + descriptionForPatient;
+            psychologistNotificationDescription = "Здравствуйте, " + psychologistName + ", Вам назначена консультация: \n"
+                    + descriptionForPsychologist;
         }
         else if (status == update) {
             subject = "Данные по вашей консультации обновились";
-            notificationDescription = "Данные по вашей консультации обновились. Новые данные:"
-                    + consultation.getLocation() + " "
-                    + consultation.getStartsAt() + " "
-                    + consultation.getPsychologist().getSurname() + " "
-                    + consultation.getPsychologist().getName();
+            patientNotificationDescription = "Здравствуйте, " + patientName + ", данные по вашей консультации обновились. Новые данные: \n"
+                    + descriptionForPatient;
+            psychologistNotificationDescription = "Здравствуйте, " + psychologistName + ", данные по вашей консультации обновились. Новые данные: \n"
+                    + descriptionForPsychologist;
         }
 
         ConsultationNotification consultationNotification = new ConsultationNotification();
         consultationNotification.setConsultation(consultation);
-        consultationNotification.setDescription(notificationDescription);
+        consultationNotification.setDescription(patientNotificationDescription);
         consultationNotificationRepository.save(consultationNotification);
 
-        mailService.send(consultation.getPatient().getEmail(), subject, notificationDescription);
+        mailService.send(consultation.getPatient().getEmail(), patientNotificationDescription, subject);
+        mailService.send(consultation.getPsychologist().getEmail(), psychologistNotificationDescription, subject);
 
     }
 
