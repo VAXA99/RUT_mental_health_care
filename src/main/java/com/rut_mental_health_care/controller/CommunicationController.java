@@ -26,12 +26,12 @@ public class CommunicationController {
         return communicationService.getFeed();
     }
 
-    @GetMapping("/{postId}/post")
+    @GetMapping("/post/{postId}")
     public PostDto getPostById(@PathVariable Long postId) {
         return communicationService.getPostWithComments(postId);
     }
 
-    @PostMapping("/{postId}/like")
+    @PostMapping("/like/{postId}")
     public void likePost(@PathVariable Long postId, @RequestParam Boolean isLike) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
@@ -42,32 +42,32 @@ public class CommunicationController {
         communicationService.writePost(postDTO);
     }
 
-    @PostMapping("/{postId}/comment")
+    @PostMapping("/comment/{postId}")
     public void commentPost(@PathVariable Long postId, @RequestBody CommentDto commentDto) {
         communicationService.commentPost(postId, commentDto);
     }
 
-    @PostMapping("/{commentId}/reply")
+    @PostMapping("/reply/{commentId}")
     public void replyToComment(@PathVariable Long commentId, @RequestBody CommentDto replyDto) {
         communicationService.replyToComment(commentId, replyDto);
     }
 
-    @PutMapping("/{commentId}/edit")
+    @PutMapping("/edit/{commentId}")
     public void editComment(@PathVariable Long commentId, @RequestParam String newContent) {
         communicationService.editComment(commentId, newContent);
     }
 
-    @DeleteMapping("/{commentId}/delete")
+    @DeleteMapping("/delete/{commentId}")
     public void deleteComment(@PathVariable Long commentId) {
         communicationService.deleteComment(commentId);
     }
 
-    @PutMapping("/{postId}/edit")
+    @PutMapping("/edit/{postId}")
     public void editPost(@PathVariable Long postId, @RequestParam String newContent) {
         communicationService.editPost(postId, newContent);
     }
 
-    @DeleteMapping("/{postId}/delete")
+    @DeleteMapping("/delete/{postId}")
     public void deletePost(@PathVariable Long postId) {
         communicationService.deletePost(postId);
     }

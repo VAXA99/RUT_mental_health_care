@@ -16,11 +16,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import com.rut_mental_health_care.entity.Consultation;
@@ -124,8 +125,8 @@ public class ConsultationServiceImpl {
         String psychologistNotificationDescription = "";
         String subject = "";
 
-        DateTimeFormatter formatterToDate = DateTimeFormatter.ofPattern("dd MM yyyy");
-        DateTimeFormatter formatterToTime = DateTimeFormatter.ofPattern( "HH:mm:ss");
+        DateTimeFormatter formatterToDate = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+        DateTimeFormatter formatterToTime = DateTimeFormatter.ofPattern("HH:mm");
 
         LocalDateTime startsAt = consultation.getStartsAt();
         LocalDateTime endsAt = consultation.getEndsAt();
@@ -133,7 +134,7 @@ public class ConsultationServiceImpl {
         User patient = consultation.getPatient();
         User psychologist = consultation.getPsychologist();
 
-        String location = consultation.getLocation().toString();
+        String location = consultation.getLocation().getDescription();
         String date = consultation.getStartsAt().format(formatterToDate);
         String timeStartsAt = startsAt.format(formatterToTime);
         String timeEndsAt = endsAt.format(formatterToTime);
@@ -144,21 +145,30 @@ public class ConsultationServiceImpl {
         String patientName = patient.getName();
         String patientSurname = patient.getSurname();
 
-        String psychProblems = consultation.getPsychProblems().toString();
+        StringBuilder stringBuilder = new StringBuilder();
 
-        long hours = ChronoUnit.HOURS.between(startsAt, endsAt);
-        long minutes = ChronoUnit.MINUTES.between(startsAt, endsAt);
+        for (PsychProblem psychProblem : consultation.getPsychProblems()) {
+            stringBuilder.append(psychProblem.getDescription()).append(" ");
+        }
+
+        String psychProblems = stringBuilder.toString().trim();
+
+        // получает разницу между двумя датами в часах и минутах
+        long millis = Duration.between(startsAt, endsAt).toMillis();
+        String duration = String.format("%d часов %d минут",
+                TimeUnit.MILLISECONDS.toHours(millis),
+                TimeUnit.MILLISECONDS.toMinutes(millis) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(millis)));
 
         String descriptionForPatient = "Ваш врач: " + psychologistSurname + " " + psychologistName + "\n"
                 + "Телефон связи с врачом: " + psychologist.getPhoneNumber() + "\n"
                 + "Место: " + location + "\n"
                 + "Дата: " + date + "\n"
-                + "Время: " + timeStartsAt + " - " + timeEndsAt + "  (" + hours + "," + minutes + ")";
+                + "Время: " + timeStartsAt + " - " + timeEndsAt + "  (" + duration + ")";
 
         String descriptionForPsychologist = "Ваш пациент: " + patientSurname + " " + patientName + "\n"
                 + "Место: " + location + "\n"
                 + "Дата: " + date + "\n"
-                + "Время: " + timeStartsAt + " - " + timeEndsAt + "  (" + hours + "," + minutes + ")" + "\n"
+                + "Время: " + timeStartsAt + " - " + timeEndsAt + "  (" + duration + ")" + "\n"
                 + "Данные о проблеме: " + psychProblems;
 
         if (status == cancel) {
