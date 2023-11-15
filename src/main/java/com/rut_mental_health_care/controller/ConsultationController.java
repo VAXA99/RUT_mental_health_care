@@ -5,6 +5,7 @@ import com.rut_mental_health_care.dto.UserDto;
 import com.rut_mental_health_care.entity.ConsultationNotification;
 import com.rut_mental_health_care.service.consultation.ConsultationService;
 import com.rut_mental_health_care.service.consultation.ConsultationServiceImpl;
+import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,17 +33,17 @@ public class ConsultationController {
     }
 
     @PostMapping("/setup")
-    public void setUpConsultation(@RequestBody ConsultationDto consultationDto) {
+    public void setUpConsultation(@RequestBody ConsultationDto consultationDto) throws MessagingException {
         consultationService.setUpConsultation(consultationDto);
     }
 
     @PutMapping("/update/{consultationId}")
-    public void updateConsultation(@PathVariable Long consultationId, @RequestBody ConsultationDto consultationDto) {
+    public void updateConsultation(@PathVariable Long consultationId, @RequestBody ConsultationDto consultationDto) throws MessagingException {
         consultationService.updateConsultation(consultationId, consultationDto);
     }
 
     @DeleteMapping("/cancel/{consultationId}")
-    public void cancelConsultation(@PathVariable Long consultationId) {
+    public void cancelConsultation(@PathVariable Long consultationId) throws MessagingException {
         consultationService.cancelConsultation(consultationId);
     }
 

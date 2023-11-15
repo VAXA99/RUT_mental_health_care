@@ -9,6 +9,7 @@ import com.rut_mental_health_care.repository.ConsultationNotificationRepository;
 import com.rut_mental_health_care.repository.PsychProblemRepository;
 import com.rut_mental_health_care.repository.UserRepository;
 import com.rut_mental_health_care.service.mail.MailService;
+import jakarta.mail.MessagingException;
 import jakarta.persistence.EntityNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,7 +73,7 @@ public class ConsultationServiceImpl {
     }
 
     @Async
-    public void setUpConsultation(ConsultationDto consultationDto) {
+    public void setUpConsultation(ConsultationDto consultationDto) throws MessagingException {
         Long patientId = consultationDto.getPatient().getId();
         Long psychologistId = consultationDto.getPsychologist().getId();
 
@@ -116,7 +117,7 @@ public class ConsultationServiceImpl {
         sendNotificationOnConsultation(consultation.getId(), setUp);
     }
 
-    private void sendNotificationOnConsultation(Long consultationId, int status) {
+    private void sendNotificationOnConsultation(Long consultationId, int status) throws MessagingException {
         Consultation consultation = consultationRepository.findById(consultationId)
                 .orElseThrow(() -> new EntityNotFoundException("Consultation not found with id:" + consultationId));
         String patientNotificationDescription = "";
@@ -193,7 +194,7 @@ public class ConsultationServiceImpl {
     }
 
     //todo change input parameters
-    public void updateConsultation(Long consultationId, ConsultationDto updatedConsultationDto) {
+    public void updateConsultation(Long consultationId, ConsultationDto updatedConsultationDto) throws MessagingException {
         Consultation consultation = consultationRepository.findById(consultationId)
                 .orElseThrow(() -> new EntityNotFoundException("Consultation not found with id:" + consultationId));
         consultation.setStartsAt(updatedConsultationDto.getStartsAt());
@@ -201,7 +202,7 @@ public class ConsultationServiceImpl {
         sendNotificationOnConsultation(consultationId, update);
     }
 
-    public void cancelConsultation(Long consultationId) {
+    public void cancelConsultation(Long consultationId) throws MessagingException {
         sendNotificationOnConsultation(consultationId, cancel);
         consultationRepository.deleteById(consultationId);
     }
