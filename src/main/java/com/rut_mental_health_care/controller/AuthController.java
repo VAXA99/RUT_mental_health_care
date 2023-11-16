@@ -1,39 +1,55 @@
 package com.rut_mental_health_care.controller;
 
+import com.rut_mental_health_care.dto.PasswordDto;
 import com.rut_mental_health_care.entity.User;
 import com.rut_mental_health_care.security.JwtService;
 import com.rut_mental_health_care.security.request.AuthRequest;
 import com.rut_mental_health_care.security.request.SignUpRequest;
+import com.rut_mental_health_care.service.mail.MailService;
 import com.rut_mental_health_care.service.user.UserDetailsServiceImpl;
+import jakarta.mail.MessagingException;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.ResultSet;
+import java.util.UUID;
+
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
 
-    @Autowired
-    private UserDetailsServiceImpl service;
+    private final UserDetailsServiceImpl userDetailsService;
+
+    private final JwtService jwtService;
+
+    private final AuthenticationManager authenticationManager;
+
+    private final MailService mailService;
 
     @Autowired
-    private JwtService jwtService;
-
-    @Autowired
-    private AuthenticationManager authenticationManager;
+    public AuthController(UserDetailsServiceImpl userDetailsService,
+                          JwtService jwtService,
+                          AuthenticationManager authenticationManager,
+                          MailService mailService) {
+        this.userDetailsService = userDetailsService;
+        this.jwtService = jwtService;
+        this.authenticationManager = authenticationManager;
+        this.mailService = mailService;
+    }
 
     @PostMapping("/signUp")
     public ResponseEntity<?> signup(@RequestBody SignUpRequest signUpRequest) {
-        if (service.existsUserByUsername(signUpRequest.getUsername())) {
+        if (userDetailsService.existsUserByUsername(signUpRequest.getUsername())) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Choose different name");
         }
-        if (service.existsUserByEmail(signUpRequest.getEmail())) {
+        if (userDetailsService.existsUserByEmail(signUpRequest.getEmail())) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Choose different email");
         }
 
@@ -43,11 +59,10 @@ public class AuthController {
         user.setPassword(signUpRequest.getPassword());
         user.setRoles("ROLE_USER");
         user.setName(signUpRequest.getName());
-        user.setMiddleName(signUpRequest.getMiddleName());
         user.setSurname(signUpRequest.getSurname());
 
 
-        service.addUser(user);
+        userDetailsService.addUser(user);
 
         return ResponseEntity.ok("Success, User Signed Up Successfully");
     }
@@ -61,4 +76,46 @@ public class AuthController {
             throw new UsernameNotFoundException("invalid user request !");
         }
     }
+
+    @PostMapping("/user/resetPassword")
+    public ResponseEntity<?> resetPassword(HttpServletRequest request,
+                                           @RequestParam String email) throws MessagingException {
+        User user = userDetailsService.findByEmail(email);
+        String token = UUID.randomUUID().toString();
+        userDetailsService.createPasswordResetTokenForUser(user, token);
+        mailService.send(mailService.constructResetTokenEmail(getAppUrl(request), token, user));
+
+        return ResponseEntity.ok("Link sent to email: " + email);
+    }
+
+    private String getAppUrl(HttpServletRequest request) {
+        // Get the scheme (http or https)
+        String scheme = request.getScheme();
+        // Get the server name
+        String serverName = request.getServerName();
+        // Get the server port
+        int serverPort = request.getServerPort();
+
+
+        return scheme + "://" + serverName + ":" + serverPort;
+    }
+
+    @PostMapping("/user/savePassword")
+    public ResponseEntity<?> savePassword(@RequestBody PasswordDto passwordDto) {
+
+        String result = userDetailsService.validatePasswordResetToken(passwordDto.getToken());
+
+        if (result != null) {
+            return ResponseEntity.status(500).body("Not valid token");
+        }
+
+        User user = userDetailsService.findUserByPasswordResetToken(passwordDto.getToken());
+
+        userDetailsService.changeUserPassword(user, passwordDto.getNewPassword());
+
+        return ResponseEntity.ok("Password changed for user: " + user.getUsername());
+
+    }
+
+
 }

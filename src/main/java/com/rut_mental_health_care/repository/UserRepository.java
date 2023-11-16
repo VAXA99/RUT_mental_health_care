@@ -2,6 +2,8 @@ package com.rut_mental_health_care.repository;
 
 import com.rut_mental_health_care.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
@@ -9,6 +11,10 @@ import java.util.Optional;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByUsername(String username);
+    Optional<User> findByEmail(String email);
+    @Query("SELECT prt.user FROM PasswordResetToken prt WHERE prt.token = :token")
+    Optional<User> findUserByPasswordResetToken(@Param("token") String token);
     Boolean existsUserByUsername(String username);
     Boolean existsUserByEmail(String email);
+
 }

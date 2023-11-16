@@ -7,9 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class LikeDto {
-    private Long id;
-    private UserDto userDto;
-    private PostDto postDto;
-    private Boolean isLike;
+public class PasswordDto {
+    private String token;
+    private String newPassword;
 }

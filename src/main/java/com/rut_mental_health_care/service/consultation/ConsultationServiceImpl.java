@@ -88,11 +88,11 @@ public class ConsultationServiceImpl {
 
         // Ensure roles are correctly assigned
         if (!patient.getRoles().equals("ROLE_USER")) {
-            throw new IllegalArgumentException("User with ID " + patient.getId() + " is not a patient.");
+            throw new EntityNotFoundException("User with ID " + patient.getId() + " is not a patient.");
         }
 
         if (!psychologist.getRoles().equals("ROLE_PSYCHOLOGIST")) {
-            throw new IllegalArgumentException("User with ID " + psychologist.getId() + " is not a psychologist.");
+            throw new EntityNotFoundException("User with ID " + psychologist.getId() + " is not a psychologist.");
         }
 
         // Set the correct patient and psychologist in the consultation
@@ -198,9 +198,8 @@ public class ConsultationServiceImpl {
         consultationNotification.setDescription(patientNotificationDescription);
         consultationNotificationRepository.save(consultationNotification);
 
-        mailService.send(consultation.getPatient().getEmail(), patientNotificationDescription, subject);
-        mailService.send(consultation.getPsychologist().getEmail(), psychologistNotificationDescription, subject);
-
+        mailService.send(mailService.constructEmail(subject, patientNotificationDescription, patient));
+        mailService.send(mailService.constructEmail(subject, psychologistNotificationDescription, psychologist));
     }
 
     //todo change input parameters
