@@ -32,7 +32,7 @@ public class ConsultationController {
         return consultationService.getAllConsultations(userDto);
     }
 
-    @PostMapping("/setup")
+    @PostMapping("/setUp")
     public void setUpConsultation(@RequestBody ConsultationDto consultationDto) throws MessagingException {
         consultationService.setUpConsultation(consultationDto);
     }

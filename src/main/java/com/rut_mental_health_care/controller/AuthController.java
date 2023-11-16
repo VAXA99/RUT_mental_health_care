@@ -28,11 +28,6 @@ public class AuthController {
     @Autowired
     private AuthenticationManager authenticationManager;
 
-    @GetMapping("/welcome")
-    public String welcome() {
-        return "Welcome this endpoint is not secure";
-    }
-
     @PostMapping("/signUp")
     public ResponseEntity<?> signup(@RequestBody SignUpRequest signUpRequest) {
         if (service.existsUserByUsername(signUpRequest.getUsername())) {
@@ -46,26 +41,15 @@ public class AuthController {
         user.setUsername(signUpRequest.getUsername());
         user.setEmail(signUpRequest.getEmail());
         user.setPassword(signUpRequest.getPassword());
-        user.setRoles(signUpRequest.getRoles());
+        user.setRoles("ROLE_USER");
         user.setName(signUpRequest.getName());
+        user.setMiddleName(signUpRequest.getMiddleName());
         user.setSurname(signUpRequest.getSurname());
 
 
         service.addUser(user);
 
         return ResponseEntity.ok("Success, User Signed Up Successfully");
-    }
-
-    @GetMapping("/user/userProfile")
-    @PreAuthorize("hasAuthority('ROLE_USER')")
-    public String userProfile() {
-        return "Welcome to User Profile";
-    }
-
-    @GetMapping("/admin/adminProfile")
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-    public String adminProfile() {
-        return "Welcome to Admin Profile";
     }
 
     @PostMapping("/signIn")
