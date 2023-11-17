@@ -85,9 +85,18 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         return passToken.getExpiryDate().before(cal.getTime());
     }
 
-    public void changeUserPassword(User user, String password) {
-        user.setPassword(encoder.encode(password));
-        userRepository.save(user);
+    public boolean changeUserPassword(User user, String password) {
+        if (isPasswordChanged(user, password)) {
+            user.setPassword(encoder.encode(password));
+            userRepository.save(user);
+            return true;
+        }
+        return false;
+    }
+
+    private boolean isPasswordChanged(User user, String newPassword) {
+        // Compare the new password with the old hashed password
+        return !encoder.matches(newPassword, user.getPassword());
     }
 
 }

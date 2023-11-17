@@ -105,17 +105,24 @@ public class AuthController {
 
         String result = userDetailsService.validatePasswordResetToken(passwordDto.getToken());
 
+
+
         if (result != null) {
             return ResponseEntity.status(500).body("Not valid token");
         }
 
         User user = userDetailsService.findUserByPasswordResetToken(passwordDto.getToken());
 
-        userDetailsService.changeUserPassword(user, passwordDto.getNewPassword());
 
-        return ResponseEntity.ok("Password changed for user: " + user.getUsername());
+        if (userDetailsService.changeUserPassword(user, passwordDto.getNewPassword())) {
+            return ResponseEntity.ok("Password changed for user: " + user.getUsername());
+        } else {
+            return ResponseEntity.badRequest().body("Password not changed. New password is the same as the old one.");
+        }
 
     }
+
+
 
 
 }
