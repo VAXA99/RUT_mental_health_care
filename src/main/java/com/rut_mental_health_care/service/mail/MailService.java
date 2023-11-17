@@ -32,7 +32,7 @@ public class MailService {
         email.setSubject(subject);
         email.setText(body);
         email.setTo(user.getEmail());
-        email.setFrom("schedania.vahtang@yandex.ru");
+        email.setFrom("rutmentalhealthcare@yandex.ru");
         return email;
     }
 
