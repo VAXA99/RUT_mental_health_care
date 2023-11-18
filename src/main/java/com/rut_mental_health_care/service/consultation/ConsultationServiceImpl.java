@@ -9,7 +9,6 @@ import com.rut_mental_health_care.repository.ConsultationNotificationRepository;
 import com.rut_mental_health_care.repository.PsychProblemRepository;
 import com.rut_mental_health_care.repository.UserRepository;
 import com.rut_mental_health_care.service.mail.MailService;
-import jakarta.mail.MessagingException;
 import jakarta.persistence.EntityNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,8 +25,6 @@ import java.util.stream.Collectors;
 
 import com.rut_mental_health_care.entity.Consultation;
 import com.rut_mental_health_care.repository.ConsultationRepository;
-
-import javax.management.relation.Role;
 
 @Service
 public class ConsultationServiceImpl implements ConsultationService {
