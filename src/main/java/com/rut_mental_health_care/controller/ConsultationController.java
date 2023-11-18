@@ -15,10 +15,10 @@ import java.util.List;
 @RequestMapping("/consultations")
 public class ConsultationController {
 
-    private final ConsultationServiceImpl consultationService;
+    private final ConsultationService consultationService;
 
     @Autowired
-    public ConsultationController(ConsultationServiceImpl consultationService) {
+    public ConsultationController(ConsultationService consultationService) {
         this.consultationService = consultationService;
     }
 

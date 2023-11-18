@@ -30,7 +30,7 @@ import com.rut_mental_health_care.repository.ConsultationRepository;
 import javax.management.relation.Role;
 
 @Service
-public class ConsultationServiceImpl {
+public class ConsultationServiceImpl implements ConsultationService {
     private final ConsultationRepository consultationRepository;
     private final ConsultationNotificationRepository consultationNotificationRepository;
     private final UserRepository userRepository;
@@ -74,7 +74,7 @@ public class ConsultationServiceImpl {
     }
 
     @Async
-    public void setUpConsultation(ConsultationDto consultationDto) throws MessagingException {
+    public void setUpConsultation(ConsultationDto consultationDto) {
         Long patientId = consultationDto.getPatient().getId();
         Long psychologistId = consultationDto.getPsychologist().getId();
 
@@ -118,7 +118,7 @@ public class ConsultationServiceImpl {
         sendNotificationOnConsultation(consultation.getId(), setUp);
     }
 
-    private void sendNotificationOnConsultation(Long consultationId, int status) throws MessagingException {
+    private void sendNotificationOnConsultation(Long consultationId, int status) {
         Consultation consultation = consultationRepository.findById(consultationId)
                 .orElseThrow(() -> new EntityNotFoundException("Consultation not found with id:" + consultationId));
         String patientNotificationDescription = "";
@@ -203,7 +203,7 @@ public class ConsultationServiceImpl {
     }
 
     //todo change input parameters
-    public void updateConsultation(Long consultationId, ConsultationDto updatedConsultationDto) throws MessagingException {
+    public void updateConsultation(Long consultationId, ConsultationDto updatedConsultationDto) {
         Consultation consultation = consultationRepository.findById(consultationId)
                 .orElseThrow(() -> new EntityNotFoundException("Consultation not found with id:" + consultationId));
         consultation.setStartsAt(updatedConsultationDto.getStartsAt());
@@ -211,7 +211,7 @@ public class ConsultationServiceImpl {
         sendNotificationOnConsultation(consultationId, update);
     }
 
-    public void cancelConsultation(Long consultationId) throws MessagingException {
+    public void cancelConsultation(Long consultationId) {
         sendNotificationOnConsultation(consultationId, cancel);
         consultationRepository.deleteById(consultationId);
     }

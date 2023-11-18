@@ -1,23 +1,19 @@
 package com.rut_mental_health_care.service.mail;
 
 import com.rut_mental_health_care.entity.User;
-import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.stereotype.Service;
-
-import java.util.Locale;
 
 @Service
 @RequiredArgsConstructor
 public class MailService {
     private final JavaMailSenderImpl javaMailSender;
 
-    public void send(SimpleMailMessage mailMessage) throws MessagingException {
+    public void send(SimpleMailMessage mailMessage) {
         javaMailSender.send(mailMessage);
     }
-
 
     //TODO rework URL
     public SimpleMailMessage constructResetTokenEmail(
@@ -35,7 +31,4 @@ public class MailService {
         email.setFrom("rutmentalhealthcare@yandex.ru");
         return email;
     }
-
-
-
 }
