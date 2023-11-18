@@ -20,4 +20,17 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     // Query to get the comment count for a post
     @Query("SELECT COUNT(c) FROM Comment c WHERE c.post = :post")
     long getCommentCount(@Param("post") Post post);
+
+    // Query to get the number of user's posts
+    @Query("SELECT COUNT(p) FROM Post p WHERE p.user.id = :userId")
+    long getUserPostCount(@Param("userId") Long userId);
+
+    // Query to get the total likes on user's posts
+    @Query("SELECT COUNT(l) FROM Like l WHERE l.post.user.id = :userId AND l.isLike = true")
+    long getTotalLikesOnUserPosts(@Param("userId") Long userId);
+
+    // Query to get the total number of comments on user's posts
+    @Query("SELECT COUNT(c) FROM Comment c WHERE c.post.user.id = :userId")
+    long getTotalCommentsOnUserPosts(@Param("userId") Long userId);
+
 }
