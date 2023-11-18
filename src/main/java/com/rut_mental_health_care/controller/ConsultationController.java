@@ -37,7 +37,7 @@ public class ConsultationController {
         consultationService.setUpConsultation(consultationDto);
     }
 
-    @PutMapping("/update/{consultationId}")
+    @PatchMapping("/update/{consultationId}")
     public void updateConsultation(@PathVariable Long consultationId, @RequestBody ConsultationDto consultationDto) throws MessagingException {
         consultationService.updateConsultation(consultationId, consultationDto);
     }

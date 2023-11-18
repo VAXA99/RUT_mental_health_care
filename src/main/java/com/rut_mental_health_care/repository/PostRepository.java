@@ -6,6 +6,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface PostRepository extends JpaRepository<Post, Long> {
 
@@ -33,4 +35,5 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     @Query("SELECT COUNT(c) FROM Comment c WHERE c.post.user.id = :userId")
     long getTotalCommentsOnUserPosts(@Param("userId") Long userId);
 
+    List<Post> findAllByUserId(Long userId);
 }

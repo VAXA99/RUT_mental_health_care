@@ -216,36 +216,6 @@ public class ConsultationServiceImpl {
         consultationRepository.deleteById(consultationId);
     }
 
-    /*// Method to remind the patient and doctor about the consultation 1 day before and 2 hours before it.
-    public void remindConsultationParticipants() {
-        // Calculate the reminder times (1 day before and 2 hours before)
-        LocalDateTime oneDayBefore = LocalDateTime.now().plusDays(1);
-        LocalDateTime twoHoursBefore = LocalDateTime.now().plusHours(2);
-
-        // Find consultations that match the reminder times
-        List<Consultation> consultationsToRemind = consultationRepository.findConsultationsToRemind(oneDayBefore, twoHoursBefore);
-
-        for (Consultation consultation : consultationsToRemind) {
-            // Create consultation notification for the patient
-            ConsultationNotification patientNotification = new ConsultationNotification();
-            patientNotification.setConsultation(consultation);
-            patientNotification.setRead(false);
-            patientNotification.setDescription("Your consultation is scheduled for " + consultation.getStartsAt());
-
-            // Create consultation notification for the doctor
-            ConsultationNotification doctorNotification = new ConsultationNotification();
-            doctorNotification.setConsultation(consultation);
-            doctorNotification.setRead(false);
-            doctorNotification.setDescription("Your consultation with " + consultation.getPatient().getName() + consultation.getPatient().getSurname() +
-                    " is scheduled for " + consultation.getStartsAt());
-
-            // Save the notifications
-            consultationNotificationRepository.save(patientNotification);
-
-           consultationNotificationRepository.save(doctorNotification);
-        }
-    }*/
-
     public ConsultationDto convertToConsultationDto(Consultation consultation) {
         ConsultationDto consultationDto = modelMapper.map(consultation, ConsultationDto.class);
 
