@@ -1,4 +1,4 @@
-package com.rut_mental_health_care.entity;
+package com.rut_mental_health_care.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -9,15 +9,11 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "consultation_notification")
-public class ConsultationNotification {
+public class Location {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(nullable = false)
-    private Consultation consultation;
-
+    @Column(nullable = false)
     private String description;
 }

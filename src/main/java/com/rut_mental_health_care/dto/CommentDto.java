@@ -1,6 +1,5 @@
 package com.rut_mental_health_care.dto;
 
-import com.rut_mental_health_care.entity.Comment;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

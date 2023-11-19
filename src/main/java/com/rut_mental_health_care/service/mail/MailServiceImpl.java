@@ -1,6 +1,6 @@
 package com.rut_mental_health_care.service.mail;
 
-import com.rut_mental_health_care.entity.User;
+import com.rut_mental_health_care.model.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSenderImpl;

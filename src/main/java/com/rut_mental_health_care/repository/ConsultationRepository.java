@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import com.rut_mental_health_care.entity.Consultation;
+import com.rut_mental_health_care.model.Consultation;
 
 import java.time.LocalDateTime;
 import java.util.List;

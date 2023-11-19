@@ -4,7 +4,7 @@ package com.rut_mental_health_care.service.communication;
 import com.rut_mental_health_care.dto.CommentDto;
 import com.rut_mental_health_care.dto.PostDto;
 import com.rut_mental_health_care.dto.UserDto;
-import com.rut_mental_health_care.entity.*;
+import com.rut_mental_health_care.model.*;
 import com.rut_mental_health_care.repository.*;
 import jakarta.persistence.EntityNotFoundException;
 import org.modelmapper.ModelMapper;

@@ -1,4 +1,4 @@
-package com.rut_mental_health_care.entity;
+package com.rut_mental_health_care.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

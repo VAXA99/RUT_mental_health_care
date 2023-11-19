@@ -1,4 +1,4 @@
-package com.rut_mental_health_care.entity;
+package com.rut_mental_health_care.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -38,4 +38,8 @@ public class User {
     private Integer sex;
 
     private String information;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "photo_id", referencedColumnName = "id")
+    private File profilePicture;
 }

@@ -1,6 +1,6 @@
 package com.rut_mental_health_care.repository;
 
-import com.rut_mental_health_care.entity.Tag;
+import com.rut_mental_health_care.model.Tag;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

@@ -1,7 +1,7 @@
 package com.rut_mental_health_care.controller;
 
 import com.rut_mental_health_care.dto.PasswordDto;
-import com.rut_mental_health_care.entity.User;
+import com.rut_mental_health_care.model.User;
 import com.rut_mental_health_care.security.JwtService;
 import com.rut_mental_health_care.security.request.AuthRequest;
 import com.rut_mental_health_care.security.request.SignUpRequest;

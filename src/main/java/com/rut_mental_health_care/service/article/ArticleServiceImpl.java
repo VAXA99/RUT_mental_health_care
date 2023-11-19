@@ -1,6 +1,6 @@
 package com.rut_mental_health_care.service.article;
 
-import com.rut_mental_health_care.entity.Article;
+import com.rut_mental_health_care.model.Article;
 import com.rut_mental_health_care.repository.ArticleRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -2,9 +2,9 @@ package com.rut_mental_health_care.service.consultation;
 
 import com.rut_mental_health_care.dto.ConsultationDto;
 import com.rut_mental_health_care.dto.UserDto;
-import com.rut_mental_health_care.entity.ConsultationNotification;
-import com.rut_mental_health_care.entity.PsychProblem;
-import com.rut_mental_health_care.entity.User;
+import com.rut_mental_health_care.model.ConsultationNotification;
+import com.rut_mental_health_care.model.PsychProblem;
+import com.rut_mental_health_care.model.User;
 import com.rut_mental_health_care.repository.ConsultationNotificationRepository;
 import com.rut_mental_health_care.repository.PsychProblemRepository;
 import com.rut_mental_health_care.repository.UserRepository;
@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
-import com.rut_mental_health_care.entity.Consultation;
+import com.rut_mental_health_care.model.Consultation;
 import com.rut_mental_health_care.repository.ConsultationRepository;
 
 @Service

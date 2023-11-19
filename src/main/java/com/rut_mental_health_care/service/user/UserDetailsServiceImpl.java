@@ -1,7 +1,7 @@
 package com.rut_mental_health_care.service.user;
 
-import com.rut_mental_health_care.entity.PasswordResetToken;
-import com.rut_mental_health_care.entity.User;
+import com.rut_mental_health_care.model.PasswordResetToken;
+import com.rut_mental_health_care.model.User;
 import com.rut_mental_health_care.repository.PasswordResetTokenRepository;
 import com.rut_mental_health_care.repository.UserRepository;
 import com.rut_mental_health_care.security.UserDetailsImpl;

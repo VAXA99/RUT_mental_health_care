@@ -2,7 +2,7 @@ package com.rut_mental_health_care.controller;
 
 import com.rut_mental_health_care.dto.ConsultationDto;
 import com.rut_mental_health_care.dto.UserDto;
-import com.rut_mental_health_care.entity.ConsultationNotification;
+import com.rut_mental_health_care.model.ConsultationNotification;
 import com.rut_mental_health_care.service.consultation.ConsultationService;
 import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;

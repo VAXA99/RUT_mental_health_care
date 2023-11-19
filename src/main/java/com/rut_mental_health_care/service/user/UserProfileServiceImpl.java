@@ -3,8 +3,8 @@ package com.rut_mental_health_care.service.user;
 import com.rut_mental_health_care.dto.PostDto;
 import com.rut_mental_health_care.dto.UserDto;
 import com.rut_mental_health_care.dto.UserProfileDto;
-import com.rut_mental_health_care.entity.Post;
-import com.rut_mental_health_care.entity.User;
+import com.rut_mental_health_care.model.Post;
+import com.rut_mental_health_care.model.User;
 import com.rut_mental_health_care.repository.PostRepository;
 import com.rut_mental_health_care.repository.TagRepository;
 import com.rut_mental_health_care.repository.UserRepository;
@@ -14,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 

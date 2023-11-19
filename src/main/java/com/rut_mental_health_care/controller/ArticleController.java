@@ -1,6 +1,6 @@
 package com.rut_mental_health_care.controller;
 
-import com.rut_mental_health_care.entity.Article;
+import com.rut_mental_health_care.model.Article;
 import com.rut_mental_health_care.service.article.ArticleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
