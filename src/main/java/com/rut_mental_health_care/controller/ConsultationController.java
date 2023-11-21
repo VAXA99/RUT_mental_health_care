@@ -4,8 +4,9 @@ import com.rut_mental_health_care.dto.ConsultationDto;
 import com.rut_mental_health_care.dto.UserDto;
 import com.rut_mental_health_care.model.ConsultationNotification;
 import com.rut_mental_health_care.service.consultation.ConsultationService;
-import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,28 +24,52 @@ public class ConsultationController {
     }
 
     @GetMapping("/notifications")
-    public List<ConsultationNotification> getAllConsNotifications() {
-        return consultationService.getAllConsNotifications();
+    public ResponseEntity<List<ConsultationNotification>> getAllConsNotifications() {
+        try {
+            List<ConsultationNotification> notifications = consultationService.getAllConsNotifications();
+            return ResponseEntity.ok(notifications);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
     }
 
     @GetMapping("/all")
-    public List<ConsultationDto> getAllConsultations(@RequestBody UserDto userDto) {
-        return consultationService.getAllConsultations(userDto);
+    public ResponseEntity<List<ConsultationDto>> getAllConsultations(@RequestBody UserDto userDto) {
+        try {
+            List<ConsultationDto> consultations = consultationService.getAllConsultations(userDto);
+            return ResponseEntity.ok(consultations);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
     }
 
     @PostMapping("/setUp")
-    public void setUpConsultation(@RequestBody ConsultationDto consultationDto) throws MessagingException {
-        consultationService.setUpConsultation(consultationDto);
+    public ResponseEntity<String> setUpConsultation(@RequestBody ConsultationDto consultationDto) {
+        try {
+            consultationService.setUpConsultation(consultationDto);
+            return ResponseEntity.status(HttpStatus.CREATED).body("Consultation set up successfully");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error setting up consultation: " + e.getMessage());
+        }
     }
 
     @PatchMapping("/update/{consultationId}")
-    public void updateConsultation(@PathVariable Long consultationId, @RequestBody ConsultationDto consultationDto) throws MessagingException {
-        consultationService.updateConsultation(consultationId, consultationDto);
+    public ResponseEntity<String> updateConsultation(@PathVariable Long consultationId, @RequestBody ConsultationDto consultationDto) {
+        try {
+            consultationService.updateConsultation(consultationId, consultationDto);
+            return ResponseEntity.ok("Consultation updated successfully");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error updating consultation: " + e.getMessage());
+        }
     }
 
     @DeleteMapping("/cancel/{consultationId}")
-    public void cancelConsultation(@PathVariable Long consultationId) throws MessagingException {
-        consultationService.cancelConsultation(consultationId);
+    public ResponseEntity<String> cancelConsultation(@PathVariable Long consultationId) {
+        try {
+            consultationService.cancelConsultation(consultationId);
+            return ResponseEntity.ok("Consultation canceled successfully");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error canceling consultation: " + e.getMessage());
+        }
     }
-
 }

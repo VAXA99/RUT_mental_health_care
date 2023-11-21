@@ -1,9 +1,16 @@
 package com.rut_mental_health_care.controller;
 
 import com.rut_mental_health_care.dto.UserProfileDto;
+import com.rut_mental_health_care.model.File;
 import com.rut_mental_health_care.service.user.UserProfileService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.crossstore.ChangeSetPersister;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -57,6 +64,44 @@ public class UserProfileController {
     @GetMapping("/psychologistsProfiles")
     public List<UserProfileDto> getPsychologistsProfile() {
         return userProfileService.getPsychologistsProfile();
+    }
+
+    @GetMapping("/profile/profilePicture/{userId}")
+    public ResponseEntity<byte[]> getProfilePicture(@PathVariable Long userId) {
+        File file = userProfileService.getProfilePicture(userId);
+
+        if (file == null) {
+            return ResponseEntity.notFound()
+                    .build();
+        }
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getName() + "\"")
+                .contentType(MediaType.valueOf(file.getContentType()))
+                .body(file.getData());
+    }
+
+    @PostMapping("/profile/uploadProfilePicture/{userId}")
+    public ResponseEntity<String> uploadProfilePicture(@PathVariable Long userId, @RequestParam("file") MultipartFile file) {
+        try {
+            userProfileService.uploadProfilePicture(userId, file);
+
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(String.format("File uploaded successfully: %s", file.getOriginalFilename()));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(String.format("Could not upload the file: %s!", file.getOriginalFilename()));
+        }
+    }
+
+    @DeleteMapping("/profile/deleteProfilePicture/{userId}")
+    public ResponseEntity<String> deleteProfilePicture(@PathVariable Long userId) {
+        try {
+            userProfileService.deleteProfilePicture(userId);
+            return new ResponseEntity<>("Profile picture deleted successfully", HttpStatus.OK);
+        } catch (Exception ex) {
+            return new ResponseEntity<>("An error occurred while deleting the profile picture", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
 }

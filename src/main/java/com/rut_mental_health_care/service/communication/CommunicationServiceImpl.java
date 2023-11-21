@@ -179,6 +179,7 @@ public class CommunicationServiceImpl implements CommunicationService {
 
     private PostDto convertToPostDTO(Post post) {
         PostDto postDto = modelMapper.map(post, PostDto.class);
+
         if (post.getUser() != null) {
             UserDto userDto = modelMapper.map(post.getUser(), UserDto.class);
             postDto.setUserDto(userDto);

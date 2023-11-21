@@ -1,5 +1,6 @@
 package com.rut_mental_health_care.dto;
 
+import com.rut_mental_health_care.model.File;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,6 +18,7 @@ public class UserProfileDto {
     private String middleName;
     private String email;
     private String bio;
+    private File profilePicture;
     private List<PostDto> postDtos;
     private long totalPosts;
     private long totalComments;

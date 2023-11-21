@@ -3,17 +3,23 @@ package com.rut_mental_health_care.service.user;
 import com.rut_mental_health_care.dto.PostDto;
 import com.rut_mental_health_care.dto.UserDto;
 import com.rut_mental_health_care.dto.UserProfileDto;
+import com.rut_mental_health_care.model.File;
 import com.rut_mental_health_care.model.Post;
 import com.rut_mental_health_care.model.User;
+import com.rut_mental_health_care.repository.FileRepository;
 import com.rut_mental_health_care.repository.PostRepository;
 import com.rut_mental_health_care.repository.TagRepository;
 import com.rut_mental_health_care.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -23,13 +29,19 @@ public class UserProfileServiceImpl implements UserProfileService {
     private final PostRepository postRepository;
     private final UserRepository userRepository;
     private final TagRepository tagRepository;
+    private final FileRepository fileRepository;
     private final ModelMapper modelMapper;
 
     @Autowired
-    public UserProfileServiceImpl(PostRepository postRepository, UserRepository userRepository, TagRepository tagRepository, ModelMapper modelMapper) {
+    public UserProfileServiceImpl(PostRepository postRepository,
+                                  UserRepository userRepository,
+                                  TagRepository tagRepository,
+                                  FileRepository fileRepository,
+                                  ModelMapper modelMapper) {
         this.postRepository = postRepository;
         this.userRepository = userRepository;
         this.tagRepository = tagRepository;
+        this.fileRepository = fileRepository;
         this.modelMapper = modelMapper;
     }
 
@@ -83,18 +95,29 @@ public class UserProfileServiceImpl implements UserProfileService {
     }
 
     @Override
+    @Transactional
+    public File getProfilePicture(Long userId) {
+
+        return fileRepository.findByUserId(userId)
+                .orElseThrow(() -> new EntityNotFoundException("File not found for user with ID:" + userId));
+
+    }
+
+    @Override
     public List<PostDto> getUserPosts(Long userId) {
         List<Post> posts = postRepository.findAllByUserId(userId);
         List<PostDto> postDtos = posts.stream()
-                .map(this::convertToPostDTO)
+                .map(post -> {
+                    PostDto postDto = convertToPostDTO(post);
+                    List<String> tagNames = tagRepository.findTagsByPostId(postDto.getId());
+                    postDto.setTagNames(tagNames);
+                    return postDto;
+                })
                 .collect(Collectors.toList());
-        for (PostDto postDto: postDtos) {
-            List<String> tagNames = tagRepository.findTagsByPostId(postDto.getId());
-            postDto.setTagNames(tagNames);
-        }
 
         return postDtos;
     }
+
 
     @Override
     public long getUserPostCount(Long userId) {
@@ -121,12 +144,13 @@ public class UserProfileServiceImpl implements UserProfileService {
         String middleName = getUserMiddleName(userId);
         String email = getUserEmail(userId);
         String bio = getUserBio(userId);
+        File profilePicture = getProfilePicture(userId);
         List<PostDto> postDtos= getUserPosts(userId);
         long totalPosts = getUserPostCount(userId);
         long totalComments = getTotalCommentsOnUserPosts(userId);
         long totalLikes = getTotalLikesOnUserPosts(userId);
 
-        return new UserProfileDto(username, roles, name, surname, middleName, email, bio, postDtos, totalPosts, totalComments, totalLikes);
+        return new UserProfileDto(username, roles, name, surname, middleName, email, bio, profilePicture, postDtos, totalPosts, totalComments, totalLikes);
     }
 
     @Override
@@ -208,5 +232,34 @@ public class UserProfileServiceImpl implements UserProfileService {
         postDto.setCommentCount(postRepository.getCommentCount(post));
 
         return postDto;
+    }
+
+
+    @Override
+    @Async
+    @Transactional
+    public void uploadProfilePicture(Long userId, MultipartFile file) throws IOException {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("User not found with ID:" + userId));
+
+        File fileEntity = new File();
+        fileEntity.setName(StringUtils.cleanPath(file.getOriginalFilename()));
+        fileEntity.setContentType(file.getContentType());
+        fileEntity.setData(file.getBytes());
+        fileEntity.setSize(file.getSize());
+
+        user.setProfilePicture(fileEntity);
+
+        fileRepository.save(fileEntity);
+    }
+
+    @Override
+    @Async
+    @Transactional
+    public void deleteProfilePicture(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("User not found with ID:" + userId));
+        user.setProfilePicture(null);
+        fileRepository.deleteByUserId(userId);
     }
 }

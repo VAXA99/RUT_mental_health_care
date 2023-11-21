@@ -3,7 +3,10 @@ package com.rut_mental_health_care.service.user;
 
 import com.rut_mental_health_care.dto.PostDto;
 import com.rut_mental_health_care.dto.UserProfileDto;
+import com.rut_mental_health_care.model.File;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 public interface UserProfileService {
@@ -14,6 +17,7 @@ public interface UserProfileService {
     String getUserMiddleName(Long userId);
     String getUserEmail(Long userId);
     String getUserBio(Long userId);
+    File getProfilePicture(Long userId);
     List<PostDto> getUserPosts(Long userId);
     long getUserPostCount(Long userId);
     long getTotalLikesOnUserPosts(Long userId);
@@ -26,4 +30,6 @@ public interface UserProfileService {
     void editMiddleName(Long userId, String newMiddleName);
     void editEmail(Long userId, String newEmail);
     void editBio(Long userId, String newBio);
+    void uploadProfilePicture(Long userId, MultipartFile file) throws IOException;
+    void deleteProfilePicture(Long userId);
 }
