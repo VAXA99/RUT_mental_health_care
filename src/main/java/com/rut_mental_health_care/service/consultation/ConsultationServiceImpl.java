@@ -31,7 +31,7 @@ public class ConsultationServiceImpl implements ConsultationService {
     private final ConsultationRepository consultationRepository;
     private final ConsultationNotificationRepository consultationNotificationRepository;
     private final UserRepository userRepository;
-    private  final PsychProblemRepository psychProblemRepository;
+    private final PsychProblemRepository psychProblemRepository;
     private final MailService mailService;
     private final ModelMapper modelMapper;
 
@@ -99,8 +99,8 @@ public class ConsultationServiceImpl implements ConsultationService {
         System.out.println(consultation.getPatient());
         System.out.println(consultation.getPsychologist());
 
-    List<PsychProblem> psychProblems = new ArrayList<>();
-        for (String psychProblem: consultationDto.getPsychProblems()) {
+        List<PsychProblem> psychProblems = new ArrayList<>();
+        for (String psychProblem : consultationDto.getPsychProblems()) {
             PsychProblem psychProblem_ = psychProblemRepository.findByDescription(psychProblem).orElseGet(() -> {
                 PsychProblem newPsychProblem = new PsychProblem();
                 newPsychProblem.setDescription(psychProblem);
@@ -174,15 +174,13 @@ public class ConsultationServiceImpl implements ConsultationService {
                     + descriptionForPatient;
             psychologistNotificationDescription = "Здравствуйте, " + psychologistName + ", Ваша консультация была отменена: \n"
                     + descriptionForPsychologist;
-        }
-        else if (status == setUp) {
+        } else if (status == setUp) {
             subject = "Вам назначена консультация";
             patientNotificationDescription = "Здравствуйте, " + patientName + ", Вам назначена консультация: \n"
                     + descriptionForPatient;
             psychologistNotificationDescription = "Здравствуйте, " + psychologistName + ", Вам назначена консультация: \n"
                     + descriptionForPsychologist;
-        }
-        else if (status == update) {
+        } else if (status == update) {
             subject = "Данные по вашей консультации обновились";
             patientNotificationDescription = "Здравствуйте, " + patientName + ", данные по вашей консультации обновились. Новые данные: \n"
                     + descriptionForPatient;
