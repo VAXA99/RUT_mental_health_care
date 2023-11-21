@@ -11,7 +11,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/consultations")
+@RequestMapping("/api/consultations")
+@CrossOrigin("http://localhost:3000/")
 public class ConsultationController {
 
     private final ConsultationService consultationService;

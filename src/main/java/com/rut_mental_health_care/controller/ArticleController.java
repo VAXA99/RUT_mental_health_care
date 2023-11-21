@@ -7,7 +7,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/articles")
+@RequestMapping("/api/articles")
+@CrossOrigin("http://localhost:3000/")
 public class ArticleController {
 
     private final ArticleService articleService;

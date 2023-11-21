@@ -11,7 +11,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/posts")
+@RequestMapping("/api/posts")
+@CrossOrigin("http://localhost:3000/")
 public class CommunicationController {
 
     private final CommunicationService communicationService;

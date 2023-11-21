@@ -21,7 +21,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/api/auth")
+@CrossOrigin("http://localhost:3000/")
 public class AuthController {
 
     private final UserDetailsServiceImpl userDetailsService;
