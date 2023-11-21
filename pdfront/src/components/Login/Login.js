@@ -1,10 +1,11 @@
 import React, {Component, useState} from 'react'
-import {Link} from 'react-router-dom'
+import {Link, useNavigate} from 'react-router-dom'
 
 export const Login = () => {
     // State to manage user input
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const navigate = useNavigate();
 
     // State to manage authentication status
     const [authenticated, setAuthenticated] = useState(false);
@@ -33,19 +34,12 @@ export const Login = () => {
 
             // Set the authenticated state to true
             setAuthenticated(true);
+            navigate("/");
         } else {
             // Handle authentication error, e.g., show an error message to the user
         }
     };
 
-    // Function to handle user logout
-    const handleLogout = () => {
-        // Remove the token from localStorage
-        localStorage.removeItem('token');
-
-        // Set the authenticated state to false
-        setAuthenticated(false);
-    };
 
     //TODO handle bad credentials
     return (
@@ -59,8 +53,10 @@ export const Login = () => {
             <img className="angle bottom right" src="/img/Star%200.png" alt=""/>
             <img className="angle bottom left" src="/img/Ellipse%205.png" alt="1"/>
             <div className="container auth">
-                <div className="auth__img"><img src="/img/Логотип%20РУТ%20(МИИТ)%20синий%201.png" alt=""/></div>
-                <div className="auth__title">Цифровая система психологической поддержки РУТ</div>
+                <Link to={"/"} >
+                    <div className="auth__img"><img src="/img/Логотип%20РУТ%20(МИИТ)%20синий%201.png" alt=""/></div>
+                    <div className="auth__title">Цифровая система психологической поддержки РУТ</div>
+                </Link>
                 <form className="auth__form" onSubmit={handleLogin}>
                     <div className="input__block">
                         <input className="auth__input"

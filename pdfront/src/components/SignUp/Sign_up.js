@@ -51,8 +51,11 @@ export default function Sign_up() {
                 <img className="angle bottom right" src="/img/Star%200.png" alt=""/>
                 <img className="angle bottom left" src="/img/Ellipse%205.png" alt="1"/>
                 <div className="container auth">
-                    <div className="auth__img"><img src="/img/Логотип%20РУТ%20(МИИТ)%20синий%201.png" alt=""/></div>
-                    <div className="auth__title">Цифровая система психологической поддержки РУТ</div>
+                    <Link to={"/"} >
+                        <div className="auth__img"><img src="/img/Логотип%20РУТ%20(МИИТ)%20синий%201.png" alt=""/></div>
+                        <div className="auth__title">Цифровая система психологической поддержки РУТ</div>
+                    </Link>
+
                     <form className="auth__form" onSubmit={handleSignUp}>
                         <div className="input__block">
                             <input

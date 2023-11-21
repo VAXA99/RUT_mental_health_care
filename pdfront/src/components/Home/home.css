@@ -74,6 +74,12 @@ body{
     margin: 10px;
 }
 
+.header__nav__text {
+    text-decoration: underline;
+    color: #52C9FB;
+;
+}
+
 /*                           LEft Form */
 :root {
     --border-w: 3px;
