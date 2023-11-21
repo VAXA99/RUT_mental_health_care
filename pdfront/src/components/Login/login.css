@@ -137,7 +137,7 @@ body{
     font-weight: 500;
     border-radius: 17px;
     margin-bottom: 10px;
-    
+    cursor: pointer;
 }
 
 .auth__link{
@@ -145,5 +145,6 @@ body{
     color:rgba(197, 197, 197, 1);
     ;
 }
+
 
 

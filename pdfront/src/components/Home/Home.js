@@ -7,7 +7,7 @@ export default function Home() {
     <link href="https://fonts.cdnfonts.com/css/sf-pro-display" rel="stylesheet"/>
     <link href="https://fonts.cdnfonts.com/css/forma-djr-banner" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@900&display=swap" rel="stylesheet"></link>
-    <img className="angle top center" src="/img/Star 1.png" />
+    <img className="angle top center" src="/img/Star%201.png" />
     
     <div className="display__flex__mt">
     <div className="container left">
@@ -24,7 +24,7 @@ export default function Home() {
         <img src="/img/Опрос.png" alt="" width="115%" height="100%"/>
         <div className="testing__link">
             <div className="get__testing">Пройдите<br/> опрос</div>
-            <a href=""><img src="/img/Arrow 3.png" alt=""/></a>
+            <a href=""><img src="/img/Arrow%203.png" alt=""/></a>
         </div>
        
 
@@ -47,14 +47,14 @@ export default function Home() {
                     <img className="main__links__comp" src="/img/Студентам.png" alt="" width="105%" height="105%"/>
                     <div className="links__subcomp">
                         <div className="links__comp__text">Студентам <br/>и аспирантам</div>
-                        <a href=""><img src="/img/Arrow 2.png" alt=""/></a>
+                        <a href=""><img src="/img/Arrow%202.png" alt=""/></a>
                     </div>
                 </div>
                 <div className="links__components">
                     <img className="main__links__comp " src="/img/сотрудникам.png" alt="" width="105%" height="110%"/>
                     <div className="links__subcomp empl">
                         <div className="links__comp__text">Сотрудникам <br/>и преподавателям</div>
-                        <a href=""><img src="/img/Arrow 2.png" alt=""/></a>
+                        <a href=""><img src="/img/Arrow%202.png" alt=""/></a>
                     </div>
                    
                 </div>
@@ -64,14 +64,14 @@ export default function Home() {
                     <img className="main__links__comp" src="/img/новости.png" alt="" width="105%" height="105%"/>
                     <div className="links__subcomp news">
                         <div className="links__comp__text">Новости</div>
-                        <a href=""><img src="/img/Arrow 2.png" alt=""/></a>
+                        <a href=""><img src="/img/Arrow%202.png" alt=""/></a>
                     </div>
                 </div>
                 <div className="links__components">
                     <img className="main__links__comp" src="/img/инфо.png" alt="" width="105%" height="105%"/>
                     <div className="links__subcomp">
                         <div className="links__comp__text">Правила <br/>и регламентации</div>
-                        <a href=""><img src="/img/Arrow 2.png" alt=""/></a>
+                        <a href=""><img src="/img/Arrow%202.png" alt=""/></a>
                     </div>
                 </div>
             </div>
@@ -112,12 +112,12 @@ export default function Home() {
                 </div>
                 <div className="info__block__info media">
                     <div className="media__content">
-                       <img className="media__img first" src="/img/icons8-vk 1.png" alt="" width="100%" height="100%"/>
+                       <img className="media__img first" src="/img/icons8-vk%201.png" alt="" width="100%" height="100%"/>
                         вконтакте
                     </div>
                     <div >
                     <div className="media__content">
-                       <img className="media__img" src="/img/3380451_telegram_communication_social media_message_icon 1.png" alt="" width="100%" height="100%"/>
+                       <img className="media__img" src="/img/3380451_telegram_communication_social%20media_message_icon%201.png" alt="" width="100%" height="100%"/>
                         телеграм
                     </div>
                 </div>

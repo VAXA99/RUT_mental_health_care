@@ -29,31 +29,31 @@ export function Specialists(){
                     <div class="main__title">Наши специалисты</div>
                     <div class="specialists">
                         <a class="spec__element" href="/index.html">
-                            <img class="spec__img" src="/img/Морозова 1.png" alt="" width="90%" height="100%"/>
+                            <img class="spec__img" src="/img/Морозова%201.png" alt="" width="90%" height="100%"/>
                             <div class="spec__link"></div>
                         </a>
                         <a class="spec__element" href="/index.html">
-                            <img class="spec__img" src="/img/Морозова 1.png" alt="" width="90%" height="100%"/>
+                            <img class="spec__img" src="/img/Морозова%201.png" alt="" width="90%" height="100%"/>
                             <div class="spec__info"></div>
                         </a>
                         <a class="spec__element" href="/index.html">
-                            <img class="spec__img" src="/img/Морозова 3.png" alt="" width="90%" height="100%"/>
+                            <img class="spec__img" src="/img/Морозова%203.png" alt="" width="90%" height="100%"/>
                             <div class="spec__link"></div>
                         </a>
                     </div>
 
                     <div class="specialists">
                         <a class="spec__element" href="/index.html">
-                            <img class="spec__img" src="/img/Морозова 3.png" alt="" width="90%" height="100%"/>
+                            <img class="spec__img" src="/img/Морозова%203.png" alt="" width="90%" height="100%"/>
                             <div class="spec__link"></div>
                         </a>
                         <a class="spec__element" href="/index.html">
-                            <img class="spec__img" src="/img/Морозова 2.png" alt="" width="90%" height="100%"/>
+                            <img class="spec__img" src="/img/Морозова%202.png" alt="" width="90%" height="100%"/>
                             <div class="spec__info"></div>
                         </a>
 
                         <a class="spec__element" href="/index.html">
-                            <img class="spec__img" src="/img/Морозова 3.png" alt="" width="90%" height="100%"/>
+                            <img class="spec__img" src="/img/Морозова%203.png" alt="" width="90%" height="100%"/>
                             <div class="spec__link"></div>
                         </a>
 
@@ -92,12 +92,12 @@ export function Specialists(){
                             </div>
                             <div class="info__block__info media">
                                 <div class="media__content">
-                                    <img class="media__img first" src="/img/icons8-vk 1.png" alt="" width="100%" height="100%"/>
+                                    <img class="media__img first" src="/img/icons8-vk%201.png" alt="" width="100%" height="100%"/>
                                     вконтакте
                                 </div>
                                 <div>
                                     <div class="media__content">
-                                        <img class="media__img" src="/img/3380451_telegram_communication_social media_message_icon 1.png" alt="" width="100%" height="100%"/>
+                                        <img class="media__img" src="/img/3380451_telegram_communication_social%20media_message_icon%201.png" alt="" width="100%" height="100%"/>
                                         телеграм
                                     </div>
                                 </div>
