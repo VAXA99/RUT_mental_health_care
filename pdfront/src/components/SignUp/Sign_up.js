@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Link} from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
 
 export default function Sign_up() {
     // State to manage user input
@@ -8,6 +8,8 @@ export default function Sign_up() {
     const [password, setPassword] = useState('');
     const [name, setName] = useState('');
     const [surname, setSurname] = useState('');
+
+    const navigate = useNavigate();
 
     // Function to handle user registration
     const handleSignUp = async (e) => {
@@ -32,6 +34,7 @@ export default function Sign_up() {
         if (response.ok) {
             // Optionally, you can redirect the user to the login page or perform other actions
             console.log('Registration successful');
+            navigate("/auth");
         } else {
             // Handle registration error, e.g., show an error message to the user
             console.log('Registration failed');

@@ -38,17 +38,15 @@ export default function Header() {
                         {authenticated ?
                             ( //TODO make links usable
                                 <div>
-                                    <Link to={'/user_profile'}><img className="header__nav__img" src="/img/меню__.png" alt=""/></Link>
+                                    <Link to={'/user_profile'}><img className="header__nav__img" src="/img/меню__.png"
+                                                                    alt=""/></Link>
                                     <button onClick={handleLogout}>
                                         <img className="header__nav__img" src="/img/Group%2089.png" alt=""/>
                                     </button>
                                 </div>
-                            ):(
+                            ) : (
                                 <div>
-                                    <Link className="header__nav__text" to={'/auth'}><img  alt=""/>Войти</Link>
-                                    <button onClick={handleLogout}>
-                                        <img className="header__nav__img" src="/img/Group%2089.png" alt=""/>
-                                    </button>
+                                    <Link className="header__nav__text" to={'/auth'}><img alt=""/>Войти</Link>
                                 </div>
                             )
                         }

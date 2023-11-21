@@ -10,9 +10,7 @@ import { Specialists } from './components/Specialists/Specialists.js';
 import { Forum } from './components/Forum/Forum.js';
 import { Login } from './components/Login/Login.js';
 
-import { Helmet } from 'react-helmet'
 import {BrowserRouter as Router, Routes, Route} from "react-router-dom";
-import Test from "./backend/Test";
 
 
 

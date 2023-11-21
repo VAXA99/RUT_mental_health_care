@@ -1,4 +1,5 @@
-import React, { Component } from 'react'
+import React from 'react'
+import {Link} from "react-router-dom";
 
 export function Specialists(){
     return (
@@ -9,19 +10,19 @@ export function Specialists(){
                     <div class="form">
                         <div class="form__title">Меню</div>
                         <div class="form__main">
-                            <div class="form info"><a href="/login.htm">Сотрудники</a></div>
-                            <div class="form info"><a href="/login.htm">Как записаться</a></div>
-                            <div class="form info"><a href="/login.htm">Самопомощь</a></div>
-                            <div class="form info"><a href="/login.htm">Библиотека</a></div>
+                            <div class="form info"><Link to={'/a'}>Сотрудники</Link></div>
+                            <div class="form info"><Link to={'/a'}>Как записаться</Link></div>
+                            <div class="form info"><Link to={'/a'}>Самопомощь</Link></div>
+                            <div class="form info"><Link to={'/a'}>Библиотека</Link></div>
                         </div>
                     </div>
                     <div class="form">
                         <div class="form__title">Меню</div>
                         <div class="form__main">
-                            <div class="form info"><a href="/login.htm">Сотрудники</a></div>
-                            <div class="form info"><a href="/login.htm">Как записаться</a></div>
-                            <div class="form info"><a href="/login.htm">Самопомощь</a></div>
-                            <div class="form info"><a href="/login.htm">Библиотека</a></div>
+                            <div class="form info"><Link to={'/a'}>Сотрудники</Link></div>
+                            <div class="form info"><Link to={'/a'}>Как записаться</Link></div>
+                            <div class="form info"><Link to={'/a'}>Самопомощь</Link></div>
+                            <div class="form info"><Link to={'/a'}>Библиотека</Link></div>
                         </div>
                     </div>
                 </div>
