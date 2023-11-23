@@ -5,6 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.sql.Date;
+
+
 @Entity
 @Data
 @NoArgsConstructor
@@ -36,6 +39,9 @@ public class User {
     private String phoneNumber;
 
     private Integer sex;
+
+    @Column(name = "date_of_birth")
+    private Date dateOfBirth;
 
     private String information;
 

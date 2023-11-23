@@ -1,12 +1,12 @@
 package com.rut_mental_health_care.repository;
 
-import com.rut_mental_health_care.model.File;
 import com.rut_mental_health_care.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.sql.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,4 +19,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
     List<User> findAllByRoles(String roles);
     Boolean existsUserByUsername(String username);
     Boolean existsUserByEmail(String email);
+
+    @Query(nativeQuery = true,
+            value = "SELECT FLOOR(EXTRACT(EPOCH FROM AGE(NOW(), :dateOfBirth)) / 31556952.0)")
+    Integer countUserAge(@Param("dateOfBirth") Date dateOfBirth);
 }

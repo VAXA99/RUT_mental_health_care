@@ -20,6 +20,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.sql.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -96,6 +97,15 @@ public class UserProfileServiceImpl implements UserProfileService {
 
     @Override
     @Transactional
+    public int getUserAge(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("User not found with ID:" + userId));
+
+        return userRepository.countUserAge(user.getDateOfBirth());
+    }
+
+    @Override
+    @Transactional
     public File getProfilePicture(Long userId) {
 
         return fileRepository.findByUserId(userId)
@@ -144,13 +154,14 @@ public class UserProfileServiceImpl implements UserProfileService {
         String middleName = getUserMiddleName(userId);
         String email = getUserEmail(userId);
         String bio = getUserBio(userId);
+        int age = getUserAge(userId);
         File profilePicture = getProfilePicture(userId);
         List<PostDto> postDtos= getUserPosts(userId);
         long totalPosts = getUserPostCount(userId);
         long totalComments = getTotalCommentsOnUserPosts(userId);
         long totalLikes = getTotalLikesOnUserPosts(userId);
 
-        return new UserProfileDto(username, roles, name, surname, middleName, email, bio, profilePicture, postDtos, totalPosts, totalComments, totalLikes);
+        return new UserProfileDto(username, roles, name, surname, middleName, email, bio, age, profilePicture, postDtos, totalPosts, totalComments, totalLikes);
     }
 
     @Override
@@ -221,19 +232,13 @@ public class UserProfileServiceImpl implements UserProfileService {
         userRepository.save(user);
     }
 
-    private PostDto convertToPostDTO(Post post) {
-        PostDto postDto = modelMapper.map(post, PostDto.class);
-        if (post.getUser() != null) {
-            UserDto userDto = modelMapper.map(post.getUser(), UserDto.class);
-            postDto.setUserDto(userDto);
-        }
-        postDto.setLikeCount(postRepository.getLikeCount(post));
-        postDto.setDislikeCount(postRepository.getDislikeCount(post));
-        postDto.setCommentCount(postRepository.getCommentCount(post));
-
-        return postDto;
+    @Override
+    @Transactional
+    public void setUserDateOfBirth(Long userId, Date dateOfBirth) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("User not found with ID:" + userId));
+        user.setDateOfBirth(dateOfBirth);
     }
-
 
     @Override
     @Async
@@ -262,4 +267,19 @@ public class UserProfileServiceImpl implements UserProfileService {
         user.setProfilePicture(null);
         fileRepository.deleteByUserId(userId);
     }
+
+
+    private PostDto convertToPostDTO(Post post) {
+        PostDto postDto = modelMapper.map(post, PostDto.class);
+        if (post.getUser() != null) {
+            UserDto userDto = modelMapper.map(post.getUser(), UserDto.class);
+            postDto.setUserDto(userDto);
+        }
+        postDto.setLikeCount(postRepository.getLikeCount(post));
+        postDto.setDislikeCount(postRepository.getDislikeCount(post));
+        postDto.setCommentCount(postRepository.getCommentCount(post));
+
+        return postDto;
+    }
+
 }
