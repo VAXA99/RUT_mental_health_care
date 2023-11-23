@@ -108,6 +108,16 @@ body{
     
 }
 
+.auth__error{
+    color: #FF5555;
+    text-decoration: underline;
+    font-weight: bolder;
+    font-size: 20px;
+    padding: 4px 40px;
+    text-align: center;
+    font-family: 'Forma DJR Banner', sans-serif;
+}
+
 ::placeholder{
     text-align: center;
     color: rgba(197, 197, 197, 1);

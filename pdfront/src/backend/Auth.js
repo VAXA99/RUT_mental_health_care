@@ -1,33 +1,90 @@
 import {jwtDecode} from "jwt-decode";
+import axios from "axios";
 
-const isTokenValid = () => {
-    const token = localStorage.getItem('token');
+export default {
 
-    if (!token) {
-        // Token is not present
-        return false;
-    }
+    isTokenValid: () => {
+        const token = localStorage.getItem('token');
 
-    try {
-        // Decode the token to get its payload
-        const decodedToken = jwtDecode(token);
-
-        // Check the token's expiration time
-        const currentTime = Date.now() / 1000; // Convert to seconds
-        if (decodedToken.exp < currentTime) {
-            // Token has expired
+        if (!token) {
+            // Token is not present
             return false;
         }
 
-        // Additional checks based on your requirements can be added here
+        try {
+            // Decode the token to get its payload
+            const decodedToken = jwtDecode(token);
 
-        // If all checks pass, the token is considered valid
-        return true;
-    } catch (error) {
-        // An error occurred while decoding the token
-        console.error('Error decoding token:', error);
+            // Check the token's expiration time
+            const currentTime = Date.now() / 1000; // Convert to seconds
+            if (decodedToken.exp < currentTime) {
+                // Token has expired
+                return false;
+            }
+
+            // Additional checks based on your requirements can be added here
+
+            // If all checks pass, the token is considered valid
+            return true;
+        } catch (error) {
+            // An error occurred while decoding the token
+            console.error('Error decoding token:', error);
+            return false;
+        }
+    },
+
+    signUp: async (email, username, password, name, surname) => {
+        try {
+            const response = await axios.post('http://localhost:8080/api/auth/signUp', {
+                email,
+                username,
+                password,
+                name,
+                surname
+            });
+            return response.status === 200;
+        } catch (error) {
+            console.error('Error on signUp: ', error);
+            return false;
+        }
+    },
+
+    logout: async () => {
+        // Remove the token from localStorage
+        localStorage.removeItem('token');
+
+        // Set the authenticated state to false
         return false;
-    }
-};
+    },
 
-export default isTokenValid;
+    isUsernameValid: async (username) => {
+        try {
+            const response = await axios.get('http://localhost:8080/api/auth/exists_by_username',
+                {params: {
+                    username: username
+                    }
+                });
+
+            return response.status === 200;
+        } catch (error) {
+            console.error('Error checking username: ', error);
+            return false;
+        }
+    },
+
+    isEmailValid: async (email) => {
+        try {
+            const response = await axios.get('http://localhost:8080/api/auth/exists_by_email',
+                {params: {
+                    email: email
+                    }
+                });
+            return response.status === 200;
+        } catch (error) {
+            console.error('Error checking email: ', error);
+            return false;
+        }
+    }
+
+}
+

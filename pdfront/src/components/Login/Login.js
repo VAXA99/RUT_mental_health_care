@@ -1,5 +1,6 @@
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import {Link, useNavigate} from 'react-router-dom'
+import auth from "../../backend/Auth";
 
 export const Login = () => {
     // State to manage user input
@@ -7,11 +8,14 @@ export const Login = () => {
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
 
-    // State to manage authentication status
-    const [authenticated, setAuthenticated] = useState(false);
+    // State to manage authentication errors
+    const [error, setError] = useState('');
 
     const handleLogin = async (e) => {
         e.preventDefault(); // Prevent the default form submission
+
+        setError('');
+
         // Make a request to your backend /api/auth/signIn endpoint
         const response = await fetch('http://localhost:8080/api/auth/signIn', {
             method: 'POST',
@@ -32,14 +36,18 @@ export const Login = () => {
             // Store the token in localStorage (you might want to use more secure storage)
             localStorage.setItem('token', token);
 
-            // Set the authenticated state to true
-            setAuthenticated(true);
             navigate("/");
         } else {
-            // Handle authentication error, e.g., show an error message to the user
+            setError("Неверный логин или пароль");
         }
     };
 
+    useEffect(() => {
+        const tokenValid = auth.isTokenValid();
+        if (tokenValid) {
+            navigate("/")
+        }
+    }, [navigate]);
 
     //TODO handle bad credentials
     return (
@@ -53,7 +61,7 @@ export const Login = () => {
             <img className="angle bottom right" src="/img/Star%200.png" alt=""/>
             <img className="angle bottom left" src="/img/Ellipse%205.png" alt="1"/>
             <div className="container auth">
-                <Link to={"/"} >
+                <Link to={"/"}>
                     <div className="auth__img"><img src="/img/Логотип%20РУТ%20(МИИТ)%20синий%201.png" alt=""/></div>
                     <div className="auth__title">Цифровая система психологической поддержки РУТ</div>
                 </Link>
@@ -68,7 +76,10 @@ export const Login = () => {
                                type="password"
                                value={password}
                                onChange={(e) => setPassword(e.target.value)}/>
+
+                        {error && <div className="auth__error">{error}</div>}
                     </div>
+
                     <div className="form__buttons">
                         <button type="submit" className="auth__button">
                             Вход

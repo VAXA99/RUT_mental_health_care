@@ -1,25 +1,20 @@
 import React, {useEffect, useState} from 'react'
 import {Link} from 'react-router-dom'
-import isTokenValid from '../../backend/Auth'
+import auth from '../../backend/Auth'
 
 export default function Header() {
 
-    const [authenticated, setAuthenticated] = useState(isTokenValid());
+    const [authenticated, setAuthenticated] = useState(auth.isTokenValid());
 
     const handleLogout = () => {
-        // Remove the token from localStorage
-        localStorage.removeItem('token');
-
-        // Set the authenticated state to false
-        setAuthenticated(false);
+        setAuthenticated(auth.logout);
     };
 
     useEffect(() => {
         // Periodically check token validity and update the state
         const intervalId = setInterval(() => {
-            setAuthenticated(isTokenValid());
-            console.log("the token was checked");
-        }, 60000); // Check every 60 seconds
+            setAuthenticated(auth.isTokenValid());
+        }, 100); // Check every 1/100 of a second
 
         // Clean up the interval when the component unmounts
         return () => clearInterval(intervalId);
