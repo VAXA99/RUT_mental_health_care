@@ -51,7 +51,6 @@ export default function Sign_up() {
         }
     }, [navigate]);
 
-    //TODO handle email/username occupation
     return (
         <div className='body'>
             <div className='body'>
