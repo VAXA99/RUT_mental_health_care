@@ -1,21 +1,15 @@
+import Menu from "../Menu/Menu";
 
 export function Forum(){
     return(
     <>
     <div className="display__flex__mt">
     <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@900&display=swap" rel="stylesheet"/>
-    <link href="https://fonts.cdnfonts.com/css/sf-pro-display" rel="stylesheet"/>
+    <link href="https://fonts.cdnfonts.com/css/sf-pro-display" rel="stylesheet"/> 
+    <img className="angle top center" src="/img/Star%201.png" />
+    <img className="angle right__home" src="/img/Ellipse 6.png" />
         <div className="container left">
-            <div className="form left">
-                <div className="form__title">Меню</div>
-                <div className="form__main">
-                    <div className="form info"><a href="/login.htm">Сотрудники</a></div>
-                    <div className="form info"><a href="/login.htm">Как записаться</a></div>
-                    <div className="form info"><a href="/login.htm">Самопомощь</a></div>
-                    <div className="form info"><a href="/login.htm">Библиотека</a></div>
-                    <div className="form info"><a href="/index.html">Главная</a></div>
-                </div>
-            </div>
+        <Menu/>
             <div className="form left">
                 <div className="form__title">Популярное</div>
                 <div className="form__main">
@@ -51,6 +45,11 @@ export function Forum(){
                         Я часто чувствовал, что моя депрессия была как пустота, которая поглощала меня. Однако, в этот момент, когда я был на грани, я нашел поддержку в самых неожиданных местах. Мои близкие и друзья поддерживали меня, даже если они не всегда понимали, что я прохожу. И я нашел профессиональную помощь, обратившись к психологу.
                         <br/>Самое важное, что я хочу сказать, это то, что депрессия - это не конец. Хотя дорога к выздоровлению была долгой и сложной, она была того стоила. Сейчас я чувствую себя сильнее, чем когда-либо, и я хочу сказать тем, кто сейчас борется, что есть надежда. Не стесняйтесь просить помощи, делиться своими чувствами, и помните, что вы не одни.
                         С депрессией можно бороться, и я верю, что каждый из нас может найти свой собственный путь к светлому будущему. Пожалуйста, помните, что вы ценны, и ваша история имеет значение.
+                    </div>
+                    <div className="action__button">
+                        <button className="action__button__element"><img src='/img/icons8-заполненная-тема-96 1.png' width="110%" height="110%"/></button>
+                        <button className="action__button__element"><img src='/img/Vector.png' width="90%" height="90%"/></button>
+                        <div className="like__count">666</div>
                     </div>
                 </div>
             </div>

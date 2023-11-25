@@ -8,6 +8,7 @@ html{
 body{
     padding: 0;
     margin: 0;
+ 
 }
 
 *, 
@@ -33,15 +34,23 @@ body{
     width: 63%;
  }
  .container.right{
-    width: 22%;
-    margin-right: 36px;
+    width: 20%;
+    margin-right: 30px;
+    position: relative;
  }
 
  .angle{
-    position: fixed;
+    position: absolute;
     width: 270px;
     height: 270px;
+}
+.angle.right__home{
+    right: 0;
+    width: 315px;
+    height: 500px;
+    top: 20%;
     z-index: -1;
+    position: absolute;
 }
 .angle.top{
     top: 0;
@@ -77,9 +86,33 @@ body{
 .header__nav__text {
     text-decoration: underline;
     color: #52C9FB;
-    font-size: larger;
-;
 }
+.nav__img{
+    border: none;
+    padding: 0;
+    margin: 0;
+    background-color: inherit;
+    cursor: pointer;
+}
+button{
+    padding: 0;
+    margin: 0;
+}
+
+.nav__img{
+    padding: -10px;
+    border: 4px solid transparent;
+}
+.nav__img.focus:focus{
+    padding: -10px;
+    border-radius: 25px;
+    border: solid 4px transparent;
+    background-image: linear-gradient(rgba(255, 255, 255, 0), rgba(255, 255, 255, 0)), linear-gradient(180deg,rgba(146, 213, 241, 1), rgba(146, 213, 241, 0));
+    background-origin: border-box;
+    background-clip: content-box, border-box;
+    box-shadow: 2px 1000px 1px #fff inset;
+}
+
 
 /*                           LEft Form */
 :root {
@@ -97,6 +130,7 @@ body{
     z-index: 5;
     margin-bottom: 10px;
     min-width: none;
+    background-color: #fff;
   }
   
   .form::before {
@@ -187,12 +221,7 @@ a:hover{
 
 /*Right form*/
 
-.info__block{
-    margin: 8px;
-    font-family: 'Inter' sans-serif;
-    text-align: left;
 
-}
 
 .info__block__title{
     padding-top: 10px;
@@ -278,26 +307,7 @@ a:hover{
     width: 240px;
 }
 
-.testing{
-    height: 330px;
-    width: 100%;
-    margin-left: -20px;
-}
 
-.testing__link{
-    display: flex;
-    margin-top: -100px;
-    margin-left: 35px;
-    padding: 0 15px ;
-}
-
-.get__testing{
-    margin-right: 25px;
-    color: #204757;
-    font-size: 18px;
-    font-weight: 700;
-    margin-top: -10px;
-}
 .display__flex__mt{
     margin-top: 20px;
     display: flex;
@@ -306,6 +316,8 @@ a:hover{
 .display__flex{
     display: flex;
 }
+
+
 
 
 

@@ -121,7 +121,7 @@ a:hover{
 }
 .form.left{
     
-    min-height: 45%;
+    min-height: 30%;
 }
 
 .popular{
@@ -136,7 +136,7 @@ a:hover{
    justify-content: space-between;
     display: flex;
     margin-left: 10px;
-    width: 90%;
+    width: 100%;
     min-height: none;
     display: flex;
     align-items: center;
@@ -242,7 +242,31 @@ a:hover{
     display: flex;
 }
 
+.action__button{
+    display: flex;
+    text-align: left;
+    align-items: center;
+    margin-top: 15px;
+}
 
+.action__button__element{
+    width: 28px;
+    height: 28px;
+    border: none;
+    cursor: pointer;
+    background-color: inherit;
+    display: flex;
+    align-items: center;
+    margin-left: 10px;
+}
+
+.like__count{
+    font-size: 20px;
+    font-weight: 600;
+    vertical-align: middle;
+    display: flex;
+    align-items: center;
+}
 
 
 

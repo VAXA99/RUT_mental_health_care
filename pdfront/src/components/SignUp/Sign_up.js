@@ -1,6 +1,5 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {Link, useNavigate} from 'react-router-dom';
-import auth from '../../backend/Auth'
 
 export default function Sign_up() {
     // State to manage user input
@@ -10,47 +9,39 @@ export default function Sign_up() {
     const [name, setName] = useState('');
     const [surname, setSurname] = useState('');
 
-    const [usernameError, setUsernameError] = useState('');
-    const [emailError, setEmailError] = useState('');
     const navigate = useNavigate();
 
     // Function to handle user registration
     const handleSignUp = async (e) => {
         e.preventDefault(); // Prevent the default form submission
 
-        const isValidUsername = await auth.isUsernameValid(username);
-        const isValidEmail = await auth.isEmailValid(email);
-
-        setUsernameError('');
-        setEmailError('');
-
-
-        if (!isValidUsername) {
-            setUsernameError("Данный логин уже занят")
-        }
-
-        if (!isValidEmail) {
-            setEmailError('Аккаунт с такой почтой уже сущетсвует');
-        }
-
-        // Check if either username or email is invalid
-        if (!isValidUsername || !isValidEmail) {
-            return;
-        }
-
         // Make a request to your backend /api/auth/signUp endpoint
-        if (await auth.signUp(email, username, password, name, surname)) {
-            navigate("/");
+        const response = await fetch('http://localhost:8080/api/auth/signUp', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                email,
+                username,
+                password,
+                name,
+                surname,
+            }),
+        });
+
+        // Check if the registration was successful
+        if (response.ok) {
+            // Optionally, you can redirect the user to the login page or perform other actions
+            console.log('Registration successful');
+            navigate("/auth");
+        } else {
+            // Handle registration error, e.g., show an error message to the user
+            console.log('Registration failed');
         }
     };
 
-    useEffect(() => {
-        const tokenValid = auth.isTokenValid();
-        if (tokenValid) {
-            navigate("/auth")
-        }
-    }, [navigate]);
-
+    //TODO handle email/username occupation
     return (
         <div className='body'>
             <div className='body'>
@@ -72,14 +63,14 @@ export default function Sign_up() {
                         <div className="input__block">
                             <input
                                 className="auth__input"
-                                placeholder="почта"
+                                placeholder="логин"
                                 type="email"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                             />
                             <input
                                 className="auth__input"
-                                placeholder="логин"
+                                placeholder="ФИО"
                                 type="text"
                                 value={username}
                                 onChange={(e) => setUsername(e.target.value)}
@@ -93,32 +84,23 @@ export default function Sign_up() {
                             />
                             <input
                                 className="auth__input"
-                                placeholder="имя"
+                                placeholder="повторите пароль"
                                 type="text"
                                 value={name}
                                 onChange={(e) => setName(e.target.value)}
                             />
-                            <input
-                                className="auth__input"
-                                placeholder="фамилия"
-                                type="text"
-                                value={surname}
-                                onChange={(e) => setSurname(e.target.value)}
-                            />
                         </div>
-                        {usernameError && <div className="auth__error">{usernameError}</div>}
-                        {emailError && <div className="auth__error">{emailError}</div>}
-                        <div className="form__buttons">
+                    </form>
+                    <div className="form__buttons">
                             <button type="submit" className="auth__button">
                                 Регистрация
                             </button>
-                            <div>
-                                <Link className="auth__link" to={'/auth'}>
-                                    Вход
+                            <div className="auth__link">
+                                <Link  to={'/auth'}>
+                                    Назад
                                 </Link>
                             </div>
                         </div>
-                    </form>
                 </div>
             </div>
         </div>

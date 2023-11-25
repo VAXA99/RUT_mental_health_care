@@ -33,13 +33,15 @@ body{
     margin: 0 70px;
  }
  .container.right{
-    width: 22%;
-    margin-right: 36px;
+    width: 20%;
+    margin-right: 30px;
+    position: relative;
+    z-index: 2;
  }
 
  .angle{
-    position: fixed;
-    width: 540px;
+    position: absolute;
+    width: 270px;
     height: 270px;
     z-index: -1;
 }
@@ -47,6 +49,7 @@ body{
     top: 0;
 }
 .angle.top.center{
+    width: 540px;
     left: 50%;
     transform: translate(-50%);
 }
@@ -112,7 +115,7 @@ body{
     padding: 10px 5px;
     left: auto;
     font-weight: 600;
-    z-index: 1;
+    z-index: 2;
   }
 
 
@@ -131,10 +134,7 @@ a:hover{
     font-family: 'Inter Tight', sans-serif;
     color: #204757;
 }
-.form.left{
-    
-    min-height: 45%;
-}
+
 
 .popular{
     margin: 7px;
@@ -145,10 +145,11 @@ a:hover{
 
 /*                           Center Form */
 .form.main{
+   
    justify-content: space-between;
     display: flex;
     margin-left: 10px;
-    width: 90%;
+    width: 100%;
     min-height: none;
     display: flex;
     align-items: center;
@@ -156,6 +157,7 @@ a:hover{
     min-width: none;
     margin-bottom: 25px;
     box-shadow: none;
+    margin-left: -40px;
 
 }
 .form__block{
@@ -222,54 +224,6 @@ a:hover{
 
 /*Right form*/
 
-.info__block{
-    margin: 8px;
-    font-family: 'Inter' sans-serif;
-    text-align: left;
-
-}
-
-.info__block__title{
-    padding-top: 10px;
-    padding: 5px;
-    font-weight: 800;
-    font-size: 16px;
-
-}
-
-.info__block__info{
-    padding-top: 5px;
-    font-weight: 600;
-    font-size: 15px;
-}
-
-.info__block__info.media{
-    vertical-align: middle;
-    color: rgba(121, 121, 121, 1);
-    padding-left: 5px;
-}
-
-.media__img{
-    width: 26px;
-    height: 26px;
-    margin-right: 3px;
-}
-
-.media__content{
-    display: flex;
-    align-items: center;
-}
-
-.media__img.first{
-    width: 32px;
-    height: 32px;
-    margin-left: -3px;
-    margin-right: 0;
-}
-
-.form.right{
-    height: 95%;
-}
 
 .main__title{
     color: rgba(0, 39, 53, 1);
@@ -279,15 +233,15 @@ a:hover{
 }
 
 .specialists{
-    margin: 20px auto;
-   
     display: flex;
-    justify-content: space-between;
-
+    flex-direction: row;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    margin: 15px 0;
 }
 
 .spec__element{
-    margin: 10px;
+    margin: 10px 25px;
 
 }
 .display__flex__mt{

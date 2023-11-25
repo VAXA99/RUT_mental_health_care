@@ -37,8 +37,8 @@ body{
 
 .angle{
     position: fixed;
-    width: 220px;
-    height: 220px;
+    width: 270px;
+    height: 270px;
     z-index: -1;
 }
 .angle.top{
@@ -76,6 +76,7 @@ body{
 }
 
 .auth__title{
+    color: #204757;
     font-size: 58px;
     font-weight: 900;
     text-align: center;
@@ -108,18 +109,8 @@ body{
     
 }
 
-.auth__error{
-    color: #FF5555;
-    text-decoration: underline;
-    font-weight: bolder;
-    font-size: 20px;
-    padding: 4px 40px;
-    text-align: center;
-    font-family: 'Forma DJR Banner', sans-serif;
-}
-
 ::placeholder{
-    text-align: center;
+    text-align: left;
     color: rgba(197, 197, 197, 1);
     
 
@@ -128,6 +119,7 @@ body{
 .input__block{
     width: 73%;
     display: flex;
+    text-align: left;
     flex-direction: column;
     margin: 20px auto;
 
@@ -137,24 +129,42 @@ body{
     text-align: center;
 }
 .auth__button{
-    background-color: rgba(90, 115, 243, 1);
+    background-color: #92D5F1;
     padding: 4px 40px;
     border: none;
-    color: white;
+    color: #204757;
     text-align: center;
     font-size: 25px;
-    font-family: 'Forma DJR Banner', sans-serif;
-    font-weight: 500;
+    
+    font-family: 'SF Pro Display';
+    font-weight: 700;
+
     border-radius: 17px;
     margin-bottom: 10px;
     cursor: pointer;
+
 }
 
 .auth__link{
-   
+   text-decoration: underline;
     color:rgba(197, 197, 197, 1);
-    ;
+    font-size: 20px;
+    margin-bottom: 3px;
+    font-family: 'SF Pro Display';
+    
 }
 
+.form__block__title{
+    text-align: center;
+    font-size: 25px;
+    color: #204757;
+}
 
+.form__block__title.email{
+    font-size: 20px;
+}
+.form__block__title.email.out{
+    margin-top: 10px;
+    margin-bottom: -15px;
+}
 
