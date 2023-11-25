@@ -1,0 +1,49 @@
+.info__block{
+    margin: 8px;
+    font-family: 'SF Pro Display' sans-serif;
+    font-family: 'Inter' sans-serif;
+    text-align: left;
+
+}
+
+.info__block__title{
+    padding-top: 10px;
+    padding: 5px;
+    font-weight: 800;
+    font-size: 16px;
+
+}
+
+.info__block__info{
+    padding-top: 5px;
+    font-weight: 600;
+    font-size: 15px;
+}
+
+.info__block__info.media{
+    vertical-align: middle;
+    color: rgba(121, 121, 121, 1);
+    padding-left: 5px;
+}
+
+.media__img{
+    width: 26px;
+    height: 26px;
+    margin-right: 3px;
+}
+
+.media__content{
+    display: flex;
+    align-items: center;
+}
+
+.media__img.first{
+    width: 32px;
+    height: 32px;
+    margin-left: -3px;
+    margin-right: 0;
+}
+
+.form.right{
+    height: 95%;
+}

@@ -1,0 +1,18 @@
+.articles__form{
+    font-size: 40px;
+    margin: 15px 0;
+    font-weight: 700;
+}
+
+.form.main.article{
+    display: block;
+    pad: 0;
+}
+
+.img__position{
+    width: 104%;
+    height: 80%;
+    position: relative;
+    top: -2px;
+    left: -2%;
+}

@@ -1,0 +1,144 @@
+.form__page__title{
+    color: #002735;
+    font-size: 28px;
+    margin: 10px 0;
+    font-family: 'SF Pro Display', sans-serif;
+    font-weight: 700;
+    text-align: left;
+}
+.form__page__subtitle{
+    font-weight: 500;
+    font-size: 20px;
+    color: #A1A1A1;
+
+    
+}
+
+
+.up__block{
+    padding: 40px;
+    color: #D9DBE9;
+    width: 95%;
+    display: flex;
+    vertical-align: middle;
+    justify-content: space-evenly;
+    margin: 0 auto;
+    text-align: center;
+    border-bottom: 1px solid #D9DBE9;
+}
+
+
+
+.underline{
+    text-decoration: underline;
+}
+
+
+.up__block__element{
+    border-radius: 50%;
+    color: #9A9494;
+    margin-right: 40px;
+    padding: 8px 14px;
+    background-color:#F3F3F3;
+    cursor: pointer;
+    border: none;
+    font-size: 20px;
+}
+
+.up__block__element.blue{
+    background-color:#92D5F1;
+    color: white;
+}
+
+.form.main.forms{
+
+    padding: 10px;
+    display: block;
+    text-align: left;
+    max-height: 100%;
+}
+
+
+.up__block__element:focus{
+    color: white;
+    background-color: #92D5F1;;
+}
+
+.problems{
+    margin: 15px 30px;
+}
+
+.form.info.problem.form.info.problem{
+    display:inline-flex;
+    padding: 12px 10px;
+    margin: 10px;
+    margin-top: 20px;
+    width: fit-content;
+
+}
+
+.form.main.form.one{
+    display: block;
+   
+}
+.form.main.form.two{
+    display: block;
+}
+.display__inline{
+    display:table-cell;
+    margin: 10px;
+}
+
+.problem__button{
+    border: none;
+    padding: 0;
+    margin: 0;
+    background-color: inherit;
+    cursor: pointer;
+}
+.next__step{
+    
+    padding: 12px 20px;
+    border: none;
+    border-radius: 20px;
+    font-size: 20px;
+    color: white;
+    background-color: #92D5F1;
+    cursor: pointer;
+
+}
+.button{
+    display: flex;
+    justify-content: flex-end;
+    margin: 15px 0;
+}
+
+.problems__input{
+    width: 100%;
+    height: 250px;
+    background-color: #F1F1F1;
+    border-radius: 20px;
+    margin: 10px 0;
+    padding: 5px;
+    font-family: 'SF Pro Display';
+    
+}
+
+.form__page__subtitle.in{
+    color: #170F49;
+}
+
+.form__page__subtitle.input{
+    height: 80%;
+    font-family:'Inter' serif;
+}
+textarea{
+    padding: 10px;
+    background-color: #F1F1F1;;
+    border: none;
+    outline: none;
+    width: 100%;
+    height: 100%;
+    resize: none;
+
+}
