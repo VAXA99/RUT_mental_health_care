@@ -12,9 +12,7 @@ export default function Sign_up() {
 
     const [usernameError, setUsernameError] = useState('');
     const [emailError, setEmailError] = useState('');
-    const [passwordError, setPasswordError] = useState('');
-    const [nameError, setNameError] = useState('');
-    const [surnameError, setSurnameError] = useState('');
+    const [emptyCredentialsError, setEmptyCredentialsError] = useState('');
 
     const navigate = useNavigate();
 
@@ -27,31 +25,10 @@ export default function Sign_up() {
 
         setUsernameError('');
         setEmailError('');
-        setPasswordError('');
-        setNameError('');
-        setSurnameError('');
-
-        if (!username) {
-            setUsernameError('Логин не может быть пустым');
-        }
-
-        if (!email) {
-            setEmailError('Почта не может быть пустой');
-        }
-
-        if (!password) {
-            setPasswordError('Пароль не может быть пустым');
-        }
-
-        if (!name) {
-            setNameError('Имя не может быть пустым');
-        }
-
-        if (!surname) {
-            setSurnameError('Фамилия не может быть пустой');
-        }
+        setEmptyCredentialsError('');
 
         if (!username || !email || !password || !name || !surname) {
+            setEmptyCredentialsError("Все поля должны быть заполнены");
             return;
         }
 
@@ -101,43 +78,44 @@ export default function Sign_up() {
                     <form className="auth__form" onSubmit={handleSignUp}>
                         <div className="input__block">
                             <input
-                                className={`auth__input ${usernameError ? 'error' : 'auth__error'}`}
-                                placeholder={usernameError ? usernameError : 'логин'}
+                                className="auth__input"
+                                placeholder='логин'
                                 type="text"
                                 value={username}
                                 onChange={(e) => setUsername(e.target.value)}
                             />
                             <input
-                                className={`auth__input ${emailError ? 'error' : 'auth__error'}`}
-                                placeholder={emailError ? emailError : 'почта'}
+                                className="auth__input"
+                                placeholder='почта'
                                 type="email"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                             />
                             <input
-                                className={`auth__input ${passwordError ? 'error' : 'auth__error'}`}
-                                placeholder={passwordError ? passwordError : 'пароль'}
+                                className="auth__input"
+                                placeholder='пароль'
                                 type="password"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                             />
                             <input
-                                className={`auth__input ${nameError ? 'error' : 'auth__error'}`}
-                                placeholder={nameError ? nameError : 'имя'}
+                                className="auth__input"
+                                placeholder='имя'
                                 type="text"
                                 value={name}
                                 onChange={(e) => setName(e.target.value)}
                             />
                             <input
-                                className={` auth__error ${surnameError ? 'error' : 'auth__input'}`}
-                                placeholder={surnameError ? surnameError : 'фамилия'}
+                                className="auth__input"
+                                placeholder='фамилия'
                                 type="text"
                                 value={surname}
                                 onChange={(e) => setSurname(e.target.value)}
                             />
                         </div>
-                        {/*{usernameError && <div className="auth__error">{usernameError}</div>}*/}
-                        {/*{emailError && <div className="auth__error">{emailError}</div>}*/}
+                        {usernameError && <div className="auth__error">{usernameError}</div>}
+                        {emailError && <div className="auth__error">{emailError}</div>}
+                        {emptyCredentialsError && <div className="auth__error">{emptyCredentialsError}</div>}
                         <div className="form__buttons">
                             <button type="submit" className="auth__button">
                                 Регистрация
