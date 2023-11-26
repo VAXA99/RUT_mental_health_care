@@ -1,30 +1,24 @@
 import React, {useEffect, useState} from 'react'
 import {Link} from 'react-router-dom'
-//import isTokenValid from '../../backend/Auth'
+import Auth from '../../backend/Auth'
 
 export default function Header() {
-/*
-    const [authenticated, setAuthenticated] = useState(isTokenValid());
+
+    const [authenticated, setAuthenticated] = useState(Auth.isTokenValid);
 
     const handleLogout = () => {
-        // Remove the token from localStorage
-        localStorage.removeItem('token');
-
-        // Set the authenticated state to false
-        setAuthenticated(false);
+        setAuthenticated(Auth.logout());
     };
 
     useEffect(() => {
         // Periodically check token validity and update the state
         const intervalId = setInterval(() => {
-            setAuthenticated(isTokenValid());
-            console.log("the token was checked");
-        }, 60000); // Check every 60 seconds
+            setAuthenticated(Auth.isTokenValid);
+        }, 100); // Check every 1/100 seconds
 
         // Clean up the interval when the component unmounts
         return () => clearInterval(intervalId);
     }, []); // Run this effect once during component mount
-    */
 
 
     return (
@@ -36,22 +30,22 @@ export default function Header() {
                     <div className="header__logo"><img src="/img/Логотип%20РУТ%20(МИИТ)%20синий%201.png" alt=""/></div>
                     <div className="header__title">Цифровая система психологической поддержки РУТ</div>
                     <div className="header__nav">
-                        { //authenticated ?
+                        { authenticated ?
                             ( //TODO make links usable
                                 <div>
                                     <button id="popup_link" className="nav__img focus">
-                                        <img className="header__nav__img focus" src="img/иконка_уведомление.png" alt=""/>
+                                        <img className="header__nav__img focus" src="../../../public/img/иконка_уведомление.png" alt=""/>
                                     </button>
-                                    <Link to={'/user_profile'}><img className="header__nav__img" src="/img/меню__.png"alt=""/></Link>
-                                    <button className="nav__img" /*onClick=/*{handleLogout}*/>
+                                    <Link to={'/user_profile'}><img className="header__nav__img" src="../../../public/img/меню__.png" alt=""/></Link>
+                                    <button className="nav__img" onClick={handleLogout}>
                                         <img className="header__nav__img" src="/img/Group%2089.png" alt=""/>
                                     </button>
                                 </div>
-                            ) /*: (
+                            ) : (
                                 <div>
                                     <Link className="header__nav__text" to={'/auth'}><img alt=""/>Войти</Link>
                                 </div>
-                           )*/
+                           )
                         }
                         
                     </div>
