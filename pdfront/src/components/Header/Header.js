@@ -34,9 +34,9 @@ export default function Header() {
                             ( //TODO make links usable
                                 <div>
                                     <button id="popup_link" className="nav__img focus">
-                                        <img className="header__nav__img focus" src="../../../public/img/иконка_уведомление.png" alt=""/>
+                                        <img className="header__nav__img focus" src="/img/иконка_уведомление.png" alt=""/>
                                     </button>
-                                    <Link to={'/user_profile'}><img className="header__nav__img" src="../../../public/img/меню__.png" alt=""/></Link>
+                                    <Link to={'/user_profile'}><img className="header__nav__img" src="/img/меню__.png" alt=""/></Link>
                                     <button className="nav__img" onClick={handleLogout}>
                                         <img className="header__nav__img" src="/img/Group%2089.png" alt=""/>
                                     </button>
@@ -47,7 +47,6 @@ export default function Header() {
                                 </div>
                            )
                         }
-                        
                     </div>
                 </div>
             </div>
