@@ -6,18 +6,19 @@ export default function Header() {
 
     const [authenticated, setAuthenticated] = useState(Auth.isTokenValid);
 
-    const handleLogout = () => {
-        setAuthenticated(Auth.logout());
+    const handleLogout = async () => {
+        await Auth.logout();
+        setAuthenticated(false);
     };
 
     useEffect(() => {
-        // Periodically check token validity and update the state
         const intervalId = setInterval(() => {
-            setAuthenticated(Auth.isTokenValid);
-        }, 100); // Check every 1/100 seconds
+            setAuthenticated(Auth.isTokenValid());
+        }, 1000); // Check every second
 
-        // Clean up the interval when the component unmounts
-        return () => clearInterval(intervalId);
+        return () => {
+            clearInterval(intervalId);
+        };
     }, []); // Run this effect once during component mount
 
 

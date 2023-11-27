@@ -16,29 +16,13 @@ export const Login = () => {
 
         setError('');
 
-        // Make a request to your backend /api/auth/signIn endpoint
-        const response = await fetch('http://localhost:8080/api/auth/signIn', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                username,
-                password,
-            }),
-        });
+        try {
+            const token = await auth.signIn(username, password);
 
-        // Check if the login was successful
-        if (response.ok) {
-            // Extract the JWT token from the response
-            const token = await response.text();
-
-            // Store the token in localStorage (you might want to use more secure storage)
             localStorage.setItem('token', token);
-
-            navigate("/");
-        } else {
-            setError("Неверный логин или пароль");
+            navigate('/');
+        } catch (error) {
+            setError('Неверный логин или пароль');
         }
     };
 

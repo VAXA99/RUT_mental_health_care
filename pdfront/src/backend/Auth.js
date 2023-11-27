@@ -34,6 +34,19 @@ export default {
         }
     },
 
+    signIn: async (username, password) => {
+        try {
+            const response = await axios.post(baseUrl + '/auth/signIn', {
+                username,
+                password,
+            });
+
+            return response.data;
+        } catch (error) {
+            throw error.response.data;
+        }
+    },
+
     signUp: async (email, username, password, name, surname) => {
         try {
             const response = await axios.post({baseUrl} + '/auth/signUp', {
