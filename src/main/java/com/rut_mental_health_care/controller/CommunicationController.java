@@ -6,8 +6,6 @@ import com.rut_mental_health_care.service.communication.CommunicationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -45,11 +43,9 @@ public class CommunicationController {
     }
 
     @PostMapping("/like/{postId}")
-    public ResponseEntity<String> likePost(@PathVariable Long postId, @RequestParam Boolean isLike) {
+    public ResponseEntity<String> likePost(@PathVariable Long postId, @RequestParam Long userId, @RequestParam Boolean isLike) {
         try {
-            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-            String username = authentication.getName();
-            communicationService.likePost(postId, username, isLike);
+            communicationService.likePost(postId, userId, isLike);
             return ResponseEntity.ok("Post liked successfully");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error liking post");

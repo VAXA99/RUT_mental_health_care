@@ -16,10 +16,13 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByEmail(String email);
     @Query("SELECT prt.user FROM PasswordResetToken prt WHERE prt.token = :token")
     Optional<User> findUserByPasswordResetToken(@Param("token") String token);
+    @Query("SELECT u.id FROM User u WHERE u.username = :username")
+    Long findUserIdByUsername(@Param("username") String username);
+    @Query("SELECT u.roles FROM User u WHERE u.username = :username")
+    String findUserRolesByUsername(@Param("username") String username);
     List<User> findAllByRoles(String roles);
     Boolean existsUserByUsername(String username);
     Boolean existsUserByEmail(String email);
-
     @Query(nativeQuery = true,
             value = "SELECT FLOOR(EXTRACT(EPOCH FROM AGE(NOW(), :dateOfBirth)) / 31556952.0)")
     Integer countUserAge(@Param("dateOfBirth") Date dateOfBirth);

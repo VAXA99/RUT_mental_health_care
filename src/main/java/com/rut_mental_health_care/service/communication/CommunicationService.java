@@ -8,7 +8,7 @@ public interface CommunicationService {
 
     List<PostDto> getFeed();
     PostDto getPostWithComments(Long postId);
-    void likePost(Long postId, String username, Boolean isLike);
+    void likePost(Long postId, Long userId, Boolean isLike);
     void commentPost(Long postId, CommentDto commentDto);
     void replyToComment(Long parentCommentId, CommentDto replyDto);
     void editComment(Long commentId, String newContent);

@@ -6,6 +6,7 @@ import com.rut_mental_health_care.repository.PasswordResetTokenRepository;
 import com.rut_mental_health_care.repository.UserRepository;
 import com.rut_mental_health_care.security.UserDetailsImpl;
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.data.repository.query.Param;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,6 +52,14 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     public Boolean existsUserByEmail(String email) {
         return userRepository.existsUserByEmail(email);
+    }
+
+    public Long findUserIdByUsername(@Param("username") String username) {
+        return userRepository.findUserIdByUsername(username);
+    }
+
+    public String findUserRolesByUsername(@Param("username") String username) {
+        return userRepository.findUserRolesByUsername(username);
     }
 
     public User findByEmail(String email) {

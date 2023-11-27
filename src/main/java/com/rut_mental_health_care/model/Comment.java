@@ -37,4 +37,15 @@ public class Comment {
     @CreationTimestamp
     @Column(updatable = false)
     private LocalDateTime createdAt;
+
+    @PostPersist
+    public void onCommentPersist() {
+        CommunicationNotification notification = new CommunicationNotification();
+        notification.setSender(this.user);
+        notification.setRecipient(this.post.getUser());
+        notification.setPost(this.post);
+        notification.setMessage("Пользователь " + this.user.getUsername() + " оставил комментариий под вашим постом");
+        // notificationService.sendNotification(notification);
+
+    }
 }
