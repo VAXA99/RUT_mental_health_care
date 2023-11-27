@@ -20,6 +20,7 @@ import {Form1} from './components/Form/Form1.js';
 import {Form2} from './components/Form/Form2.js';
 import Articles from './components/Articles/Articles.js';
 import Calendar from './components/Calendar/Calendar.js';
+import Popup from "./components/Popup/Popup";
 
 
 function App() {

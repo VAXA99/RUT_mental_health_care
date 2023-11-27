@@ -1,10 +1,16 @@
 import React, {useEffect, useState} from 'react'
 import {Link} from 'react-router-dom'
 import Auth from '../../backend/Auth'
+import Popup from "../Popup/Popup";
 
 export default function Header() {
 
     const [authenticated, setAuthenticated] = useState(Auth.isTokenValid);
+    const [showPopup, setShowPopup] = useState(false); // State for showing/hiding the popup
+
+    const togglePopup = () => {
+        setShowPopup(!showPopup);
+    };
 
     const handleLogout = async () => {
         await Auth.logout();
@@ -33,14 +39,16 @@ export default function Header() {
                     <div className="header__nav">
                         { authenticated ?
                             ( //TODO make links usable
+                                //TODO make popUp usable
                                 <div>
-                                    <button id="popup_link" className="nav__img focus">
+                                    <button id="popup_link" className="nav__img focus" onClick={togglePopup}>
                                         <img className="header__nav__img focus" src="/img/иконка_уведомление.png" alt=""/>
                                     </button>
                                     <Link to={'/user_profile'}><img className="header__nav__img" src="/img/меню__.png" alt=""/></Link>
                                     <button className="nav__img" onClick={handleLogout}>
                                         <img className="header__nav__img" src="/img/Group%2089.png" alt=""/>
                                     </button>
+                                    {showPopup && <Popup/>}
                                 </div>
                             ) : (
                                 <div>
