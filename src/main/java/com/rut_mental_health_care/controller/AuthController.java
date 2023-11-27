@@ -25,7 +25,7 @@ import java.util.UUID;
 @CrossOrigin("http://localhost:3000/")
 public class AuthController {
 
-    private final UserDetailsServiceImpl userDetailsService;
+    private final UserDetailsServiceImpl userService;
 
     private final JwtService jwtService;
 
@@ -34,11 +34,11 @@ public class AuthController {
     private final MailService mailService;
 
     @Autowired
-    public AuthController(UserDetailsServiceImpl userDetailsService,
+    public AuthController(UserDetailsServiceImpl userService,
                           JwtService jwtService,
                           AuthenticationManager authenticationManager,
                           MailService mailService) {
-        this.userDetailsService = userDetailsService;
+        this.userService = userService;
         this.jwtService = jwtService;
         this.authenticationManager = authenticationManager;
         this.mailService = mailService;
@@ -46,6 +46,12 @@ public class AuthController {
 
     @PostMapping("/signUp")
     public ResponseEntity<?> signup(@RequestBody SignUpRequest signUpRequest) {
+        if (userService.existsUserByUsername(signUpRequest.getUsername())) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Choose different name");
+        }
+        if (userService.existsUserByEmail(signUpRequest.getEmail())) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Choose different email");
+        }
 
         User user = new User();
         user.setUsername(signUpRequest.getUsername());
@@ -56,47 +62,29 @@ public class AuthController {
         user.setSurname(signUpRequest.getSurname());
 
 
-        userDetailsService.addUser(user);
+        userService.addUser(user);
 
         return ResponseEntity.ok("Success, User Signed Up Successfully");
-    }
-
-    @GetMapping("/exists_by_username")
-    public ResponseEntity<?> exists_by_username (String username) {
-        boolean userExists = userDetailsService.existsUserByUsername(username);
-        if (userExists) {
-            return ResponseEntity.badRequest().body("User with username " + username + " already exists.");
-        } else {
-            return ResponseEntity.ok("User with username " + username + " does not exists");
-        }
-    }
-
-    @GetMapping("/exists_by_email")
-    public ResponseEntity<?> exists_by_email (String email) {
-        boolean userExists = userDetailsService.existsUserByEmail(email);
-        if (userExists) {
-            return ResponseEntity.badRequest().body("User with email " + email + " already exists.");
-        } else {
-            return ResponseEntity.ok("User with email " + email + " does not exists");
-        }
     }
 
     @PostMapping("/signIn")
     public String authenticateAndGetToken(@RequestBody AuthRequest authRequest) {
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword()));
         if (authentication.isAuthenticated()) {
-            return jwtService.generateToken(authRequest.getUsername());
+            Long id = userService.findUserIdByUsername(authRequest.getUsername());
+            String roles = userService.findUserRolesByUsername(authRequest.getUsername());
+            return jwtService.generateToken(authRequest.getUsername(), id, roles);
         } else {
-            throw new UsernameNotFoundException("invalid user request !");
+            throw new UsernameNotFoundException("Invalid user request !");
         }
     }
 
     @PostMapping("/user/resetPassword")
     public ResponseEntity<?> resetPassword(HttpServletRequest request,
                                            @RequestParam String email) throws MessagingException {
-        User user = userDetailsService.findByEmail(email);
+        User user = userService.findByEmail(email);
         String token = UUID.randomUUID().toString();
-        userDetailsService.createPasswordResetTokenForUser(user, token);
+        userService.createPasswordResetTokenForUser(user, token);
         mailService.send(mailService.constructResetTokenEmail(getAppUrl(request), token, user));
 
         return ResponseEntity.ok("Link sent to email: " + email);
@@ -110,26 +98,23 @@ public class AuthController {
         // Get the server port
         int serverPort = request.getServerPort();
 
-
         return scheme + "://" + serverName + ":" + serverPort;
     }
 
     @PostMapping("/user/savePassword")
     public ResponseEntity<?> savePassword(@RequestBody PasswordDto passwordDto) {
-
-        String result = userDetailsService.validatePasswordResetToken(passwordDto.getToken());
+        String result = userService.validatePasswordResetToken(passwordDto.getToken());
 
         if (result != null) {
             return ResponseEntity.status(500).body("Not valid token");
         }
 
-        User user = userDetailsService.findUserByPasswordResetToken(passwordDto.getToken());
+        User user = userService.findUserByPasswordResetToken(passwordDto.getToken());
 
-        if (userDetailsService.changeUserPassword(user, passwordDto.getNewPassword())) {
+        if (userService.changeUserPassword(user, passwordDto.getNewPassword())) {
             return ResponseEntity.ok("Password changed for user: " + user.getUsername());
         } else {
             return ResponseEntity.badRequest().body("Password not changed. New password is the same as the old one.");
         }
-
     }
 }

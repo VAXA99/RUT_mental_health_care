@@ -23,4 +23,15 @@
         private Post post;
 
         private Boolean isLike;
+
+        @PostPersist
+        public void onLikePersist() {
+            CommunicationNotification notification = new CommunicationNotification();
+            notification.setSender(this.user);
+            notification.setRecipient(this.post.getUser());
+            notification.setPost(this.post);
+            notification.setMessage("Пользователю " + this.user.getUsername() + " понравился ваш пост");
+            // notificationService.sendNotification(notification);
+
+        }
     }

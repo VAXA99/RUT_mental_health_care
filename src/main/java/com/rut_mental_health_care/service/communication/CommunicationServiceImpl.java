@@ -10,7 +10,6 @@ import jakarta.persistence.EntityNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -70,15 +69,15 @@ public class CommunicationServiceImpl implements CommunicationService {
 
     @Override
     @Async
-    public void likePost(Long postId, String username, Boolean isLike) {
+    public void likePost(Long postId, Long userId, Boolean isLike) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new EntityNotFoundException("Post not found with ID: " + postId));
 
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found " + username));
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("User not found with ID:" + userId));
 
         // Find the existing like, if any
-        Like existingLike = likeRepository.findByPostIdAndUserUsername(postId, username);
+        Like existingLike = likeRepository.findByPostIdAndUserId(postId, userId);
 
         if (existingLike != null) {
 
