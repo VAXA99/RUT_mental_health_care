@@ -67,6 +67,22 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                 .orElseThrow(() -> new EntityNotFoundException("User not found with email: " + email));
     }
 
+    public String validatePassword(String password) {
+        if (password.length() < 6) {
+            return "Password is too short. Please choose a password with at least 6 characters.";
+        }
+
+        if (!password.matches(".*\\d.*")) {
+            return "Password must contain at least one digit.";
+        }
+
+        if (!password.matches(".*[a-z].*")) {
+            return "Password must contain at least one lowercase letter.";
+        }
+
+        return "";
+    }
+
     public User findUserByPasswordResetToken( String token) {
         return userRepository.findUserByPasswordResetToken(token)
                 .orElseThrow(() -> new EntityNotFoundException("User not found"));

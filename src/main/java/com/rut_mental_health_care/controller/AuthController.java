@@ -9,6 +9,7 @@ import com.rut_mental_health_care.service.mail.MailService;
 import com.rut_mental_health_care.service.user.UserDetailsServiceImpl;
 import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletRequest;
+import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -49,8 +50,14 @@ public class AuthController {
         if (userService.existsUserByUsername(signUpRequest.getUsername())) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Choose different name");
         }
+
         if (userService.existsUserByEmail(signUpRequest.getEmail())) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Choose different email");
+        }
+
+        String passwordValidationMessage = userService.validatePassword(signUpRequest.getPassword());
+        if (!passwordValidationMessage.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(passwordValidationMessage);
         }
 
         User user = new User();
@@ -60,7 +67,6 @@ public class AuthController {
         user.setRoles("ROLE_USER");
         user.setName(signUpRequest.getName());
         user.setSurname(signUpRequest.getSurname());
-
 
         userService.addUser(user);
 
