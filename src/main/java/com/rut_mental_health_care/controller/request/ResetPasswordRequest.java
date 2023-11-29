@@ -1,4 +1,4 @@
-package com.rut_mental_health_care.security.request;
+package com.rut_mental_health_care.controller.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

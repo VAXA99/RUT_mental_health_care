@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "communication_notification")
 public class CommunicationNotification {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -23,10 +24,6 @@ public class CommunicationNotification {
     @ManyToOne
     @JoinColumn(name = "recipient_id", nullable = false)
     private User recipient;
-
-    @ManyToOne
-    @JoinColumn(name = "post_id")
-    private Post post;
 
     @ManyToOne
     @JoinColumn(name = "comment_id")
@@ -44,5 +41,4 @@ public class CommunicationNotification {
     @CreationTimestamp
     @Column(updatable = false)
     private LocalDateTime createdAt;
-
 }

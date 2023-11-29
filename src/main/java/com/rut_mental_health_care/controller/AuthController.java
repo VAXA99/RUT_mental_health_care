@@ -1,17 +1,15 @@
 package com.rut_mental_health_care.controller;
 
+import com.rut_mental_health_care.controller.request.AuthRequest;
+import com.rut_mental_health_care.controller.request.SignUpRequest;
 import com.rut_mental_health_care.dto.PasswordDto;
 import com.rut_mental_health_care.model.User;
 import com.rut_mental_health_care.security.JwtService;
-import com.rut_mental_health_care.security.request.AuthRequest;
-import com.rut_mental_health_care.security.request.SignUpRequest;
 import com.rut_mental_health_care.service.mail.MailService;
 import com.rut_mental_health_care.service.user.UserDetailsServiceImpl;
 import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletRequest;
-import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

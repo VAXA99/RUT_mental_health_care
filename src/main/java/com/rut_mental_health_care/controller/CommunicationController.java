@@ -1,6 +1,7 @@
 package com.rut_mental_health_care.controller;
 
-import com.rut_mental_health_care.dto.CommentDto;
+import com.rut_mental_health_care.controller.request.CommentRequest;
+import com.rut_mental_health_care.controller.request.PostRequest;
 import com.rut_mental_health_care.dto.PostDto;
 import com.rut_mental_health_care.service.communication.CommunicationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,7 +43,7 @@ public class CommunicationController {
         }
     }
 
-    @PostMapping("/like/{postId}")
+    @PostMapping("/like/post/{postId}")
     public ResponseEntity<String> likePost(@PathVariable Long postId, @RequestParam Long userId, @RequestParam Boolean isLike) {
         try {
             communicationService.likePost(postId, userId, isLike);
@@ -53,39 +54,51 @@ public class CommunicationController {
     }
 
     @PostMapping("/write")
-    public ResponseEntity<String> writePost(@RequestBody PostDto postDTO) {
+    public ResponseEntity<String> writePost(@RequestBody PostRequest postRequest) {
         try {
-            communicationService.writePost(postDTO);
+            communicationService.writePost
+                    (postRequest.getUserId(),
+                    postRequest.getTitle(),
+                    postRequest.getContent(),
+                    postRequest.getTagNames());
             return ResponseEntity.status(HttpStatus.CREATED).body("Post created successfully");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error creating post");
         }
     }
 
-    @PostMapping("/comment/{postId}")
-    public ResponseEntity<String> commentPost(@PathVariable Long postId, @RequestBody CommentDto commentDto) {
+    @PostMapping("/comment/post/{postId}")
+    public ResponseEntity<String> commentPost(@PathVariable Long postId, @RequestBody CommentRequest commentRequest) {
         try {
-            communicationService.commentPost(postId, commentDto);
+            communicationService.commentPost(
+                    postId,
+                    commentRequest.getUserId(),
+                    commentRequest.getContent()
+            );
             return ResponseEntity.ok("Comment added successfully");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error adding comment");
         }
     }
 
-    @PostMapping("/reply/{commentId}")
-    public ResponseEntity<String> replyToComment(@PathVariable Long commentId, @RequestBody CommentDto replyDto) {
+    @PostMapping("/reply/comment/{commentId}")
+    public ResponseEntity<String> replyToComment(@PathVariable Long commentId, @RequestBody CommentRequest commentRequest) {
         try {
-            communicationService.replyToComment(commentId, replyDto);
+            communicationService.replyToComment(
+                    commentId,
+                    commentRequest.getUserId(),
+                    commentRequest.getContent()
+            );
             return ResponseEntity.ok("Reply added successfully");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error adding reply");
         }
     }
 
-    @PutMapping("/edit/comment/{commentId}")
-    public ResponseEntity<String> editComment(@PathVariable Long commentId, @RequestParam String newContent) {
+    @PatchMapping("/edit/comment/{commentId}")
+    public ResponseEntity<String> editComment(@PathVariable Long commentId, @RequestBody CommentRequest commentRequest) {
         try {
-            communicationService.editComment(commentId, newContent);
+            communicationService.editComment(commentId, commentRequest.getContent());
             return ResponseEntity.ok("Comment edited successfully");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error editing comment");
@@ -102,10 +115,10 @@ public class CommunicationController {
         }
     }
 
-    @PutMapping("/edit/post/{postId}")
-    public ResponseEntity<String> editPost(@PathVariable Long postId, @RequestParam String newContent) {
+    @PatchMapping("/edit/post/{postId}")
+    public ResponseEntity<String> editPost(@PathVariable Long postId, @RequestBody PostRequest postRequest) {
         try {
-            communicationService.editPost(postId, newContent);
+            communicationService.editPost(postId, postRequest.getContent());
             return ResponseEntity.ok("Post edited successfully");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error editing post");

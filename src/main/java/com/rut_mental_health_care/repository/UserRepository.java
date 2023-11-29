@@ -25,5 +25,4 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Boolean existsUserByEmail(String email);
     @Query("SELECT EXTRACT(YEAR FROM CURRENT_DATE) - EXTRACT(YEAR FROM u.dateOfBirth) FROM User u WHERE u.id = :userId")
     Integer countUserAge(@Param("userId") Long userId);
-
 }

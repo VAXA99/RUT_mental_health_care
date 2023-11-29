@@ -9,11 +9,11 @@ public interface CommunicationService {
     List<PostDto> getFeed();
     PostDto getPostWithComments(Long postId);
     void likePost(Long postId, Long userId, Boolean isLike);
-    void commentPost(Long postId, CommentDto commentDto);
-    void replyToComment(Long parentCommentId, CommentDto replyDto);
+    void commentPost(Long postId, Long userId, String content);
+    void replyToComment(Long parentCommentId, Long userId, String content);
     void editComment(Long commentId, String newContent);
     void deleteComment(Long commentId);
-    void writePost(PostDto postDto);
+    void writePost(Long userId, String title, String content, List<String> tagNames);
     void editPost(Long postId, String newContent);
     void deletePost(Long postId);
 }
