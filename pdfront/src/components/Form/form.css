@@ -16,7 +16,7 @@
 
 
 .up__block{
-    padding: 40px;
+    padding: 20px;
     color: #D9DBE9;
     width: 95%;
     display: flex;
@@ -129,7 +129,7 @@
 
 .form__page__subtitle.input{
     height: 80%;
-    font-family:'Inter' serif;
+    font-family:'SF Pro Display';
 }
 textarea{
     padding: 10px;

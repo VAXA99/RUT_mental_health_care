@@ -53,7 +53,8 @@ export const Login = () => {
                     <div className="auth__img"><img src="/img/Логотип%20РУТ%20(МИИТ)%20синий%201.png" alt=""/></div>
                     <div className="auth__title">Цифровая система психологической поддержки РУТ</div>
                 </Link>
-                <form className="auth__form" onSubmit={handleLogin}>
+                <form  onSubmit={handleLogin}>
+                    <div className="auth__form">
                     <div className="input__block">
                         <input className="auth__input"
                                placeholder="логин"
@@ -67,7 +68,7 @@ export const Login = () => {
 
                         {error && <div className="auth__error">{error}</div>}
                     </div>
-
+                    </div>
                     <div className="form__buttons">
                         <button type="submit" className="auth__button">
                             Вход

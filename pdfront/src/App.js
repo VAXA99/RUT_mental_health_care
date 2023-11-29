@@ -36,8 +36,6 @@ function App() {
 
                     <Route exact path='/auth' element={<Login/>}/>
 
-                    <Route exact path='/l' element={<Home/>}/>
-
                     <Route exact path='/sign_up' element={<Sign_up/>}/>
 
                     <Route exact path='/forum' element={<div className='containerr'><Header/><Forum/></div>}/>
