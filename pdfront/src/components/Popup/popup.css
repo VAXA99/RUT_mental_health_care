@@ -5,13 +5,12 @@
     width: 500PX;
     height: 500px;
     background-color: #fff;
+    display: block;
+    z-index: 15;
   
 }
 
-#popupWindow{
-    display: none;
-    z-index: 15;
-}
+
 .popup__button{
     cursor: pointer;
     border: none;

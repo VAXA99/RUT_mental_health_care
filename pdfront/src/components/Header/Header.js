@@ -1,14 +1,30 @@
 import React, {useEffect, useState} from 'react'
-import {Link} from 'react-router-dom'
+import {Link, useNavigate} from 'react-router-dom'
 import Auth from '../../backend/Auth'
+import Popup from "../Popup/Popup";
 
 export default function Header() {
+
+    const [modalState, setModalVisible] = useState(false);
+    const openModal = () => {
+        setModalVisible(true);
+    };
 
     const [authenticated, setAuthenticated] = useState(Auth.isTokenValid);
 
     const handleLogout = () => {
         setAuthenticated(Auth.logout());
     };
+
+    const navigate = useNavigate();
+    const handleLogoutAndNavigate = () => {
+        setAuthenticated(Auth.logout());
+
+        navigate('/');
+    };
+
+    const userId = Auth.isUserIdValid();
+
 
     useEffect(() => {
         // Periodically check token validity and update the state
@@ -33,11 +49,14 @@ export default function Header() {
                         { authenticated ?
                             ( //TODO make links usable
                                 <div>
-                                    <button id="popup_link" className="nav__img focus">
-                                        <img className="header__nav__img focus" src="../../../public/img/иконка_уведомление.png" alt=""/>
+                                    <button
+                                        title="Open"
+                                        onClick={openModal}
+                                        className="nav__img focus">
+                                        <img className="header__nav__img focus" src="/img/иконка_уведомление.png" alt=""/>
                                     </button>
-                                    <Link to={'/user_profile'}><img className="header__nav__img" src="../../../public/img/меню__.png" alt=""/></Link>
-                                    <button className="nav__img" onClick={handleLogout}>
+                                    <Link to={`/user_profile/${userId}`}><img className="header__nav__img" src="/img/меню__.png" alt=""/></Link>
+                                    <button className="nav__img" onClick={handleLogoutAndNavigate}>
                                         <img className="header__nav__img" src="/img/Group%2089.png" alt=""/>
                                     </button>
                                 </div>
@@ -46,6 +65,11 @@ export default function Header() {
                                     <Link className="header__nav__text" to={'/auth'}><img alt=""/>Войти</Link>
                                 </div>
                            )
+                        }
+                        {
+                            modalState &&
+                            <Popup
+                                closeModal={() => setModalVisible(false)} />
                         }
                         
                     </div>

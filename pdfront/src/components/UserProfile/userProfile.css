@@ -1,0 +1,124 @@
+.container.main.profile{
+    width: 60%;
+    margin: 0 auto;
+    margin-top: 3%;
+}
+
+.profile__photo{
+    width: 230px;
+    height: 280px;
+    text-align: center;
+}
+
+.profile__ifo{
+    margin-left: 5%;
+    width: 60%;
+}
+
+.edit__info{
+
+    display: flex;
+}
+
+.nav__img__proile{
+    margin-top: 20px;
+}
+
+.margin__top{
+    margin-top: 2%;
+}
+
+.worker{
+    text-transform: lowercase;
+    margin-top: 10px;
+    font-size: 20px;
+    font-family: 'SF Pro Display' , sans-serif;
+    font-weight: 900;
+}
+.profile__edit{
+    margin-top: 20px;
+    margin-right: 20px;
+    display: flex;
+    text-align: left;
+}
+
+.profile__edit__title{
+    font-size: 13px;
+    font-weight: 600;
+
+}
+.profile__edit__info{
+    margin-right: 20px;
+    width: auto;
+}
+
+.profile__edit__info.nickname{
+    margin-left: -90px;
+}
+
+.profile__edit__input{
+    margin-top: 7px;
+    border: none;
+    outline: none;
+    border-radius: 25px;
+    background-color: #D1EDF9;
+    text-align: center;
+    font-size: 25px;
+    font-weight: 700;
+    padding: 10px 25px;
+
+}
+.profile__edit__input.age {
+    width: 55%;
+}
+.profile__edit__input.nickname {
+    width: 80%;
+
+}
+.profile__edit__input.email {
+    width: 100%;
+}
+
+.profile__edit__input::placeholder{
+    color: black;
+    text-align: center;
+}
+
+.profile__edit__info.email{
+    width: 130%;
+}
+
+.problems__input.profile{
+    height: 150px;
+}
+
+.profile__edit__info.textarea{
+    margin-top: 20px;
+    margin-bottom: 30px;
+}
+
+textarea{
+    font-family: "SF Pro Display";
+}
+
+.display__flex.profile{
+
+}
+
+.log__out{
+    color: #FF8F8F;
+    font-size: 15px;
+    font-weight: 600;
+    text-decoration: underline;
+    margin-right: 15px;
+}
+
+.nav__img.change__photo{
+    margin-top: 10px;
+    text-decoration: underline;
+    text-transform: lowercase;
+    color: #666;;
+    font-size: 14px;
+    font-weight: 600;
+
+}

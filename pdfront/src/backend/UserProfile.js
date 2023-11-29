@@ -51,6 +51,15 @@ async function editBio(userId, newBio) {
         throw error;
     }
 }
+async function userProfile(userID) {
+    try {
+        await axios.patch(`http://localhost:8080//api/profile/${userId}`);
+    } catch (error) {
+        console.error('Error find userID:', error);
+        throw error;
+    }
+}
+
 
 export {
     editName,
@@ -58,4 +67,5 @@ export {
     editMiddleName,
     editEmail,
     editBio,
+    userProfile
 };

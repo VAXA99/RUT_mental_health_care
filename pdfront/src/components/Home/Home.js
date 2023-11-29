@@ -80,7 +80,6 @@ export default function Home() {
                             </div>
                         </div>
                     </div>
-                    <Popup/>
                 </div>
                 <div className="container right">
                     <RightForm/>

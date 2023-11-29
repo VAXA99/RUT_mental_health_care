@@ -6,6 +6,7 @@ import "./components/Form/form.css"
 import "./components/Articles/articles.css"
 import "./components/Calendar/calendar.css"
 
+
 import Home from './components/Home/Home.js';
 import Header from './components/Header/Header.js';
 import Sign_up from './components/SignUp/Sign_up.js';
@@ -20,6 +21,7 @@ import {Form1} from './components/Form/Form1.js';
 import {Form2} from './components/Form/Form2.js';
 import Articles from './components/Articles/Articles.js';
 import Calendar from './components/Calendar/Calendar.js';
+import UserProfile from "./components/UserProfile/UserProfile";
 
 
 function App() {
@@ -52,6 +54,7 @@ function App() {
                     <Route exact path='/form2' element={<Form2/>}/>
                     <Route exact path='/articles' element={<Articles/>}/>
                     <Route exact path='/calendar' element={<Calendar/>}/>
+                    <Route exact path='/user_profile/:userId' element={<UserProfile/>}/>
 
                 </Routes>
 

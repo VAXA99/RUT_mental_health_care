@@ -17,7 +17,9 @@ export default function Menu() {
           <Link to={'/a'}><div className="form info">Библиотека</div></Link>
           <Link to={'/forum'}><div className="form info">Тред</div></Link>
         </div>
-      ) : (
+
+
+        ) : (
         <div className="form__main">
          {location.pathname !== '/spec' && <Link to={'/spec'}><div className="form info">Сотрудники</div></Link>}
           <Link to={'/a'}><div className="form info">Как записаться</div></Link>
