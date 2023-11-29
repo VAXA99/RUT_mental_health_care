@@ -26,6 +26,10 @@ export const Login = () => {
         }
     };
 
+    const goBack = () => {
+        navigate(-1); // Navigate back one step in the history stack
+    };
+
     useEffect(() => {
         const tokenValid = auth.isTokenValid();
         if (tokenValid) {
@@ -73,9 +77,7 @@ export const Login = () => {
                                 Региcтрация
                             </Link>
                         </div>
-                        <div>
-                            <Link to={'/'} className="auth__link">Назад</Link>
-                        </div>
+                        <div className="auth__link" onClick={goBack}>Назад</div>
                     </div>
                 </form>
             </div>
