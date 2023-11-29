@@ -7,10 +7,12 @@ export default class CalendarComponent extends Component {
 
     static defaultProps = {
         date: new Date(),
-        years: [2020, 2021, 2022, 2023, 2024, 2025, 2026, 2027, 2028, 2029, 2030],
+        years: [2023, 2024],
         monthNames: ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"],
         weekDayNames: ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"],
-        onChange: Function.prototype
+        onChange: Function.prototype,
+        onTimeSelect: Function.prototype,
+        onDateSelect: Function.prototype
     };
 
     state = {
@@ -51,12 +53,20 @@ export default class CalendarComponent extends Component {
 
     };
 
-    handleDayClick = date => {
-        console.log(date);
-        this.setState({selectedDate: date});
+    // handleDayClick = date => {
+    //     console.log(date);
+    //     this.setState({selectedDate: date});
+    //
+    //     this.props.onChange(date);
+    // }
 
-        this.props.onChange(date);
-    }
+    handleDayClick = (date) => {
+        console.log(date);
+        this.setState({ selectedDate: date });
+
+        // Call the callback function passed from the parent
+        this.props.onDateSelect(date);
+    };
 
     render() {
         const {currentDate, selectedDate} = this.state;

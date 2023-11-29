@@ -1,13 +1,17 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {Form1} from "../Form/Form1";
 import {Form2} from "../Form/Form2";
 import Calendar from "../Calendar/Calendar";
 import Header from "../Header/Header";
 import Menu from "../Menu/Menu";
+import {useNavigate} from "react-router-dom";
+import Auth from "../../backend/Auth";
 
 
 export function ConsultationAppointment() {
+    const [authenticated, setAuthenticated] = useState(Auth.isTokenValid);
     const [step, setStep] = useState(1);
+    const navigate = useNavigate();
     const [formData, setFormData] = useState({
         selectedProblems: [],
         problemDescription: '',
@@ -23,12 +27,12 @@ export function ConsultationAppointment() {
         setStep(2);
     };
 
-    const handleNext = () => {
-        setStep((prevStep) => prevStep + 1);
-    };
-
     const handleThirdStep = () => {
         setStep(3);
+    };
+
+    const handleNext = () => {
+        setStep((prevStep) => prevStep + 1);
     };
 
     const handleForm1Submit = (selectedProblems) => {
@@ -47,16 +51,35 @@ export function ConsultationAppointment() {
         handleNext();
     };
 
-    const handleCalendarSubmit = (selectedDate, selectedTime) => {
+    const handleDateSelect = (selectedDate) => {
         setFormData({
             ...formData,
             selectedDate,
+        });
+    };
+
+    const handleTimeSelect = (selectedTime) => {
+        setFormData({
+            ...formData,
             selectedTime,
         });
-        // Now you can send formData to the backend
-        // You may want to use a library like axios to make a network request
-        // Example: axios.post('/api/submitFormData', formData);
     };
+
+
+    useEffect(() => {
+        const intervalId = setInterval(() => {
+            setAuthenticated(Auth.isTokenValid());
+            if (!authenticated) {
+                navigate("/auth")
+            }
+        }, 1000); // Check every second
+
+        return () => {
+            clearInterval(intervalId);
+        };
+    }, []);
+
+
 
     return (
         <>
@@ -117,20 +140,21 @@ export function ConsultationAppointment() {
                     {step === 1 && (
                         <Form1
                             selectedProblems={formData.selectedProblems}
-                            onSubmit={handleForm1Submit}
+                            onNext={handleForm1Submit}
                         />
                     )}
                     {step === 2 && (
                         <Form2
                             problemDescription={formData.problemDescription}
-                            onSubmit={handleForm2Submit}
+                            onNext={handleForm2Submit}
                         />
                     )}
                     {step === 3 && (
                         <Calendar
                             selectedDate={formData.selectedDate}
                             selectedTime={formData.selectedTime}
-                            onSubmit={handleCalendarSubmit}
+                            onDateSelect={handleDateSelect}
+                            onTimeSelect={handleTimeSelect}
                         />
                     )}
                 </div>
