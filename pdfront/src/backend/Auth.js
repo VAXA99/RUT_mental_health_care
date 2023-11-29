@@ -49,7 +49,7 @@ export default {
 
     signUp: async (email, username, password, name, surname) => {
         try {
-            const response = await axios.post({baseUrl} + '/auth/signUp', {
+            const response = await axios.post(baseUrl + '/auth/signUp', {
                 email,
                 username,
                 password,
@@ -73,7 +73,7 @@ export default {
 
     isUsernameValid: async (username) => {
         try {
-            const response = await axios.get({baseUrl} + '/auth/exists_by_username',
+            const response = await axios.get(baseUrl + '/auth/exists_by_username',
                 {params: {
                     username: username
                     }
@@ -88,7 +88,7 @@ export default {
 
     isEmailValid: async (email) => {
         try {
-            const response = await axios.get({baseUrl} + '/auth/exists_by_email',
+            const response = await axios.get(baseUrl + '/auth/exists_by_email',
                 {params: {
                     email: email
                     }
