@@ -23,7 +23,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     List<User> findAllByRoles(String roles);
     Boolean existsUserByUsername(String username);
     Boolean existsUserByEmail(String email);
-    @Query(nativeQuery = true,
-            value = "SELECT FLOOR(EXTRACT(EPOCH FROM AGE(NOW(), :dateOfBirth)) / 31556952.0)")
+    @Query("SELECT FLOOR(DATEDIFF(CURRENT_DATE, u.dateOfBirth) / 365) FROM User u WHERE u.dateOfBirth = :dateOfBirth")
     Integer countUserAge(@Param("dateOfBirth") Date dateOfBirth);
+
 }
