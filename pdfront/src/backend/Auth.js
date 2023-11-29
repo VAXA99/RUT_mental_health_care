@@ -1,5 +1,6 @@
 import {jwtDecode} from "jwt-decode";
 import axios from "axios";
+import baseUrl from "./base-url";
 
 export default {
 
@@ -33,9 +34,22 @@ export default {
         }
     },
 
+    signIn: async (username, password) => {
+        try {
+            const response = await axios.post(baseUrl + '/auth/signIn', {
+                username,
+                password,
+            });
+
+            return response.data;
+        } catch (error) {
+            throw error.response.data;
+        }
+    },
+
     signUp: async (email, username, password, name, surname) => {
         try {
-            const response = await axios.post('http://localhost:8080/api/auth/signUp', {
+            const response = await axios.post({baseUrl} + '/auth/signUp', {
                 email,
                 username,
                 password,
@@ -59,7 +73,7 @@ export default {
 
     isUsernameValid: async (username) => {
         try {
-            const response = await axios.get('http://localhost:8080/api/auth/exists_by_username',
+            const response = await axios.get({baseUrl} + '/auth/exists_by_username',
                 {params: {
                     username: username
                     }
@@ -74,7 +88,7 @@ export default {
 
     isEmailValid: async (email) => {
         try {
-            const response = await axios.get('http://localhost:8080/api/auth/exists_by_email',
+            const response = await axios.get({baseUrl} + '/auth/exists_by_email',
                 {params: {
                     email: email
                     }

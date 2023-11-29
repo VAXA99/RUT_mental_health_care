@@ -10,9 +10,9 @@ import TestingForm from '../TestingForm/TestingForm';
 export default function Home() {
     useEffect(() => {
         // Код обработчика событий
-        var popupLink = document.getElementById('popupLink');
-        var popupWindow = document.getElementById('popupWindow');
-        var popupClose = document.getElementById('popupClose');
+        // var popupLink = document.getElementById('popupLink');
+        // var popupWindow = document.getElementById('popupWindow');
+        // var popupClose = document.getElementById('popupClose');
     }, []); // Пустой массив зависимостей означает, что эффект будет выполнен только при монтировании компонента
     return (
         <>

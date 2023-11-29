@@ -22,6 +22,7 @@ import {Form2} from './components/Form/Form2.js';
 import Articles from './components/Articles/Articles.js';
 import Calendar from './components/Calendar/Calendar.js';
 import UserProfile from "./components/UserProfile/UserProfile";
+import Popup from "./components/Popup/Popup";
 
 
 function App() {

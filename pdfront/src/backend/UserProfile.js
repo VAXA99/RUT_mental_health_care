@@ -1,5 +1,5 @@
 import axios from "axios";
-import baseUrl from "../base-url";
+import baseUrl from "./base-url";
 
 
 // Function to edit name by user ID

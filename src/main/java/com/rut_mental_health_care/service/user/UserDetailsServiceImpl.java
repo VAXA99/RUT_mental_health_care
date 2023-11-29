@@ -6,6 +6,7 @@ import com.rut_mental_health_care.repository.PasswordResetTokenRepository;
 import com.rut_mental_health_care.repository.UserRepository;
 import com.rut_mental_health_care.security.UserDetailsImpl;
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.data.repository.query.Param;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,9 +54,33 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         return userRepository.existsUserByEmail(email);
     }
 
+    public Long findUserIdByUsername(@Param("username") String username) {
+        return userRepository.findUserIdByUsername(username);
+    }
+
+    public String findUserRolesByUsername(@Param("username") String username) {
+        return userRepository.findUserRolesByUsername(username);
+    }
+
     public User findByEmail(String email) {
         return userRepository.findByEmail(email)
                 .orElseThrow(() -> new EntityNotFoundException("User not found with email: " + email));
+    }
+
+    public String validatePassword(String password) {
+        if (password.length() < 6) {
+            return "Password is too short. Please choose a password with at least 6 characters.";
+        }
+
+        if (!password.matches(".*\\d.*")) {
+            return "Password must contain at least one digit.";
+        }
+
+        if (!password.matches(".*[a-z].*")) {
+            return "Password must contain at least one lowercase letter.";
+        }
+
+        return "";
     }
 
     public User findUserByPasswordResetToken( String token) {
