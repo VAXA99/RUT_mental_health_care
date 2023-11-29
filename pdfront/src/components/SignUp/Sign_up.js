@@ -51,6 +51,10 @@ export default function Sign_up() {
         }
     };
 
+    const goBack = () => {
+        navigate(-1); // Navigate back one step in the history stack
+    };
+
     useEffect(() => {
         const tokenValid = auth.isTokenValid();
         if (tokenValid) {
@@ -120,11 +124,7 @@ export default function Sign_up() {
                             <button type="submit" className="auth__button">
                                 Регистрация
                             </button>
-                            <div className="auth__link">
-                                <Link to={'/auth'}>
-                                    Назад
-                                </Link>
-                            </div>
+                            <div className="auth__link" onClick={goBack}>Назад</div>
                         </div>
                     </form>
                 </div>
