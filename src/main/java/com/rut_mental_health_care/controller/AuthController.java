@@ -47,13 +47,6 @@ public class AuthController {
 
     @PostMapping("/signUp")
     public ResponseEntity<?> signup(@RequestBody SignUpRequest signUpRequest) {
-        if (userService.existsUserByUsername(signUpRequest.getUsername())) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Choose different name");
-        }
-
-        if (userService.existsUserByEmail(signUpRequest.getEmail())) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Choose different email");
-        }
 
         String passwordValidationMessage = userService.validatePassword(signUpRequest.getPassword());
         if (!passwordValidationMessage.isEmpty()) {
@@ -71,6 +64,26 @@ public class AuthController {
         userService.addUser(user);
 
         return ResponseEntity.ok("Success, User Signed Up Successfully");
+    }
+
+    @GetMapping("/exists_by_username")
+    public ResponseEntity<?> exists_by_username (String username) {
+        boolean userExists = userService.existsUserByUsername(username);
+        if (userExists) {
+            return ResponseEntity.badRequest().body("User with username " + username + " already exists.");
+        } else {
+            return ResponseEntity.ok("User with username " + username + " does not exists");
+        }
+    }
+
+    @GetMapping("/exists_by_email")
+    public ResponseEntity<?> exists_by_email (String email) {
+        boolean userExists = userService.existsUserByEmail(email);
+        if (userExists) {
+            return ResponseEntity.badRequest().body("User with email " + email + " already exists.");
+        } else {
+            return ResponseEntity.ok("User with email " + email + " does not exists");
+        }
     }
 
     @PostMapping("/signIn")
