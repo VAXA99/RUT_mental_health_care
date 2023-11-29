@@ -79,7 +79,7 @@ export default class CalendarComponent extends Component {
                             <select
                                 ref={elemement => this.yearSelect = elemement}
                                 onChange={this.handleSelectChange}
-                                alue={this.year}
+                                value={this.year}
                                 className='month__name'>{years.map(year =>
                                 <option key={year} value={year}>{year}</option>)}
                             </select>

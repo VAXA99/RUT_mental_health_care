@@ -16,11 +16,10 @@ import {ChangePassword} from './components/Change password/ChangePassword.js';
 
 import {BrowserRouter as Router, Routes, Route} from "react-router-dom";
 import {SendEmail} from './components/Send email/SendEmail.js';
-import {Form1} from './components/Form/Form1.js';
-import {Form2} from './components/Form/Form2.js';
 import Articles from './components/Articles/Articles.js';
 import Calendar from './components/Calendar/Calendar.js';
 import UserProfile from "./components/UserProfile/UserProfile";
+import {ConsultationAppointment} from "./components/ConsultationAppointment/ConsultationAppointment";
 
 
 function App() {
@@ -49,12 +48,10 @@ function App() {
 
                     <Route exact path='/send_email' element={<div className='containerr'><SendEmail/></div>}/>
 
-                    <Route exact path='/form1' element={<Form1/>}/>
-                    <Route exact path='/form2' element={<Form2/>}/>
+                    <Route exact path='/consultation_appointment' element={<ConsultationAppointment/>}/>
                     <Route exact path='/articles' element={<Articles/>}/>
                     <Route exact path='/calendar' element={<Calendar/>}/>
                     <Route exact path='/user_profile/:userId' element={<UserProfile/>}/>
-
                 </Routes>
 
             </Router>

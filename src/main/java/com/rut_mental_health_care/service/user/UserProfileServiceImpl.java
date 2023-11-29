@@ -101,7 +101,7 @@ public class UserProfileServiceImpl implements UserProfileService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("User not found with ID:" + userId));
 
-        return userRepository.countUserAge(user.getDateOfBirth());
+        return userRepository.countUserAge(userId);
     }
 
     @Override

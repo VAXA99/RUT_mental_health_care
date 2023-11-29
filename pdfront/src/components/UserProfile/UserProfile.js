@@ -4,113 +4,103 @@ import Header from "../Header/Header";
 import Auth from "../../backend/Auth";
 import {useNavigate, useParams} from "react-router-dom";
 import axios from "axios";
+import {getUserProfile} from "../../backend/UserProfile";
 
 
 export default function UserProfile() {
+
     const [authenticated, setAuthenticated] = useState(Auth.isTokenValid);
-
     const { userId } = useParams();
-
     const [userData, setUserData] = useState({});
-
-    useEffect(() => {
-        // Получение профиля пользователя
-        axios.get(`http://localhost:8080/api/profile/${userId}`)
-            .then(response => {
-                setUserData(response.data);
-            })
-            .catch(error => {
-                console.error('Error fetching user profile:', error);
-            });
-    }, [userId]);
-
     const navigate = useNavigate();
+
     const handleLogoutAndNavigate = () => {
         setAuthenticated(Auth.logout());
 
         navigate('/');
     };
 
+    useEffect(() => {
+        const fetchUserProfile = () => {
+            getUserProfile(userId) // Assuming userID is defined somewhere in your component
+                .then((data) => {
+                    setUserData(data);
+                    console.log(data.age);
+                })
+                .catch((error) => {
+                    // Handle error if needed
+                    console.error('Error fetching user profile:', error);
+                });
+        };
+
+        fetchUserProfile();
+    }, []);
+
     return(
 
         <>
-            <img className="angle top center" src="/img/Star%201.png"/>
-            <img className="angle right__home" src="/img/Ellipse 6.png"/>
-            <Header/>
-            <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@900&display=swap"
-                  rel="stylesheet"/>
-            <link href="https://fonts.cdnfonts.com/css/sf-pro-display" rel="stylesheet"/>
-            <div className='container main profile'>
+            <img className="angle top center" src="/img/Star%201.png" alt="Angle" />
+            <img className="angle right__home" src="/img/Ellipse 6.png" alt="Ellipse" />
+            <Header />
+            <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@900&display=swap" rel="stylesheet" />
+            <link href="https://fonts.cdnfonts.com/css/sf-pro-display" rel="stylesheet" />
+            <div className="container main profile">
                 <div className="display__flex">
                     <div className="profile__photo">
-                        <img src="/img/Rectangle 176(2).png" alt=""/>
-                        <button className='nav__img change__photo'>Изменить фото</button>
+                        <img src="/img/Rectangle 176(2).png" alt="User" />
+                        <button className="nav__img change__photo">Изменить фото</button>
                     </div>
 
                     <div className="profile__ifo">
                         <div className="edit__info">
                             <div className="main__title profile">
-                                Шедания Вахтанг Мерабиевич
+                                {userData.name} {userData.surname}
                                 {userData.email}
                             </div>
-                            <div className='margin__top'>
-                                <button  className="nav__img profile"><img src="/img/Small FAB.png" alt=""/></button>
+                            <div className="margin__top">
+                                <button className="nav__img profile">
+                                    <img src="/img/Small FAB.png" alt="FAB" />
+                                </button>
                             </div>
                         </div>
-                        <div className="worker">
-                            студент
-                        </div>
+                        <div className="worker">студент</div>
                         <div className="profile__edit">
                             <div className="profile__edit__info">
-                                <div className="profile__edit__title">
-                                    Возраст
-                                </div>
-                                <input  className='profile__edit__input age' type="text" placeholder='19 лет'/>
+                                <div className="profile__edit__title">Возраст</div>
+                                <input className="profile__edit__input age" type="text" value={userData.age} placeholder="Возраст" />
                             </div>
                             <div className="profile__edit__info nickname">
-                                <div className="profile__edit__title ">
-                                    Никнейм
-                                </div>
-                                <input  className='profile__edit__input nickname' type="text" placeholder='Vaxo009'/>
+                                <div className="profile__edit__title">Никнейм</div>
+                                <input className="profile__edit__input nickname" type="text" value={userData.username} placeholder="Юзернейм" />
                             </div>
                         </div>
                         <div className="profile__edit">
                             <div className="profile__edit__info email">
-                                <div className="profile__edit__title">
-                                    Email
-                                </div>
-                                <input  className='profile__edit__input email ' type="emal" placeholder='somemail@gmail.com'/>
+                                <div className="profile__edit__title">Email</div>
+                                <input className="profile__edit__input email" type="email" value={userData.email} placeholder="Емэил" />
                             </div>
                             <div className="profile__edit__info age">
-                                <div className="profile__edit__title">
-                                    Записей в thread
-                                </div>
-                                <input  className='profile__edit__input age' type="text" placeholder='120'/>
+                                <div className="profile__edit__title">Количество постов</div>
+                                <input className="profile__edit__input age" type="text" value={userData.totalPosts} placeholder="---" />
                             </div>
                         </div>
                         <div className="profile__edit__info textarea">
-                            <div className="profile__edit__title">
-                                Обо мне
-                            </div>
+                            <div className="profile__edit__title">Обо мне</div>
                             <div className="problems__input profile">
-                                <textarea className="profile__edit__title ">Не пью не курю</textarea>
+                                <textarea className="profile__edit__title" value={userData.bio} />
                             </div>
                         </div>
-                        <button onClick={handleLogoutAndNavigate} className='nav__img profile'>
+                        <button onClick={handleLogoutAndNavigate} className="nav__img profile">
                             <div className="display__flex">
-                                <div className='log__out'>
-                                    Выйти из аккаунта
-                                </div>
+                                <div className="log__out">Выйти из аккаунта</div>
                                 <div>
-                                    <img src="/img/Group 89.png" alt=""/>
+                                    <img src="/img/Group 89.png" alt="Group 89" />
                                 </div>
                             </div>
                         </button>
                     </div>
-
-                    </div>
+                </div>
             </div>
-
         </>
     )
 }

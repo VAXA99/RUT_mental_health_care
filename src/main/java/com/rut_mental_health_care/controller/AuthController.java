@@ -48,11 +48,6 @@ public class AuthController {
     @PostMapping("/signUp")
     public ResponseEntity<?> signup(@RequestBody SignUpRequest signUpRequest) {
 
-        String passwordValidationMessage = userService.validatePassword(signUpRequest.getPassword());
-        if (!passwordValidationMessage.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(passwordValidationMessage);
-        }
-
         User user = new User();
         user.setUsername(signUpRequest.getUsername());
         user.setEmail(signUpRequest.getEmail());

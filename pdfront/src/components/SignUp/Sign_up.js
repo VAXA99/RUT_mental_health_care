@@ -13,8 +13,26 @@ export default function Sign_up() {
     const [usernameError, setUsernameError] = useState('');
     const [emailError, setEmailError] = useState('');
     const [emptyCredentialsError, setEmptyCredentialsError] = useState('');
+    const [someError, setSomeError] = useState('');
 
     const navigate = useNavigate();
+    const [showPasswordMessage, setShowPasswordMessage] = useState(false);
+
+    const canSubmit = !showPasswordMessage;
+
+    const handlePasswordChange = (e) => {
+        const newPassword = e.target.value;
+        setPassword(newPassword);
+
+        // Check password requirements and toggle the message accordingly
+        const hasUpperCase = /[A-Z]/.test(newPassword);
+        const hasLowerCase = /[a-z]/.test(newPassword);
+        const hasDigit = /\d/.test(newPassword);
+        const isLengthValid = newPassword.length >= 6;
+
+        setShowPasswordMessage(!(hasUpperCase && hasLowerCase && hasDigit && isLengthValid));
+};
+
 
     // Function to handle user registration
     const handleSignUp = async (e) => {
@@ -26,6 +44,7 @@ export default function Sign_up() {
         setUsernameError('');
         setEmailError('');
         setEmptyCredentialsError('');
+        setSomeError('');
 
         if (!username || !email || !password || !name || !surname) {
             setEmptyCredentialsError("Все поля должны быть заполнены");
@@ -45,9 +64,12 @@ export default function Sign_up() {
             return;
         }
 
-        // Make a request to your backend /api/auth/signUp endpoint
-        if (await auth.signUp(email, username, password, name, surname)) {
+
+        const {success, error} = await auth.signUp(email, username, password, name, surname);
+        if (success) {
             navigate("/auth");
+        } else {
+            setSomeError(error);
         }
     };
 
@@ -75,7 +97,8 @@ export default function Sign_up() {
                 <img className="angle bottom left" src="/img/Ellipse%205.png" alt="1"/>
                 <div className="container auth">
                     <Link to={"/"}>
-                        <div className="auth__img"><img src="/img/Логотип%20РУТ%20(МИИТ)%20синий%201.png" alt=""/></div>
+                        <div className="auth__img"><img src="/img/Логотип%20РУТ%20(МИИТ)%20синий%201.png" alt=""/>
+                        </div>
                         <div className="auth__title">Цифровая система психологической поддержки РУТ</div>
                     </Link>
 
@@ -95,13 +118,24 @@ export default function Sign_up() {
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                             />
-                            <input
-                                className="auth__input"
-                                placeholder='пароль'
-                                type="password"
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                            />
+                            <div>
+                                <input
+                                    className="auth__input"
+                                    placeholder='пароль'
+                                    type="password"
+                                    value={password}
+                                    onChange={handlePasswordChange}
+                                />
+                                {showPasswordMessage && (
+                                    <div>
+                                        <span style={{color: 'red'}}>Пароль должен быть больше 6ти символов</span>
+                                        <br></br>
+                                        <span style={{color: 'red'}}>и иметь одну прописную и строчную букву</span>
+                                    </div>
+
+                                )}
+                            </div>
+
                             <input
                                 className="auth__input"
                                 placeholder='имя'
@@ -120,8 +154,10 @@ export default function Sign_up() {
                         {usernameError && <div className="auth__error">{usernameError}</div>}
                         {emailError && <div className="auth__error">{emailError}</div>}
                         {emptyCredentialsError && <div className="auth__error">{emptyCredentialsError}</div>}
+                        {someError &&
+                            <div className="auth__error">Пароль не соотвествует параметрам</div>}
                         <div className="form__buttons">
-                            <button type="submit" className="auth__button">
+                            <button type="submit" className="auth__button" disabled={!canSubmit}>
                                 Регистрация
                             </button>
                             <div className="auth__link" onClick={goBack}>Назад</div>

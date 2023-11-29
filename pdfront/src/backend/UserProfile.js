@@ -25,7 +25,9 @@ async function editSurname(userId, newSurname) {
 // Function to edit middle name by user ID
 async function editMiddleName(userId, newMiddleName) {
     try {
-        await axios.patch(`${baseUrl}/profile/editMiddleName/${userId}?newMiddleName=${newMiddleName}`);
+        await axios.patch(`${baseUrl}/profile/editMiddleName/${userId}`, {
+            newMiddleName
+        });
     } catch (error) {
         console.error('Error editing middle name:', error);
         throw error;
@@ -35,7 +37,9 @@ async function editMiddleName(userId, newMiddleName) {
 // Function to edit email by user ID
 async function editEmail(userId, newEmail) {
     try {
-        await axios.patch(`${baseUrl}/profile/editEmail/${userId}?newEmail=${newEmail}`);
+        await axios.patch(`${baseUrl}/profile/editEmail/${userId}`, {
+            newEmail
+        });
     } catch (error) {
         console.error('Error editing email:', error);
         throw error;
@@ -45,15 +49,18 @@ async function editEmail(userId, newEmail) {
 // Function to edit bio by user ID
 async function editBio(userId, newBio) {
     try {
-        await axios.patch(`${baseUrl}/profile/editBio/${userId}?newBio=${newBio}`);
+        await axios.patch(`${baseUrl}/profile/editBio/${userId}`,{
+            newBio
+        });
     } catch (error) {
         console.error('Error editing bio:', error);
         throw error;
     }
 }
-async function userProfile(userID) {
+async function getUserProfile(userID) {
     try {
-        await axios.patch(`http://localhost:8080//api/profile/${userId}`);
+        const response = await axios.get(baseUrl + `/profile/${userID}`);
+        return response.data;
     } catch (error) {
         console.error('Error find userID:', error);
         throw error;
@@ -67,5 +74,5 @@ export {
     editMiddleName,
     editEmail,
     editBio,
-    userProfile
+    getUserProfile
 };
