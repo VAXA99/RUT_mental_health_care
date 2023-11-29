@@ -98,7 +98,42 @@ export default {
             console.error('Error checking email: ', error);
             return false;
         }
+    },
+
+    isUserIdValid: async () =>{
+        const token = localStorage.getItem('token');
+
+        if (!token) {
+            // Token is not present
+            return null;
+        }
+
+        try {
+            // Decode the token to get its payload
+            const decodedToken = jwtDecode(token);
+
+            // Check the token's expiration time
+            const currentTime = Date.now() / 1000; // Convert to seconds
+            if (decodedToken.exp < currentTime) {
+                // Token has expired
+                return null;
+            }
+
+            // Additional checks based on your requirements can be added here
+
+            // If all checks pass, the token is considered valid
+            // Return userId along with other information
+            return decodedToken.userId;
+        } catch (error) {
+            // An error occurred while decoding the token
+            console.error('Error decoding token:', error);
+            return null;
+        }
     }
 
+
+
+
 }
+
 

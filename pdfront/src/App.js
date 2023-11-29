@@ -20,7 +20,7 @@ import {Form1} from './components/Form/Form1.js';
 import {Form2} from './components/Form/Form2.js';
 import Articles from './components/Articles/Articles.js';
 import Calendar from './components/Calendar/Calendar.js';
-import Popup from "./components/Popup/Popup";
+import UserProfile from "./components/UserProfile/UserProfile";
 
 
 function App() {
@@ -53,6 +53,7 @@ function App() {
                     <Route exact path='/form2' element={<Form2/>}/>
                     <Route exact path='/articles' element={<Articles/>}/>
                     <Route exact path='/calendar' element={<Calendar/>}/>
+                    <Route exact path='/user_profile/:userId' element={<UserProfile/>}/>
 
                 </Routes>
 
