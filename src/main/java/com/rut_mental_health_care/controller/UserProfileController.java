@@ -13,6 +13,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -60,6 +61,10 @@ public class UserProfileController {
     @PatchMapping("/profile/editBio/{userId}")
     public void editBio(@PathVariable Long userId, @RequestParam String newBio) {
         userProfileService.editBio(userId, newBio);
+    }
+    @PatchMapping("/profile/editDateOfBirth/{userId}")
+    public void editDateOfBirth(@PathVariable Long userId, @RequestParam LocalDate dateOfBirth) {
+        userProfileService.editUserDateOfBirth(userId, dateOfBirth);
     }
 
     @GetMapping("/psychologistsProfiles")

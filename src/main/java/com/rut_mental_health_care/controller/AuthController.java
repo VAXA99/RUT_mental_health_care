@@ -7,9 +7,11 @@ import com.rut_mental_health_care.model.User;
 import com.rut_mental_health_care.security.JwtService;
 import com.rut_mental_health_care.service.mail.MailService;
 import com.rut_mental_health_care.service.user.UserDetailsServiceImpl;
+import com.rut_mental_health_care.service.user.UserProfileService;
 import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -17,6 +19,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.UUID;
 
 @RestController
@@ -44,19 +47,18 @@ public class AuthController {
     }
 
     @PostMapping("/signUp")
-    public ResponseEntity<?> signup(@RequestBody SignUpRequest signUpRequest) {
+    public ResponseEntity<?> signup(@RequestBody SignUpRequest signUpRequest) throws IOException {
+            User user = new User();
+            user.setUsername(signUpRequest.getUsername());
+            user.setEmail(signUpRequest.getEmail());
+            user.setPassword(signUpRequest.getPassword());
+            user.setRoles("ROLE_USER");
+            user.setName(signUpRequest.getName());
+            user.setSurname(signUpRequest.getSurname());
 
-        User user = new User();
-        user.setUsername(signUpRequest.getUsername());
-        user.setEmail(signUpRequest.getEmail());
-        user.setPassword(signUpRequest.getPassword());
-        user.setRoles("ROLE_USER");
-        user.setName(signUpRequest.getName());
-        user.setSurname(signUpRequest.getSurname());
+            userService.addUser(user);
 
-        userService.addUser(user);
-
-        return ResponseEntity.ok("Success, User Signed Up Successfully");
+            return ResponseEntity.ok("Success, User Signed Up Successfully");
     }
 
     @GetMapping("/exists_by_username")

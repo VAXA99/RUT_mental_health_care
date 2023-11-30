@@ -1,11 +1,15 @@
 package com.rut_mental_health_care.service.user;
 
+import com.rut_mental_health_care.model.File;
 import com.rut_mental_health_care.model.PasswordResetToken;
 import com.rut_mental_health_care.model.User;
+import com.rut_mental_health_care.repository.FileRepository;
 import com.rut_mental_health_care.repository.PasswordResetTokenRepository;
 import com.rut_mental_health_care.repository.UserRepository;
 import com.rut_mental_health_care.security.UserDetailsImpl;
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.data.repository.query.Param;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
@@ -15,6 +19,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Calendar;
 import java.util.Optional;
 
@@ -23,6 +30,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private FileRepository fileRepository;
 
     @Autowired
     private PasswordEncoder encoder;
@@ -41,8 +51,27 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                 .orElseThrow(() -> new UsernameNotFoundException("User not found " + username));
     }
 
-    public void addUser(User user) {
+    private byte[] readImageAsBytes(String imagePath) throws IOException {
+        Resource resource = new ClassPathResource("images/" + imagePath);
+        Path path = resource.getFile().toPath();
+        return Files.readAllBytes(path);
+    }
+
+    public void addUser(User user) throws IOException {
         user.setPassword(encoder.encode(user.getPassword()));
+
+        File file = new File();
+        file.setName("default_profile_photo.jpg");
+        file.setContentType("image/jpeg");
+        byte[] imageData = readImageAsBytes("default_profile_photo.jpg");
+
+        file.setData(imageData);
+        file.setSize((long) imageData.length);
+
+        fileRepository.save(file);
+
+        user.setProfilePicture(file);
+
         userRepository.save(user);
     }
 
