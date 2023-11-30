@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import * as calendarFunctions from './calendarFunctions'
 import classNames from 'classnames';
+import './calendar.css'
 
 
 export default class CalendarComponent extends Component {

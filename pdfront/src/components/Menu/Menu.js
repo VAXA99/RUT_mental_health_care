@@ -12,9 +12,9 @@ export default function Menu() {
         <div className="form__main">
           
           <Link to={'/spec'}><div className="form info">Сотрудники</div></Link>          
-          <Link to={'/a'}><div className="form info">Как записаться</div></Link>
+          <Link to={'/'}><div className="form info">Как записаться</div></Link>
           <Link to={'/a'}><div className="form info">Самопомощь</div></Link>
-          <Link to={'/a'}><div className="form info">Библиотека</div></Link>
+          <Link to={'/articles'}><div className="form info">Библиотека</div></Link>
           <Link to={'/forum'}><div className="form info">Тред</div></Link>
         </div>
 

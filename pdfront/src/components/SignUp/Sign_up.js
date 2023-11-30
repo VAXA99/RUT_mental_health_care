@@ -101,25 +101,29 @@ export default function Sign_up() {
                         </div>
                         <div className="auth__title">Цифровая система психологической поддержки РУТ</div>
                     </Link>
+                    <form onSubmit={handleSignUp}>
+                    <div className="auth__form" >
 
-                    <form className="auth__form" onSubmit={handleSignUp}>
                         <div className="input__block">
-                            <input
+                            <div><input
                                 className="auth__input"
                                 placeholder='логин'
                                 type="text"
                                 value={username}
                                 onChange={(e) => setUsername(e.target.value)}
                             />
-                            <input
+                                {usernameError && <div className="auth__error sign__up">{usernameError}</div>}
+                            </div>
+                            <div><input
                                 className="auth__input"
                                 placeholder='почта'
                                 type="email"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                             />
-                            <div>
-                                <input
+                                {emailError && <div className="auth__error sign__up">{emailError}</div>}
+                            </div>
+                            <div><input
                                     className="auth__input"
                                     placeholder='пароль'
                                     type="password"
@@ -127,35 +131,39 @@ export default function Sign_up() {
                                     onChange={handlePasswordChange}
                                 />
                                 {showPasswordMessage && (
-                                    <div>
-                                        <span style={{color: 'red'}}>Пароль должен быть больше 6ти символов</span>
-                                        <br></br>
-                                        <span style={{color: 'red'}}>и иметь одну прописную и строчную букву</span>
-                                    </div>
 
+                                        <span className="error__sign__up">Пароль должен быть больше 6ти символов
+                                         <br></br> и иметь одну прописную и строчную букву и цифру
+                                        </span>
                                 )}
                             </div>
 
-                            <input
+                            <div><input
                                 className="auth__input"
                                 placeholder='имя'
                                 type="text"
                                 value={name}
                                 onChange={(e) => setName(e.target.value)}
                             />
-                            <input
+
+                            </div>
+                            <div><input
                                 className="auth__input"
                                 placeholder='фамилия'
                                 type="text"
                                 value={surname}
                                 onChange={(e) => setSurname(e.target.value)}
                             />
+                            </div>
+
+
+                            {emptyCredentialsError && <div className="auth__error sign__up">{emptyCredentialsError}</div>}
                         </div>
-                        {usernameError && <div className="auth__error">{usernameError}</div>}
-                        {emailError && <div className="auth__error">{emailError}</div>}
-                        {emptyCredentialsError && <div className="auth__error">{emptyCredentialsError}</div>}
+
                         {someError &&
                             <div className="auth__error">Пароль не соотвествует параметрам</div>}
+
+                    </div>
                         <div className="form__buttons">
                             <button type="submit" className="auth__button" disabled={!canSubmit}>
                                 Регистрация

@@ -40,7 +40,7 @@ export default function Home() {
             <img className="angle right__home" src="/img/Ellipse 6.png"/>
 
 
-            <div className="display__flex__mt">
+            <div className="display__flex__mt overflow">
                 <div className="container left">
                     <Menu/>
                     <TestingForm/>
