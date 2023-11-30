@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {Component} from 'react'
 import CalendarComponent from './CalendarComponent';
 import TimeComponent from "./TimeComponent";
 
