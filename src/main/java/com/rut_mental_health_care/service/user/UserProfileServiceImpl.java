@@ -20,7 +20,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -96,11 +96,7 @@ public class UserProfileServiceImpl implements UserProfileService {
     }
 
     @Override
-    @Transactional
     public int getUserAge(Long userId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new EntityNotFoundException("User not found with ID:" + userId));
-
         return userRepository.countUserAge(userId);
     }
 
@@ -127,7 +123,6 @@ public class UserProfileServiceImpl implements UserProfileService {
 
         return postDtos;
     }
-
 
     @Override
     public long getUserPostCount(Long userId) {
@@ -234,14 +229,13 @@ public class UserProfileServiceImpl implements UserProfileService {
 
     @Override
     @Transactional
-    public void setUserDateOfBirth(Long userId, Date dateOfBirth) {
+    public void editUserDateOfBirth(Long userId, LocalDate dateOfBirth) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("User not found with ID:" + userId));
         user.setDateOfBirth(dateOfBirth);
     }
 
     @Override
-    @Async
     @Transactional
     public void uploadProfilePicture(Long userId, MultipartFile file) throws IOException {
         User user = userRepository.findById(userId)
@@ -256,6 +250,7 @@ public class UserProfileServiceImpl implements UserProfileService {
         user.setProfilePicture(fileEntity);
 
         fileRepository.save(fileEntity);
+        userRepository.save(user);
     }
 
     @Override

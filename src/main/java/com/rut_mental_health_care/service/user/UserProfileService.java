@@ -7,7 +7,7 @@ import com.rut_mental_health_care.model.File;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 public interface UserProfileService {
@@ -32,7 +32,7 @@ public interface UserProfileService {
     void editMiddleName(Long userId, String newMiddleName);
     void editEmail(Long userId, String newEmail);
     void editBio(Long userId, String newBio);
-    void setUserDateOfBirth(Long userId, Date dateOfBirth);
+    void editUserDateOfBirth(Long userId, LocalDate dateOfBirth);
     void uploadProfilePicture(Long userId, MultipartFile file) throws IOException;
     void deleteProfilePicture(Long userId);
 }
