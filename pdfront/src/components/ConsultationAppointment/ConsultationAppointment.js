@@ -14,9 +14,7 @@ export function ConsultationAppointment() {
     const navigate = useNavigate();
     const [formData, setFormData] = useState({
         selectedProblems: [],
-        problemDescription: '',
-        selectedDate: null,
-        selectedTime: null,
+        problemDescription: ''
     });
 
     const handleFirstStep = () => {
@@ -51,20 +49,6 @@ export function ConsultationAppointment() {
         handleNext();
     };
 
-    const handleDateSelect = (selectedDate) => {
-        setFormData({
-            ...formData,
-            selectedDate,
-        });
-    };
-
-    const handleTimeSelect = (selectedTime) => {
-        setFormData({
-            ...formData,
-            selectedTime,
-        });
-    };
-
 
     useEffect(() => {
         const intervalId = setInterval(() => {
@@ -78,7 +62,6 @@ export function ConsultationAppointment() {
             clearInterval(intervalId);
         };
     }, []);
-
 
 
     return (
@@ -151,10 +134,7 @@ export function ConsultationAppointment() {
                     )}
                     {step === 3 && (
                         <Calendar
-                            selectedDate={formData.selectedDate}
-                            selectedTime={formData.selectedTime}
-                            onDateSelect={handleDateSelect}
-                            onTimeSelect={handleTimeSelect}
+
                         />
                     )}
                 </div>

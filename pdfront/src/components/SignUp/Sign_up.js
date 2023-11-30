@@ -31,7 +31,7 @@ export default function Sign_up() {
         const isLengthValid = newPassword.length >= 6;
 
         setShowPasswordMessage(!(hasUpperCase && hasLowerCase && hasDigit && isLengthValid));
-};
+    };
 
 
     // Function to handle user registration

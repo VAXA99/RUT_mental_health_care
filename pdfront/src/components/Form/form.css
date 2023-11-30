@@ -65,13 +65,13 @@
 
 .problems{
     margin: 15px 30px;
+    display: inline-flex;
 }
 
 .form.info.problem.form.info.problem{
     display:inline-flex;
     padding: 12px 10px;
-    margin: 10px;
-    margin-top: 20px;
+    margin: 20px 10px 10px;
     width: fit-content;
 
 }
