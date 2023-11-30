@@ -150,13 +150,12 @@ public class UserProfileServiceImpl implements UserProfileService {
         String email = getUserEmail(userId);
         String bio = getUserBio(userId);
         int age = getUserAge(userId);
-        File profilePicture = getProfilePicture(userId);
         List<PostDto> postDtos= getUserPosts(userId);
         long totalPosts = getUserPostCount(userId);
         long totalComments = getTotalCommentsOnUserPosts(userId);
         long totalLikes = getTotalLikesOnUserPosts(userId);
 
-        return new UserProfileDto(username, roles, name, surname, middleName, email, bio, age, profilePicture, postDtos, totalPosts, totalComments, totalLikes);
+        return new UserProfileDto(username, roles, name, surname, middleName, email, bio, age, postDtos, totalPosts, totalComments, totalLikes);
     }
 
     @Override

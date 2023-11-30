@@ -19,7 +19,6 @@ public class UserProfileDto {
     private String email;
     private String bio;
     private int age;
-    private File profilePicture;
     private List<PostDto> postDtos;
     private long totalPosts;
     private long totalComments;
