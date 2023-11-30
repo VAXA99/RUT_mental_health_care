@@ -35,7 +35,8 @@ export default function Header() {
         <div>
             <div className="container head">
                 <div className="header">
-                    <div className="header__logo"><img src="/img/Логотип%20РУТ%20(МИИТ)%20синий%201.png" alt=""/></div>
+
+                    <Link to={'/'}><div className="header__logo"><img src="/img/Логотип%20РУТ%20(МИИТ)%20синий%201.png" alt=""/></div></Link>
                     <div className="header__title">Цифровая система психологической поддержки РУТ</div>
                     <div className="header__nav">
                         {authenticated ?
@@ -64,4 +65,5 @@ export default function Header() {
             </div>
         </div>
     )
+
 }

@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import * as calendarFunctions from './calendarFunctions'
 import classNames from 'classnames';
+import './calendar.css'
 
 
 export default class CalendarComponent extends Component {
@@ -10,9 +11,7 @@ export default class CalendarComponent extends Component {
         years: [2023, 2024],
         monthNames: ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"],
         weekDayNames: ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"],
-        onChange: Function.prototype,
-        onTimeSelect: Function.prototype,
-        onDateSelect: Function.prototype
+        onChange: Function.prototype
     };
 
     state = {
@@ -53,19 +52,10 @@ export default class CalendarComponent extends Component {
 
     };
 
-    // handleDayClick = date => {
-    //     console.log(date);
-    //     this.setState({selectedDate: date});
-    //
-    //     this.props.onChange(date);
-    // }
-
     handleDayClick = (date) => {
         console.log(date);
         this.setState({ selectedDate: date });
-
-        // Call the callback function passed from the parent
-        this.props.onDateSelect(date);
+        this.props.onChange(date); // Invoke the callback function from props
     };
 
     render() {
@@ -80,14 +70,14 @@ export default class CalendarComponent extends Component {
                     <div className='month'>
                         <div className='display__flex'>
                             <select
-                                ref={elemement => this.monthSelect = elemement}
+                                ref={element => this.monthSelect = element}
                                 onChange={this.handleSelectChange}
                                 value={this.month}
                                 className='month__name'>{monthNames.map((name, index) =>
                                 <option key={index} value={index}>{name}</option>)}
                             </select>
                             <select
-                                ref={elemement => this.yearSelect = elemement}
+                                ref={element => this.yearSelect = element}
                                 onChange={this.handleSelectChange}
                                 value={this.year}
                                 className='month__name'>{years.map(year =>
@@ -134,4 +124,3 @@ export default class CalendarComponent extends Component {
         );
     }
 }
-

@@ -71,7 +71,7 @@ export function Form1({onNext}) {
                         </div>
                     </div>
                     <div className="button">
-                        <button className="next__step">Следующий шаг</button>
+                        <button type={"submit"} className="next__step">Следующий шаг</button>
                     </div>
                 </form>
             </div>
