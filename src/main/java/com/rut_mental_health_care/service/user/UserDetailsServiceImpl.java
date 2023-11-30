@@ -3,10 +3,10 @@ package com.rut_mental_health_care.service.user;
 import com.rut_mental_health_care.model.File;
 import com.rut_mental_health_care.model.PasswordResetToken;
 import com.rut_mental_health_care.model.User;
-import com.rut_mental_health_care.repository.FileRepository;
 import com.rut_mental_health_care.repository.PasswordResetTokenRepository;
 import com.rut_mental_health_care.repository.UserRepository;
 import com.rut_mental_health_care.security.UserDetailsImpl;
+import com.rut_mental_health_care.service.file.FileService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
@@ -32,7 +32,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     private UserRepository userRepository;
 
     @Autowired
-    private FileRepository fileRepository;
+    private FileService fileService;
 
     @Autowired
     private PasswordEncoder encoder;
@@ -51,25 +51,10 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                 .orElseThrow(() -> new UsernameNotFoundException("User not found " + username));
     }
 
-    private byte[] readImageAsBytes(String imagePath) throws IOException {
-        Resource resource = new ClassPathResource("images/" + imagePath);
-        Path path = resource.getFile().toPath();
-        return Files.readAllBytes(path);
-    }
-
     public void addUser(User user) throws IOException {
         user.setPassword(encoder.encode(user.getPassword()));
 
-        File file = new File();
-        file.setName("default_profile_photo.jpg");
-        file.setContentType("image/jpeg");
-        byte[] imageData = readImageAsBytes("default_profile_photo.jpg");
-
-        file.setData(imageData);
-        file.setSize((long) imageData.length);
-
-        fileRepository.save(file);
-
+        File file = fileService.uploadDefaultProfilePicture();
         user.setProfilePicture(file);
 
         userRepository.save(user);

@@ -34,5 +34,5 @@ public interface UserProfileService {
     void editBio(Long userId, String newBio);
     void editUserDateOfBirth(Long userId, LocalDate dateOfBirth);
     void uploadProfilePicture(Long userId, MultipartFile file) throws IOException;
-    void deleteProfilePicture(Long userId);
+    void deleteProfilePicture(Long userId) throws IOException;
 }

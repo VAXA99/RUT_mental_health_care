@@ -6,17 +6,16 @@ import com.rut_mental_health_care.dto.UserProfileDto;
 import com.rut_mental_health_care.model.File;
 import com.rut_mental_health_care.model.Post;
 import com.rut_mental_health_care.model.User;
-import com.rut_mental_health_care.repository.FileRepository;
 import com.rut_mental_health_care.repository.PostRepository;
 import com.rut_mental_health_care.repository.TagRepository;
 import com.rut_mental_health_care.repository.UserRepository;
+import com.rut_mental_health_care.service.file.FileService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -30,19 +29,19 @@ public class UserProfileServiceImpl implements UserProfileService {
     private final PostRepository postRepository;
     private final UserRepository userRepository;
     private final TagRepository tagRepository;
-    private final FileRepository fileRepository;
+    private final FileService fileService;
     private final ModelMapper modelMapper;
 
     @Autowired
     public UserProfileServiceImpl(PostRepository postRepository,
                                   UserRepository userRepository,
                                   TagRepository tagRepository,
-                                  FileRepository fileRepository,
+                                  FileService fileService,
                                   ModelMapper modelMapper) {
         this.postRepository = postRepository;
         this.userRepository = userRepository;
         this.tagRepository = tagRepository;
-        this.fileRepository = fileRepository;
+        this.fileService = fileService;
         this.modelMapper = modelMapper;
     }
 
@@ -103,10 +102,7 @@ public class UserProfileServiceImpl implements UserProfileService {
     @Override
     @Transactional
     public File getProfilePicture(Long userId) {
-
-        return fileRepository.findByUserId(userId)
-                .orElseThrow(() -> new EntityNotFoundException("File not found for user with ID:" + userId));
-
+        return fileService.findByUserId(userId);
     }
 
     @Override
@@ -239,27 +235,18 @@ public class UserProfileServiceImpl implements UserProfileService {
     public void uploadProfilePicture(Long userId, MultipartFile file) throws IOException {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("User not found with ID:" + userId));
+        user.setProfilePicture(fileService.uploadFile(file));
 
-        File fileEntity = new File();
-        fileEntity.setName(StringUtils.cleanPath(file.getOriginalFilename()));
-        fileEntity.setContentType(file.getContentType());
-        fileEntity.setData(file.getBytes());
-        fileEntity.setSize(file.getSize());
-
-        user.setProfilePicture(fileEntity);
-
-        fileRepository.save(fileEntity);
         userRepository.save(user);
     }
 
     @Override
     @Async
     @Transactional
-    public void deleteProfilePicture(Long userId) {
+    public void deleteProfilePicture(Long userId) throws IOException {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("User not found with ID:" + userId));
-        user.setProfilePicture(null);
-        fileRepository.deleteByUserId(userId);
+        user.setProfilePicture(fileService.deleteByUserId(userId));
     }
 
 
