@@ -6,6 +6,7 @@ import Header from "../Header/Header";
 import Menu from "../Menu/Menu";
 import {useNavigate} from "react-router-dom";
 import Auth from "../../backend/Auth";
+import consultation from "../../backend/Consultation";
 
 
 export function ConsultationAppointment() {
@@ -13,17 +14,25 @@ export function ConsultationAppointment() {
     const [step, setStep] = useState(1);
     const navigate = useNavigate();
 
+    const [form1Data, setForm1Data] = useState([]);
+    const [form2Data, setForm2Data] = useState("");
+    const [selectedTime, setSelectedTime] = useState("");
     const [selectedDate, setSelectedDate] = useState(null);
-    const [selectedTime, setSelectedTime] = useState(null);
-    const [selectedProblems, setSelectedProblems] = useState([]);
-    const [problemDescription, setProblemDescription] = useState('');
 
-    // const [formData, setFormData] = useState({
-    //     selectedProblems: [],
-    //     problemDescription: '',
-    //     selectedDate: null,
-    //     selectedTime: null,
-    // });
+    const handleForm1Data = (data) => {
+        setForm1Data(data);
+        handleNext();
+    };
+    const handleForm2Data = (data) => {
+        setForm2Data(data);
+        handleNext();
+    };
+
+    const handleDateTimeSelect = ({ selectedTime, selectedDate }) => {
+        setSelectedTime(selectedTime);
+        setSelectedDate(selectedDate);
+        handleNext();
+    };
 
     const handleFirstStep = () => {
         setStep(1);
@@ -41,26 +50,6 @@ export function ConsultationAppointment() {
         setStep((prevStep) => prevStep + 1);
     };
 
-    const handleForm1Submit = (selectedProblems) => {
-        setSelectedProblems(selectedProblems);
-        handleNext();
-    };
-
-    const handleForm2Submit = (problemDescription) => {
-        setProblemDescription(problemDescription);
-        handleNext();
-    };
-
-    const handleCalendarSubmit = (selectedDate, selectedTime) => {
-        setSelectedDate(selectedDate);
-        setSelectedTime(selectedTime);
-    };
-
-    const handleAppointmentBooking = () => {
-        console.log('Form data: \n', selectedProblems, '\n', problemDescription, '\n', selectedDate, '\n', selectedTime);
-    }
-
-
     useEffect(() => {
         const intervalId = setInterval(() => {
             const tokenValid = Auth.isTokenValid();
@@ -74,6 +63,28 @@ export function ConsultationAppointment() {
             clearInterval(intervalId);
         };
     }, []);
+
+    const handleSubmission = () => {
+        // Add any additional logic you need before submission
+        // For example, you might want to send the collected data to a server here
+
+        // Log the gathered information
+        console.log("Form 1 Data:", form1Data);
+        console.log("Form 2 Data:", form2Data);
+        console.log('Selected Time:', selectedTime);
+        const formattedDate = selectedDate.toLocaleString('en-US', {
+            year: 'numeric',
+            month: 'numeric',
+            day: 'numeric',
+        });
+        console.log('Selected date: ', formattedDate);
+        console.log(consultation.getAvailableConsultationsForDate(formattedDate));
+        // Add any additional logic after submission
+        // For example, navigate to the next page
+    };
+
+    const converter = (date) => {
+    }
 
 
     return (
@@ -133,30 +144,20 @@ export function ConsultationAppointment() {
                         )}
                     </div>
                     {step === 1 && (
-                        <Form1
-                            selectedProblems={setSelectedProblems}
-                            onNext={handleForm1Submit}
-                        />
+                        <Form1 onSubmit={handleForm1Data} />
                     )}
                     {step === 2 && (
-                        <Form2
-                            problemDescription={setProblemDescription}
-                            onNext={handleForm2Submit}
-                        />
+                        <Form2 onSubmit={handleForm2Data} />
                     )}
                     {step === 3 && (
-                        <>
-                            <Calendar
-                                onDateChange={setSelectedDate}
-                                onTimeChange={setSelectedTime}
-                                onAppointmentBooking={handleCalendarSubmit}
-                            />
-                            <div className="button calendar">
-                                <button className="next__step" onClick={handleAppointmentBooking}>
-                                    Записаться
-                                </button>
-                            </div>
-                        </>
+                        <Calendar onDateTimeSelect={handleDateTimeSelect} />
+                    )}
+                    {step === 4 && (
+                        <div className="button calendar">
+                            <button className="next__step" onClick={handleSubmission}>
+                                Записаться
+                            </button>
+                        </div>
                     )}
                 </div>
 

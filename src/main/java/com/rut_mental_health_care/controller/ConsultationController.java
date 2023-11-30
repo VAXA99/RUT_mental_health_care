@@ -2,8 +2,6 @@ package com.rut_mental_health_care.controller;
 
 import com.rut_mental_health_care.controller.request.ConsultationRequest;
 import com.rut_mental_health_care.dto.ConsultationDto;
-import com.rut_mental_health_care.dto.UserDto;
-import com.rut_mental_health_care.model.Consultation;
 import com.rut_mental_health_care.model.ConsultationNotification;
 import com.rut_mental_health_care.service.consultation.ConsultationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +10,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Locale;
 
 @RestController
 @RequestMapping("/api/consultations")
@@ -47,9 +48,11 @@ public class ConsultationController {
     }
 
     @GetMapping("/allAvailable")
-    public ResponseEntity<?> getAvailableConsultationsForDate(@RequestParam LocalDate chosenDate) {
+    public ResponseEntity<?> getAvailableConsultationsForDate(@RequestParam String chosenDate, Long psychologistId) {
         try {
-            List<ConsultationDto> consultations = consultationService.getAvailableConsultationsForDate(chosenDate);
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy", Locale.ENGLISH);
+            LocalDate localDate = LocalDate.parse(chosenDate, formatter);
+            List<ConsultationDto> consultations = consultationService.getAvailableConsultationsForDate(localDate, psychologistId);
             return ResponseEntity.ok(consultations);
         } catch (IllegalArgumentException e) {
             // Log the exception or print the value of chosenDate

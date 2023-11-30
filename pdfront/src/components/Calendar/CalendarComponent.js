@@ -1,14 +1,13 @@
 import React, {Component} from 'react';
 import * as calendarFunctions from './calendarFunctions'
 import classNames from 'classnames';
-import './calendar.css'
 
 
 export default class CalendarComponent extends Component {
 
     static defaultProps = {
         date: new Date(),
-        years: [2023, 2024],
+        years: [2023, 2024, 2025],
         monthNames: ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"],
         weekDayNames: ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"],
         onChange: Function.prototype
@@ -45,7 +44,7 @@ export default class CalendarComponent extends Component {
         const month = this.monthSelect.value;
 
 
-        const date = new Date(year, month);
+        const date = new Date(Number(year), Number(month));
         console.log(date)
         this.setState({date});
 
@@ -54,8 +53,10 @@ export default class CalendarComponent extends Component {
 
     handleDayClick = (date) => {
         console.log(date);
-        this.setState({ selectedDate: date });
-        this.props.onDateChange(date); // Invoke the callback function from props
+        this.setState({selectedDate: date});
+
+        // Call the callback function passed from the parent component
+        this.props.onDateSelect(date);
     };
 
     render() {
@@ -103,18 +104,20 @@ export default class CalendarComponent extends Component {
                         <tbody>
                         {monthData.map((week, index) => (
                             <tr key={index} className="day__number">
-                                {week.map((date, index) => date ?
+                                {week.map((date, index) => (date ? (
                                     <td
                                         key={index}
                                         className={classNames('week__day__element', {
                                             ' today': calendarFunctions.areEqual(date, currentDate),
-                                            ' selected': calendarFunctions.areEqual(date, selectedDate)
+                                            ' selected': calendarFunctions.areEqual(date, selectedDate),
                                         })}
                                         onClick={() => this.handleDayClick(date)}
-                                    >{date.getDate()}</td>
-                                    :
+                                    >
+                                        {date.getDate()}
+                                    </td>
+                                ) : (
                                     <td key={index}/>
-                                )}
+                                )))}
                             </tr>
                         ))}
                         </tbody>

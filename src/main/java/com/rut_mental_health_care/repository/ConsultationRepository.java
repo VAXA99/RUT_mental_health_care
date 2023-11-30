@@ -1,5 +1,6 @@
 package com.rut_mental_health_care.repository;
 
+import com.rut_mental_health_care.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -15,11 +16,13 @@ import java.util.List;
 public interface ConsultationRepository extends JpaRepository<Consultation, Long> {
     List<Consultation> findAllByPsychologistId(Long psychologistId);
     List<Consultation> findAllByPatientId(Long userId);
-    @Query("SELECT c FROM Consultation c " +
-            "WHERE c.startsAt >= :startDate " +
-            "AND c.endsAt < :nextDay " +
-            "AND c.isAvailable = true")
+    @Query("SELECT cons FROM Consultation cons " +
+            "WHERE cons.startsAt >= :startDate " +
+            "AND cons.endsAt < :nextDay " +
+            "AND cons.isAvailable = true " +
+            "AND cons.psychologist = :psychologist")
     List<Consultation> findAllAvailableConsultationsForDate(@Param("startDate") LocalDateTime startDate,
-                                                            @Param("nextDay") LocalDateTime nextDay);
+                                                            @Param("nextDay") LocalDateTime nextDay,
+                                                            @Param("psychologist") User psychologist);
 
 }

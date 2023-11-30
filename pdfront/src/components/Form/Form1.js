@@ -2,10 +2,9 @@ import {useNavigate} from "react-router-dom"
 import {useEffect, useState} from "react";
 import auth from "../../backend/Auth";
 
-export function Form1({onNext}) {
+export function Form1({ onSubmit }) {
 
     const [selectedProblems, setSelectedProblems] = useState([]);
-    const navigate = useNavigate();
 
     const handleCheckboxChange = (problem) => {
         // Update the selected problems based on checkbox changes
@@ -24,13 +23,8 @@ export function Form1({onNext}) {
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        // Perform any additional logic or validation here
-
-        // Log the selected problems or send them to the backend
-        console.log("Selected Problems:", selectedProblems);
-
-        // Trigger the next step within the parent component
-        onNext();
+        // Call the onSubmit callback with the collected data
+        onSubmit(selectedProblems);
     };
 
     return (

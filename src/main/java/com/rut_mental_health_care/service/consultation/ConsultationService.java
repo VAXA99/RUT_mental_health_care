@@ -14,7 +14,7 @@ import java.util.List;
 public interface ConsultationService {
     List<ConsultationNotification> getAllConsNotifications();
     List<ConsultationDto> getAllConsultations(Long userId);
-    List<ConsultationDto> getAvailableConsultationsForDate(LocalDate chosenDate);
+    List<ConsultationDto> getAvailableConsultationsForDate(LocalDate chosenDate, Long psychologistId);
     void setUpConsultation(Long consultationId, ConsultationRequest consultationRequest);
     void cancelConsultation(Long consultationId);
 }

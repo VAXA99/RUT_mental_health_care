@@ -1,31 +1,26 @@
-import React, {useState} from "react";
+import React from 'react';
 
-export default function TimeComponent({ onTimeSelect }) {
-
-    const [selectedTime, setSelectedTime] = useState(null);
-
-    const handleTimeSelect = (time) => {
-        console.log('Selected time: ', time);
-        setSelectedTime(time);
-        onTimeSelect(selectedTime); // Notify the parent component
+export default function TimeComponent({onTimeSelect}) {
+    const handleTimeClick = (time) => {
+        onTimeSelect(time);
     };
 
     return (
         <>
             <div className='time__buttons'>
-                <button className='form time' onClick={() => handleTimeSelect("10:00")}>
+                <button className='form time' type={"button"} onClick={() => handleTimeClick("10:00")}>
                     10:00
                 </button>
-                <button className='form time' onClick={() => handleTimeSelect("12:00")}>
+                <button className='form time' type={"button"} onClick={() => handleTimeClick("12:00")}>
                     12:00
                 </button>
-                <button className='form time' onClick={() => handleTimeSelect("14:00")}>
+                <button className='form time' type={"button"} onClick={() => handleTimeClick("14:00")}>
                     14:00
                 </button>
-                <button className='form time' onClick={() => handleTimeSelect("16:00")}>
+                <button className='form time' type={"button"} onClick={() => handleTimeClick("16:00")}>
                     16:00
                 </button>
             </div>
         </>
-    )
+    );
 }

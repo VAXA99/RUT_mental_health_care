@@ -9,6 +9,7 @@ export default function Sign_up() {
     const [password, setPassword] = useState('');
     const [name, setName] = useState('');
     const [surname, setSurname] = useState('');
+    const [dob, setDob] = useState('');
 
     const [usernameError, setUsernameError] = useState('');
     const [emailError, setEmailError] = useState('');
@@ -46,8 +47,8 @@ export default function Sign_up() {
         setEmptyCredentialsError('');
         setSomeError('');
 
-        if (!username || !email || !password || !name || !surname) {
-            setEmptyCredentialsError("Все поля должны быть заполнены");
+        if (!username || !email || !password || !name || !surname || !dob) {
+            setEmptyCredentialsError("All fields must be filled");
             return;
         }
 
@@ -65,7 +66,7 @@ export default function Sign_up() {
         }
 
 
-        const {success, error} = await auth.signUp(email, username, password, name, surname);
+        const { success, error } = await auth.signUp(email, username, password, name, surname, dob);
         if (success) {
             navigate("/auth");
         } else {
@@ -156,6 +157,16 @@ export default function Sign_up() {
                             />
                             </div>
 
+                            <div>
+                                <input
+                                    className="auth__input"
+                                    placeholder="дата рождения"
+                                    type="date"
+                                    value={dob}
+                                    max={(new Date(new Date().setFullYear(new Date().getFullYear() - 16))).toISOString().split('T')[0]}
+                                    onChange={(e) => setDob(e.target.value)}
+                                />
+                            </div>
 
                             {emptyCredentialsError && <div className="auth__error sign__up">{emptyCredentialsError}</div>}
                         </div>

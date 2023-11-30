@@ -1,18 +1,21 @@
-import React from "react";
+import React, {useState} from "react";
 
-export function Form2({onNext}) {
+export function Form2({onSubmit}) {
+
+    const [thoughts, setThoughts] = useState("");
+
+    const handleTextareaChange = (e) => {
+        // Update the thoughts based on textarea changes
+        setThoughts(e.target.value);
+    };
+
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        // Perform any additional logic or validation here
-
-        // Get the inputted text from the textarea
-        const inputText = e.target.elements.textarea.value;
-        console.log("Inputted text:", inputText);
-
-        // Trigger the next step within the parent component
-        onNext();
+        // Call the onSubmit callback with the collected data
+        onSubmit({ thoughts });
     };
+
 
     return (
         <>
@@ -32,6 +35,7 @@ export function Form2({onNext}) {
                                 name="textarea"
                                 className="form__page__subtitle input"
                                 defaultValue={""}
+                                onChange={handleTextareaChange}
                                 placeholder={"Начните писать (необязательно)"}
                             ></textarea>
                         </div>
