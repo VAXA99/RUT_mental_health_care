@@ -7,7 +7,7 @@ export default function Header() {
 
     const [authenticated, setAuthenticated] = useState(Auth.isTokenValid);
     const [showPopup, setShowPopup] = useState(false); // State for showing/hiding the popup
-    const userId = Auth.isUserIdValid();
+    const username = Auth.getUsername();
     const navigate = useNavigate();
 
     const togglePopup = () => {
@@ -47,7 +47,7 @@ export default function Header() {
                                         <img className="header__nav__img focus" src="/img/иконка_уведомление.png"
                                              alt=""/>
                                     </button>
-                                    <Link to={`/user_profile/${userId}`}><img className="header__nav__img"
+                                    <Link to={`/user_profile/${username}`}><img className="header__nav__img"
                                                                               src="/img/меню__.png" alt=""/></Link>
                                     <button className="nav__img" onClick={handleLogoutAndNavigate}>
                                         <img className="header__nav__img" src="/img/Group%2089.png" alt=""/>

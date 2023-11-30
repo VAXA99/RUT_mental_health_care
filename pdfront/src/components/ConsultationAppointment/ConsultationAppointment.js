@@ -12,10 +12,18 @@ export function ConsultationAppointment() {
     const [authenticated, setAuthenticated] = useState(Auth.isTokenValid);
     const [step, setStep] = useState(1);
     const navigate = useNavigate();
-    const [formData, setFormData] = useState({
-        selectedProblems: [],
-        problemDescription: ''
-    });
+
+    const [selectedDate, setSelectedDate] = useState(null);
+    const [selectedTime, setSelectedTime] = useState(null);
+    const [selectedProblems, setSelectedProblems] = useState([]);
+    const [problemDescription, setProblemDescription] = useState('');
+
+    // const [formData, setFormData] = useState({
+    //     selectedProblems: [],
+    //     problemDescription: '',
+    //     selectedDate: null,
+    //     selectedTime: null,
+    // });
 
     const handleFirstStep = () => {
         setStep(1);
@@ -34,26 +42,30 @@ export function ConsultationAppointment() {
     };
 
     const handleForm1Submit = (selectedProblems) => {
-        setFormData({
-            ...formData,
-            selectedProblems,
-        });
+        setSelectedProblems(selectedProblems);
         handleNext();
     };
 
     const handleForm2Submit = (problemDescription) => {
-        setFormData({
-            ...formData,
-            problemDescription,
-        });
+        setProblemDescription(problemDescription);
         handleNext();
     };
+
+    const handleCalendarSubmit = (selectedDate, selectedTime) => {
+        setSelectedDate(selectedDate);
+        setSelectedTime(selectedTime);
+    };
+
+    const handleAppointmentBooking = () => {
+        console.log('Form data: \n', selectedProblems, '\n', problemDescription, '\n', selectedDate, '\n', selectedTime);
+    }
 
 
     useEffect(() => {
         const intervalId = setInterval(() => {
-            setAuthenticated(Auth.isTokenValid());
-            if (!authenticated) {
+            const tokenValid = Auth.isTokenValid();
+            setAuthenticated(tokenValid);
+            if (!tokenValid) {
                 navigate("/auth")
             }
         }, 1000); // Check every second
@@ -122,20 +134,29 @@ export function ConsultationAppointment() {
                     </div>
                     {step === 1 && (
                         <Form1
-                            selectedProblems={formData.selectedProblems}
+                            selectedProblems={setSelectedProblems}
                             onNext={handleForm1Submit}
                         />
                     )}
                     {step === 2 && (
                         <Form2
-                            problemDescription={formData.problemDescription}
+                            problemDescription={setProblemDescription}
                             onNext={handleForm2Submit}
                         />
                     )}
                     {step === 3 && (
-                        <Calendar
-
-                        />
+                        <>
+                            <Calendar
+                                onDateChange={setSelectedDate}
+                                onTimeChange={setSelectedTime}
+                                onAppointmentBooking={handleCalendarSubmit}
+                            />
+                            <div className="button calendar">
+                                <button className="next__step" onClick={handleAppointmentBooking}>
+                                    Записаться
+                                </button>
+                            </div>
+                        </>
                     )}
                 </div>
 

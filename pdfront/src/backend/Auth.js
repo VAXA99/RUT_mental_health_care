@@ -56,10 +56,10 @@ export default {
                 name,
                 surname
             });
-            return { success: response.status === 200, error: null };
+            return {success: response.status === 200, error: null};
         } catch (error) {
             console.error('Error on signUp: ', error);
-            return { success: false, error: error.response ? error.response.data : 'Unknown error' };
+            return {success: false, error: error.response ? error.response.data : 'Unknown error'};
         }
     },
 
@@ -74,8 +74,9 @@ export default {
     isUsernameValid: async (username) => {
         try {
             const response = await axios.get(baseUrl + '/auth/exists_by_username',
-                {params: {
-                    username: username
+                {
+                    params: {
+                        username: username
                     }
                 });
 
@@ -89,8 +90,9 @@ export default {
     isEmailValid: async (email) => {
         try {
             const response = await axios.get(baseUrl + '/auth/exists_by_email',
-                {params: {
-                    email: email
+                {
+                    params: {
+                        email: email
                     }
                 });
             return response.status === 200;
@@ -100,40 +102,22 @@ export default {
         }
     },
 
-    isUserIdValid: async () =>{
-        const token = localStorage.getItem('token');
-
-        if (!token) {
-            // Token is not present
+    getUserId: () => {
+        try {
+            return jwtDecode(localStorage.getItem('token')).userId;
+        } catch (error) {
             return null;
         }
 
+    },
+
+    getUsername: () => {
         try {
-            // Decode the token to get its payload
-            const decodedToken = jwtDecode(token);
-
-            // Check the token's expiration time
-            const currentTime = Date.now() / 1000; // Convert to seconds
-            if (decodedToken.exp < currentTime) {
-                // Token has expired
-                return null;
-            }
-
-            // Additional checks based on your requirements can be added here
-
-            // If all checks pass, the token is considered valid
-            // Return userId along with other information
-            return decodedToken.userId;
+            return jwtDecode(localStorage.getItem('token')).sub;
         } catch (error) {
-            // An error occurred while decoding the token
-            console.error('Error decoding token:', error);
             return null;
         }
     }
-
-
-
-
 }
 
 

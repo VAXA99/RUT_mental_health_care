@@ -3,14 +3,13 @@ import './userProfile.css'
 import Header from "../Header/Header";
 import Auth from "../../backend/Auth";
 import {useNavigate, useParams} from "react-router-dom";
-import axios from "axios";
 import {getUserProfile} from "../../backend/UserProfile";
 
 
 export default function UserProfile() {
 
     const [authenticated, setAuthenticated] = useState(Auth.isTokenValid);
-    const { userId } = useParams();
+    const userId= Auth.getUserId();
     const [userData, setUserData] = useState({});
     const navigate = useNavigate();
 
@@ -22,7 +21,7 @@ export default function UserProfile() {
 
     useEffect(() => {
         const fetchUserProfile = () => {
-            getUserProfile(userId) // Assuming userID is defined somewhere in your component
+            getUserProfile(userId)
                 .then((data) => {
                     setUserData(data);
                     console.log(data.age);
@@ -34,6 +33,20 @@ export default function UserProfile() {
         };
 
         fetchUserProfile();
+    }, []);
+
+    useEffect(() => {
+        const intervalId = setInterval(() => {
+            const tokenValid = Auth.isTokenValid();
+            setAuthenticated(tokenValid);
+            if (!tokenValid) {
+                navigate("/auth")
+            }
+        }, 1000); // Check every second
+
+        return () => {
+            clearInterval(intervalId);
+        };
     }, []);
 
     return(

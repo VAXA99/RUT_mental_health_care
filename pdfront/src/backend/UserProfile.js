@@ -59,7 +59,8 @@ async function editBio(userId, newBio) {
 }
 async function getUserProfile(userID) {
     try {
-        const response = await axios.get(baseUrl + `/profile/${userID}`);
+        const longUserId = Number(userID);
+        const response = await axios.get(baseUrl + `/profile/${longUserId}`);
         return response.data;
     } catch (error) {
         console.error('Error find userID:', error);

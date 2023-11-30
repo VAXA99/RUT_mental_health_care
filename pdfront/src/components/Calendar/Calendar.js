@@ -1,4 +1,4 @@
-import React, {Component} from 'react'
+import React from 'react'
 import CalendarComponent from './CalendarComponent';
 import TimeComponent from "./TimeComponent";
 
@@ -12,6 +12,7 @@ export default class Calendar extends Component {
 
     handleDateChange = (date) => {
         this.setState({selectedDate: date});
+        this.props.onDateChange(date);
     };
 
     handleTimeChange = (time) => {

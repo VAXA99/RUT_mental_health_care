@@ -49,7 +49,7 @@ function App() {
                     <Route exact path='/consultation_appointment' element={<ConsultationAppointment/>}/>
                     <Route exact path='/articles' element={<Articles/>}/>
                     <Route exact path='/calendar' element={<Calendar/>}/>
-                    <Route exact path='/user_profile/:userId' element={<UserProfile/>}/>
+                    <Route path='/user_profile/:username' element={<UserProfile/>}/>
                 </Routes>
 
             </Router>

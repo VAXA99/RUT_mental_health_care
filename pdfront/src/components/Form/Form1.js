@@ -19,6 +19,7 @@ export function Form1({onNext}) {
         }
 
         setSelectedProblems(updatedProblems);
+        this.props
     };
 
     const handleSubmit = (e) => {

@@ -55,7 +55,7 @@ export default class CalendarComponent extends Component {
     handleDayClick = (date) => {
         console.log(date);
         this.setState({ selectedDate: date });
-        this.props.onChange(date); // Invoke the callback function from props
+        this.props.onDateChange(date); // Invoke the callback function from props
     };
 
     render() {
