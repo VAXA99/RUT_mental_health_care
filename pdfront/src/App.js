@@ -38,16 +38,18 @@ function App() {
 
                     <Route exact path='/sign_up' element={<Sign_up/>}/>
 
-                    <Route exact path='/forum' element={<div className='containerr'><Header/><Forum/></div>}/>
+                    <Route exact path='/forum' element={<Forum/>}/>
 
-                    <Route exact path='/spec' element={<div className='containerr'><Header/><Specialists/></div>}/>
+                    <Route exact path='/spec' element={<Specialists/>}/>
 
-                    <Route exact path='/change_pass' element={<div className='containerr'><ChangePassword/></div>}/>
+                    <Route exact path='/change_pass' element={<ChangePassword/>}/>
 
-                    <Route exact path='/send_email' element={<div className='containerr'><SendEmail/></div>}/>
+                    <Route exact path='/send_email' element={<SendEmail/>}/>
 
                     <Route exact path='/consultation_appointment' element={<ConsultationAppointment/>}/>
+
                     <Route exact path='/articles' element={<Articles/>}/>
+
                     <Route exact path='/calendar' element={<Calendar/>}/>
                     <Route path='/user_profile/:username' element={<UserProfile/>}/>
                 </Routes>

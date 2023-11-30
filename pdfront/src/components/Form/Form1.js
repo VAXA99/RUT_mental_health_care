@@ -46,7 +46,7 @@ export function Form1({onNext}) {
                         <div className="form__page__subtitle">Выберите проблемы которые вам близки.</div>
                         <div className="display__inline">
                             {[
-                                "Суицидальность",
+                               "Суицидальность",
                                 "Депрессия",
                                 "Утомляемость",
                                 "Проблемы на работе",
@@ -60,7 +60,7 @@ export function Form1({onNext}) {
                             ].map((problem, index) => (
                                 <div key={index} className="problem__button">
                                     <label>
-                                        <input
+                                        <input className='checkbox__none'
                                             type="checkbox"
                                             value={problem}
                                             onChange={() => handleCheckboxChange(problem)}
