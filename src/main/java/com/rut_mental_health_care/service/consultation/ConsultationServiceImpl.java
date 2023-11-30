@@ -1,7 +1,7 @@
 package com.rut_mental_health_care.service.consultation;
 
+import com.rut_mental_health_care.controller.request.ConsultationRequest;
 import com.rut_mental_health_care.dto.ConsultationDto;
-import com.rut_mental_health_care.dto.UserDto;
 import com.rut_mental_health_care.model.ConsultationNotification;
 import com.rut_mental_health_care.model.PsychProblem;
 import com.rut_mental_health_care.model.User;
@@ -10,12 +10,15 @@ import com.rut_mental_health_care.repository.PsychProblemRepository;
 import com.rut_mental_health_care.repository.UserRepository;
 import com.rut_mental_health_care.service.mail.MailService;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -37,12 +40,12 @@ public class ConsultationServiceImpl implements ConsultationService {
 
     private final int cancel = 0;
     private final int setUp = 1;
-    private final int update = 2;
 
     @Autowired
     public ConsultationServiceImpl(ConsultationRepository consultationRepository,
                                    ConsultationNotificationRepository consultationNotificationRepository,
-                                   UserRepository userRepository, PsychProblemRepository psychProblemRepository,
+                                   UserRepository userRepository,
+                                   PsychProblemRepository psychProblemRepository,
                                    MailService mailService,
                                    ModelMapper modelMapper) {
         this.consultationRepository = consultationRepository;
@@ -57,50 +60,55 @@ public class ConsultationServiceImpl implements ConsultationService {
         return consultationNotificationRepository.findAll();
     }
 
-    public List<ConsultationDto> getAllConsultations(UserDto userDto) {
-        String role = userDto.getRoles();
+    @Override
+    public List<ConsultationDto> getAllConsultations(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + userId));
+        String role = user.getRoles();
+
         List<Consultation> consultations;
         if (role.equals("ROLE_USER")) {
-            consultations = consultationRepository.findAllByPatientId(userDto.getId());
+            consultations = consultationRepository.findAllByPatientId(userId);
         } else {
-            consultations = consultationRepository.findAllByPsychologistId(userDto.getId());
+            consultations = consultationRepository.findAllByPsychologistId(userId);
         }
         return consultations.stream()
                 .map(this::convertToConsultationDto)
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public List<ConsultationDto> getAvailableConsultationsForDate(LocalDate chosenDate) {
+        LocalDateTime startDateTime = chosenDate.atStartOfDay(); // Convert LocalDate to LocalDateTime
+        LocalDateTime nextDay = startDateTime.plusDays(1); // Get the next day
+
+        List<Consultation> consultations = consultationRepository.findAllAvailableConsultationsForDate(startDateTime, nextDay);
+        List<ConsultationDto> consultationDtos = consultations.stream()
+                .map(this::convertToConsultationDto)
+                .toList();
+
+        for (ConsultationDto consultationDto: consultationDtos) {
+            List<String> psychProblems = psychProblemRepository.findPsychProblemByConsultationId(consultationDto.getId());
+            consultationDto.setPsychProblems(psychProblems);
+        }
+
+        return consultationDtos;
+    }
+
+    @Override
     @Async
-    public void setUpConsultation(ConsultationDto consultationDto) {
-        Long patientId = consultationDto.getPatient().getId();
-        Long psychologistId = consultationDto.getPsychologist().getId();
+    @Transactional
+    public void setUpConsultation(Long consultationId, ConsultationRequest consultationRequest) {
+        User patient = userRepository.findById(consultationRequest.getUserId())
+                .orElseThrow(() -> new EntityNotFoundException("Patient not found with id: " + consultationRequest.getUserId()));
 
-        Consultation consultation = modelMapper.map(consultationDto, Consultation.class);
+        Consultation consultation =  consultationRepository.findById(consultationId)
+                .orElseThrow(() -> new EntityNotFoundException("Patient not found with id: " + consultationId));
 
-        User patient = userRepository.findById(patientId)
-                .orElseThrow(() -> new EntityNotFoundException("Patient not found with id: " + consultationDto.getPatient().getId()));
-
-        User psychologist = userRepository.findById(psychologistId)
-                .orElseThrow(() -> new EntityNotFoundException("Psychologist not found with id: " + consultationDto.getPsychologist().getId()));
-
-        // Ensure roles are correctly assigned
-        if (!patient.getRoles().equals("ROLE_USER")) {
-            throw new EntityNotFoundException("User with ID " + patient.getId() + " is not a patient.");
-        }
-
-        if (!psychologist.getRoles().equals("ROLE_PSYCHOLOGIST")) {
-            throw new EntityNotFoundException("User with ID " + psychologist.getId() + " is not a psychologist.");
-        }
-
-        // Set the correct patient and psychologist in the consultation
         consultation.setPatient(patient);
-        consultation.setPsychologist(psychologist);
-
-        System.out.println(consultation.getPatient());
-        System.out.println(consultation.getPsychologist());
 
         List<PsychProblem> psychProblems = new ArrayList<>();
-        for (String psychProblem : consultationDto.getPsychProblems()) {
+        for (String psychProblem : consultationRequest.getPsychProblems()) {
             PsychProblem psychProblem_ = psychProblemRepository.findByDescription(psychProblem).orElseGet(() -> {
                 PsychProblem newPsychProblem = new PsychProblem();
                 newPsychProblem.setDescription(psychProblem);
@@ -110,6 +118,8 @@ public class ConsultationServiceImpl implements ConsultationService {
         }
 
         consultation.setPsychProblems(psychProblems);
+        consultation.setDescription(consultationRequest.getDescription());
+        consultation.setAvailable(false);
 
         consultationRepository.save(consultation);
         sendNotificationOnConsultation(consultation.getId(), setUp);
@@ -180,12 +190,6 @@ public class ConsultationServiceImpl implements ConsultationService {
                     + descriptionForPatient;
             psychologistNotificationDescription = "Здравствуйте, " + psychologistName + ", Вам назначена консультация: \n"
                     + descriptionForPsychologist;
-        } else if (status == update) {
-            subject = "Данные по вашей консультации обновились";
-            patientNotificationDescription = "Здравствуйте, " + patientName + ", данные по вашей консультации обновились. Новые данные: \n"
-                    + descriptionForPatient;
-            psychologistNotificationDescription = "Здравствуйте, " + psychologistName + ", данные по вашей консультации обновились. Новые данные: \n"
-                    + descriptionForPsychologist;
         }
 
         ConsultationNotification consultationNotification = new ConsultationNotification();
@@ -197,29 +201,38 @@ public class ConsultationServiceImpl implements ConsultationService {
         mailService.send(mailService.constructEmail(subject, psychologistNotificationDescription, psychologist));
     }
 
-    //todo change input parameters
-    public void updateConsultation(Long consultationId, ConsultationDto updatedConsultationDto) {
-        Consultation consultation = consultationRepository.findById(consultationId)
-                .orElseThrow(() -> new EntityNotFoundException("Consultation not found with id:" + consultationId));
-        consultation.setStartsAt(updatedConsultationDto.getStartsAt());
-        consultation.setEndsAt(updatedConsultationDto.getEndsAt());
-        sendNotificationOnConsultation(consultationId, update);
-    }
-
     public void cancelConsultation(Long consultationId) {
         sendNotificationOnConsultation(consultationId, cancel);
         consultationRepository.deleteById(consultationId);
     }
 
+    @Scheduled(cron = "0 0 0 * * MON-FRI") // This cron expression triggers the method every day from Monday to Friday at midnight
+    public void generateDailyConsultations() {
+        // Get all psychologists from the database
+        List<User> psychologists = userRepository.findAllByRoles("ROLE_PSYCHOLOGIST"); // Assuming you have a User class with roles
+
+        // Iterate over each psychologist and generate 4 consultations for the next day
+        for (User psychologist : psychologists) {
+            for (int i = 0; i < 4; i++) {
+                LocalDateTime startsAt = LocalDateTime.now().plusDays(7).withHour(10).plusHours(i * 2); // Adjust the starting time based on your requirements, with a 30-minute gap
+                LocalDateTime endsAt = startsAt.plusHours(1).plusMinutes(30); // Each consultation lasts for 1.5 hours
+
+                Consultation consultation = new Consultation();
+                consultation.setPatient(null); // You might want to set this to a default patient or leave it null
+                consultation.setPsychologist(psychologist);
+                consultation.setStartsAt(startsAt);
+                consultation.setEndsAt(endsAt);
+                consultation.setAvailable(true); // Assuming the consultation is available initially
+                // Set other consultation properties
+
+                consultationRepository.save(consultation);
+            }
+        }
+    }
+
     public ConsultationDto convertToConsultationDto(Consultation consultation) {
-        ConsultationDto consultationDto = modelMapper.map(consultation, ConsultationDto.class);
 
-        UserDto patientDto = modelMapper.map(consultation.getPatient(), UserDto.class);
-        UserDto psychologistDto = modelMapper.map(consultation.getPsychologist(), UserDto.class);
-        consultationDto.setPatient(patientDto);
-        consultationDto.setPsychologist(psychologistDto);
-
-        return consultationDto;
+        return modelMapper.map(consultation, ConsultationDto.class);
     }
 }
 

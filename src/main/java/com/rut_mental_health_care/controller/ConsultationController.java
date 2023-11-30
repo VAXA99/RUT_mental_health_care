@@ -1,7 +1,9 @@
 package com.rut_mental_health_care.controller;
 
+import com.rut_mental_health_care.controller.request.ConsultationRequest;
 import com.rut_mental_health_care.dto.ConsultationDto;
 import com.rut_mental_health_care.dto.UserDto;
+import com.rut_mental_health_care.model.Consultation;
 import com.rut_mental_health_care.model.ConsultationNotification;
 import com.rut_mental_health_care.service.consultation.ConsultationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -33,33 +36,36 @@ public class ConsultationController {
         }
     }
 
-    @GetMapping("/all")
-    public ResponseEntity<List<ConsultationDto>> getAllConsultations(@RequestBody UserDto userDto) {
+    @GetMapping("/all/{userId}")
+    public ResponseEntity<List<ConsultationDto>> getAllConsultations(@PathVariable Long userId) {
         try {
-            List<ConsultationDto> consultations = consultationService.getAllConsultations(userDto);
+            List<ConsultationDto> consultations = consultationService.getAllConsultations(userId);
             return ResponseEntity.ok(consultations);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
 
-    @PostMapping("/setUp")
-    public ResponseEntity<String> setUpConsultation(@RequestBody ConsultationDto consultationDto) {
+    @GetMapping("/allAvailable")
+    public ResponseEntity<?> getAvailableConsultationsForDate(@RequestParam LocalDate chosenDate) {
         try {
-            consultationService.setUpConsultation(consultationDto);
-            return ResponseEntity.status(HttpStatus.CREATED).body("Consultation set up successfully");
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error setting up consultation: " + e.getMessage());
+            List<ConsultationDto> consultations = consultationService.getAvailableConsultationsForDate(chosenDate);
+            return ResponseEntity.ok(consultations);
+        } catch (IllegalArgumentException e) {
+            // Log the exception or print the value of chosenDate
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body("Invalid date format or null date");
         }
     }
 
-    @PatchMapping("/update/{consultationId}")
-    public ResponseEntity<String> updateConsultation(@PathVariable Long consultationId, @RequestBody ConsultationDto consultationDto) {
+
+    @PostMapping("/setUp/{consultationId}")
+    public ResponseEntity<String> setUpConsultation(@PathVariable Long consultationId, @RequestBody ConsultationRequest consultationRequest) {
         try {
-            consultationService.updateConsultation(consultationId, consultationDto);
-            return ResponseEntity.ok("Consultation updated successfully");
+            consultationService.setUpConsultation(consultationId, consultationRequest);
+            return ResponseEntity.status(HttpStatus.CREATED).body("Consultation set up successfully");
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error updating consultation: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error setting up consultation: " + e.getMessage());
         }
     }
 

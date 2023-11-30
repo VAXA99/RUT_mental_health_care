@@ -18,6 +18,5 @@ public class ConsultationDto {
         private List<String> psychProblems;
         private LocalDateTime startsAt;
         private LocalDateTime endsAt;
-        private String DayOfTheWeek;
         private Location location;
 }

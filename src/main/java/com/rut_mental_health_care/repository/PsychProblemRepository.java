@@ -16,9 +16,9 @@ public interface PsychProblemRepository extends JpaRepository<PsychProblem, Long
 
 
     @Query(nativeQuery = true, value = "SELECT p.description " +
-            "FROM psychproblem p " +
-            "JOIN consultation_psychproblem cp ON p.id = cp.psychproblem_id " +
-            "WHERE cp.post_id = :consultationId")
+            "FROM psych_problem p " +
+            "JOIN consultation_psychproblems cp ON p.id = cp.psychproblem_id " +
+            "WHERE cp.consultation_id = :consultationId")
     List<String> findPsychProblemByConsultationId(@Param("consultationId") Long consultationId);
 
 

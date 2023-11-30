@@ -18,7 +18,7 @@ public class Consultation {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(nullable = false)
+    @JoinColumn
     private User patient;
 
     @ManyToOne
@@ -31,9 +31,14 @@ public class Consultation {
     @Column(nullable = false)
     private LocalDateTime endsAt;
 
+    @Column(name = "is_available")
+    private boolean isAvailable;
+
     @ManyToOne
     @JoinColumn(nullable = false)
     private Location location;
+
+    private String description;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(name = "consultation_psychproblems",

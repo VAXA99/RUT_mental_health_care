@@ -25,7 +25,6 @@ public class CommunicationServiceImpl implements CommunicationService {
     private final LikeRepository likeRepository;
     private final TagRepository tagRepository;
     private final ModelMapper modelMapper;
-    private final CommunicationNotificationService communicationNotificationService;
 
     @Autowired
     public CommunicationServiceImpl(PostRepository postRepository,
@@ -33,15 +32,13 @@ public class CommunicationServiceImpl implements CommunicationService {
                                     UserRepository userRepository,
                                     LikeRepository likeRepository,
                                     TagRepository tagRepository,
-                                    ModelMapper modelMapper,
-                                    CommunicationNotificationService communicationNotificationService) {
+                                    ModelMapper modelMapper) {
         this.postRepository = postRepository;
         this.commentRepository = commentRepository;
         this.userRepository = userRepository;
         this.likeRepository = likeRepository;
         this.tagRepository = tagRepository;
         this.modelMapper = modelMapper;
-        this.communicationNotificationService = communicationNotificationService;
     }
 
     @Override
@@ -104,12 +101,9 @@ public class CommunicationServiceImpl implements CommunicationService {
             like.setIsLike(isLike);
             // Save the like entity
             likeRepository.save(like);
-
-            communicationNotificationService.createNotification(userId, like);
         }
 
         postRepository.save(post);
-
     }
 
     @Override
@@ -129,8 +123,6 @@ public class CommunicationServiceImpl implements CommunicationService {
         comment.setContent(content);
 
         commentRepository.save(comment);
-
-        communicationNotificationService.createNotification(userId, comment);
     }
 
     @Override
