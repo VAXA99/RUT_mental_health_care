@@ -7,6 +7,7 @@ import com.rut_mental_health_care.dto.UserDto;
 import com.rut_mental_health_care.model.*;
 import com.rut_mental_health_care.repository.*;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
@@ -24,15 +25,23 @@ public class CommunicationServiceImpl implements CommunicationService {
     private final LikeRepository likeRepository;
     private final TagRepository tagRepository;
     private final ModelMapper modelMapper;
+    private final CommunicationNotificationService communicationNotificationService;
 
     @Autowired
-    public CommunicationServiceImpl(PostRepository postRepository, CommentRepository commentRepository, UserRepository userRepository, LikeRepository likeRepository, TagRepository tagRepository, ModelMapper modelMapper) {
+    public CommunicationServiceImpl(PostRepository postRepository,
+                                    CommentRepository commentRepository,
+                                    UserRepository userRepository,
+                                    LikeRepository likeRepository,
+                                    TagRepository tagRepository,
+                                    ModelMapper modelMapper,
+                                    CommunicationNotificationService communicationNotificationService) {
         this.postRepository = postRepository;
         this.commentRepository = commentRepository;
         this.userRepository = userRepository;
         this.likeRepository = likeRepository;
         this.tagRepository = tagRepository;
         this.modelMapper = modelMapper;
+        this.communicationNotificationService = communicationNotificationService;
     }
 
     @Override
@@ -69,6 +78,7 @@ public class CommunicationServiceImpl implements CommunicationService {
 
     @Override
     @Async
+    @Transactional
     public void likePost(Long postId, Long userId, Boolean isLike) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new EntityNotFoundException("Post not found with ID: " + postId));
@@ -94,37 +104,59 @@ public class CommunicationServiceImpl implements CommunicationService {
             like.setIsLike(isLike);
             // Save the like entity
             likeRepository.save(like);
+
+            communicationNotificationService.createNotification(userId, like);
         }
 
         postRepository.save(post);
+
     }
 
     @Override
     @Async
-    public void commentPost(Long postId, CommentDto commentDto) {
+    @Transactional
+    public void commentPost(Long postId, Long userId, String content) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new EntityNotFoundException("Post not found with ID: " + postId));
 
-        Comment comment = modelMapper.map(commentDto, Comment.class);
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("User not found with ID:" + userId));
+
+        Comment comment = new Comment();
+        comment.setUser(user);
         comment.setPost(post);
+        comment.setIsEdited(false);
+        comment.setContent(content);
 
         commentRepository.save(comment);
+
+        communicationNotificationService.createNotification(userId, comment);
     }
 
     @Override
     @Async
-    public void replyToComment(Long parentCommentId, CommentDto replyDto) {
+    @Transactional
+    public void replyToComment(Long parentCommentId, Long userId, String content) {
         Comment parentComment = commentRepository.findById(parentCommentId)
                 .orElseThrow(() -> new EntityNotFoundException("Parent comment with ID " + parentCommentId + " not found"));
-        Comment reply = modelMapper.map(replyDto, Comment.class);
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("User not found with ID:" + userId));
+
+        Comment reply = new Comment();
         reply.setParentComment(parentComment);
+        reply.setUser(user);
+        reply.setPost(parentComment.getPost());
+        reply.setIsEdited(false);
+        reply.setContent(content);
         commentRepository.save(reply);
     }
 
     @Override
     @Async
+    @Transactional
     public void editComment(Long commentId, String newContent) {
-        Comment comment = commentRepository.findById(commentId)
+         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new EntityNotFoundException("Comment with ID " + commentId + " not found"));
         comment.setContent(newContent);
         comment.setIsEdited(true);
@@ -133,17 +165,26 @@ public class CommunicationServiceImpl implements CommunicationService {
 
     @Override
     @Async
+    @Transactional
     public void deleteComment(Long commentId) {
         commentRepository.deleteById(commentId);
     }
 
     @Override
     @Async
-    public void writePost(PostDto postDto) {
-        Post post = modelMapper.map(postDto, Post.class);
+    @Transactional
+    public void writePost(Long userId, String title, String content, List<String> tagNames) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("User not found with ID:" + userId));
+
+        Post post = new Post();
+        post.setTitle(title);
+        post.setContent(content);
+        post.setUser(user);
+        post.setIsEdited(false);
 
         List<Tag> tags = new ArrayList<>();
-        for (String tagName : postDto.getTagNames()) {
+        for (String tagName : tagNames) {
             Tag tag = tagRepository.findByDescription(tagName).orElseGet(() -> {
                 Tag newTag = new Tag();
                 newTag.setDescription(tagName);
@@ -152,14 +193,14 @@ public class CommunicationServiceImpl implements CommunicationService {
             tags.add(tag);
         }
 
-        // Add the tags to the post and save the relationship in the post_tags table
         post.setTags(tags);
+
         postRepository.save(post);
     }
 
-
     @Override
     @Async
+    @Transactional
     public void editPost(Long postId, String newContent) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new EntityNotFoundException("Post not found with ID: " + postId));
@@ -172,6 +213,7 @@ public class CommunicationServiceImpl implements CommunicationService {
 
     @Override
     @Async
+    @Transactional
     public void deletePost(Long postId) {
         postRepository.deleteById(postId);
     }
@@ -211,6 +253,5 @@ public class CommunicationServiceImpl implements CommunicationService {
 
         return commentDto;
     }
-
 
 }

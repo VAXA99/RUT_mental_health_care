@@ -8,7 +8,7 @@ export default class CalendarComponent extends Component {
 
     static defaultProps = {
         date: new Date(),
-        years: [2020, 2021, 2022, 2023, 2024, 2025, 2026, 2027, 2028, 2029, 2030],
+        years: [2023, 2024],
         monthNames: ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"],
         weekDayNames: ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"],
         onChange: Function.prototype
@@ -52,12 +52,11 @@ export default class CalendarComponent extends Component {
 
     };
 
-    handleDayClick = date => {
+    handleDayClick = (date) => {
         console.log(date);
-        this.setState({selectedDate: date});
-
-        this.props.onChange(date);
-    }
+        this.setState({ selectedDate: date });
+        this.props.onChange(date); // Invoke the callback function from props
+    };
 
     render() {
         const {currentDate, selectedDate} = this.state;
@@ -71,14 +70,14 @@ export default class CalendarComponent extends Component {
                     <div className='month'>
                         <div className='display__flex'>
                             <select
-                                ref={elemement => this.monthSelect = elemement}
+                                ref={element => this.monthSelect = element}
                                 onChange={this.handleSelectChange}
                                 value={this.month}
                                 className='month__name'>{monthNames.map((name, index) =>
                                 <option key={index} value={index}>{name}</option>)}
                             </select>
                             <select
-                                ref={elemement => this.yearSelect = elemement}
+                                ref={element => this.yearSelect = element}
                                 onChange={this.handleSelectChange}
                                 value={this.year}
                                 className='month__name'>{years.map(year =>
@@ -125,4 +124,3 @@ export default class CalendarComponent extends Component {
         );
     }
 }
-

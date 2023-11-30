@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Entity
@@ -48,4 +50,16 @@ public class User {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "photo_id", referencedColumnName = "id")
     private File profilePicture;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Comment> comments = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Like> likes = new ArrayList<>();
+
+    @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Consultation> patientConsultations = new ArrayList<>();
+
+    @OneToMany(mappedBy = "psychologist", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Consultation> psychologistConsultations = new ArrayList<>();
 }

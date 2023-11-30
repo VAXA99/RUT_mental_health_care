@@ -35,9 +35,12 @@ public class Consultation {
     @JoinColumn(nullable = false)
     private Location location;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(name = "consultation_psychproblems",
             joinColumns = @JoinColumn(name = "consultation_id"),
             inverseJoinColumns = @JoinColumn(name = "psychproblem_id"))
     private List<PsychProblem> psychProblems;
+
+    @OneToMany(mappedBy = "consultation", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ConsultationNotification> consultationNotifications;
 }

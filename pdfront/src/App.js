@@ -14,7 +14,7 @@ import {Forum} from './components/Forum/Forum.js';
 import {Login} from './components/Login/Login.js';
 import {ChangePassword} from './components/Change password/ChangePassword.js';
 
-import {BrowserRouter as Router, Routes, Route} from "react-router-dom";
+import {BrowserRouter as Router, Route, Routes} from "react-router-dom";
 import {SendEmail} from './components/Send email/SendEmail.js';
 import Articles from './components/Articles/Articles.js';
 import Calendar from './components/Calendar/Calendar.js';

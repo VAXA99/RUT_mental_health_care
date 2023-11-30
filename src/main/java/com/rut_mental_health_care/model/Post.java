@@ -36,18 +36,16 @@ public class Post {
     @Column(nullable = false)
     private Boolean isEdited;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(name = "post_tags",
             joinColumns = @JoinColumn(name = "post_id"),
             inverseJoinColumns = @JoinColumn(name = "tag_id"))
     private List<Tag> tags = new ArrayList<>();
 
-    @Transient
-    private long likeCount;
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Comment> comments = new ArrayList<>();
 
-    @Transient
-    private long dislikeCount;
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL,  orphanRemoval = true)
+    private List<Like> likes = new ArrayList<>();
 
-    @Transient
-    private long commentCount;
 }
