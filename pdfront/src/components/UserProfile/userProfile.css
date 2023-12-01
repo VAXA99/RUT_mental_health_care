@@ -125,3 +125,52 @@ textarea{
     font-weight: 600;
 
 }
+
+.nav__img.change__photo{
+
+}
+
+.form.info.problem.profile{
+    cursor: pointer;
+    display:inline-flex;
+    padding: 12px 10px;
+    margin: 20px 10px 10px;
+    width: fit-content;
+
+}
+
+.input-file{
+
+}
+
+.img__update__button{
+    background-color: aquamarine;
+    padding: 10px 20px;
+    border-radius: 20px;
+    border: none;
+    outline: none;
+    width: auto;
+    margin-top: 20px;
+    cursor: pointer;
+
+}
+.input-file span {
+
+    font-size: 14px;
+    vertical-align: middle;
+    color: rgb(255 255 255);
+    text-align: center;
+    cursor: pointer;
+    border-radius: 20px;
+    background-color: #FF8F8F;
+    line-height: 22px;
+    padding: 10px 20px;
+    margin: 10px;
+}
+.input-file input[type=file] {
+    margin-top: 10px;
+    display: block;
+    width: 0;
+    height: 0;
+}
+

@@ -97,8 +97,11 @@ export default function UserProfile() {
                     <div className="profile__photo">
                         {userProfilePicture && <img  className='profile__photo__img' height="100%" width="100%" src={userProfilePicture.src}/>}
                         {!userProfilePicture && <div>Loading...</div>}
-                        <input type="file" className="nav__img change__photo" onChange={handleFileChange} />
-                        <button onClick={handleFileUpload}>Upload Profile Picture</button>
+                        <label className="input-file">
+                            <input type="file" className="input-file" onChange={handleFileChange} />
+                            <span>Выберите файл</span>
+                        </label>
+                        <button className="img__update__button" onClick={handleFileUpload}>Изменить фото</button>
                     </div>
 
                     <div className="profile__ifo">

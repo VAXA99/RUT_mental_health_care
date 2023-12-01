@@ -319,12 +319,15 @@ a:hover{
 .display__flex{
     display: flex;
 }
+.display__flex.align__items{
+    align-items: center;
+}
 
 .img__container{
     margin-right: 8%;
     vertical-align: middle;
-    width: 40px;
-    height: 40px;
+    width: 30%;
+    height: 30%;
 }
 
 

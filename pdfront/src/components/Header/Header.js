@@ -59,7 +59,7 @@ export default function Header() {
                         {authenticated ?
                             ( //TODO make links usable
                                 //TODO make popUp usable
-                                <div className='display__flex'>
+                                <div className='display__flex align__items'>
                                     <button id="popup_link" className="nav__img focus" onClick={togglePopup}>
                                         <img className="header__nav__img focus" src="/img/иконка_уведомление.png"
                                              alt=""/>
