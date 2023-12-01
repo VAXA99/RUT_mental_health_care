@@ -47,14 +47,15 @@ export default {
         }
     },
 
-    signUp: async (email, username, password, name, surname) => {
+    signUp: async (email, username, password, name, surname, dateOfBirth) => {
         try {
             const response = await axios.post(baseUrl + '/auth/signUp', {
                 email,
                 username,
                 password,
                 name,
-                surname
+                surname,
+                dateOfBirth
             });
             return {success: response.status === 200, error: null};
         } catch (error) {

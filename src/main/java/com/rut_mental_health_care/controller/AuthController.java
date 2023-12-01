@@ -59,9 +59,9 @@ public class AuthController {
         user.setName(signUpRequest.getName());
         user.setSurname(signUpRequest.getSurname());
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy", Locale.ENGLISH);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.ENGLISH);
         LocalDate dateOfBirth = LocalDate.parse(signUpRequest.getDateOfBirth(), formatter);
-        user.setDateOfBirth(dateOfBirth).;
+        user.setDateOfBirth(dateOfBirth);
         userService.addUser(user);
 
         return ResponseEntity.ok("Success, User Signed Up Successfully");

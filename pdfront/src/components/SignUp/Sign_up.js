@@ -9,7 +9,7 @@ export default function Sign_up() {
     const [password, setPassword] = useState('');
     const [name, setName] = useState('');
     const [surname, setSurname] = useState('');
-    const [dob, setDob] = useState('');
+    const [dob, setDob] = useState(null);
 
     const [usernameError, setUsernameError] = useState('');
     const [emailError, setEmailError] = useState('');
@@ -64,7 +64,6 @@ export default function Sign_up() {
         if (!isValidUsername || !isValidEmail) {
             return;
         }
-
 
         const { success, error } = await auth.signUp(email, username, password, name, surname, dob);
         if (success) {
