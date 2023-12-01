@@ -68,6 +68,30 @@ async function getUserProfile(userID) {
     }
 }
 
+async function getUserProfilePhoto(userId) {
+    try {
+        const longUserId = Number(userId);
+        const response = await axios.get(`${baseUrl}/profile/profilePicture/${longUserId}`, {
+            responseType: 'arraybuffer',
+        });
+        const imageData = response.data;
+
+        // Create a Blob from the binary data
+        const blob = new Blob([imageData]);
+
+        // Create an object URL for the Blob
+        const imageUrl = URL.createObjectURL(blob);
+
+        // Display the image using the URL
+        const imgElement = document.createElement('img');
+        imgElement.src = imageUrl;
+        return imgElement;
+
+    } catch (error) {
+        console.error('Error find picture: ', error);
+    }
+}
+
 
 export {
     editName,
@@ -75,5 +99,6 @@ export {
     editMiddleName,
     editEmail,
     editBio,
-    getUserProfile
+    getUserProfile,
+    getUserProfilePhoto
 };

@@ -1,9 +1,9 @@
-import React, {Component, useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import './userProfile.css'
 import Header from "../Header/Header";
 import Auth from "../../backend/Auth";
-import {useNavigate, useParams} from "react-router-dom";
-import {getUserProfile} from "../../backend/UserProfile";
+import {useNavigate} from "react-router-dom";
+import {getUserProfile, getUserProfilePhoto} from "../../backend/UserProfile";
 
 
 export default function UserProfile() {
@@ -12,6 +12,10 @@ export default function UserProfile() {
     const userId= Auth.getUserId();
     const [userData, setUserData] = useState({});
     const navigate = useNavigate();
+    const [userProfilePicture, setUserProfilePicture] = useState(null);
+
+
+    // setUserProfilePicture(getUserProfilePhoto());
 
     const handleLogoutAndNavigate = () => {
         setAuthenticated(Auth.logout());
@@ -49,6 +53,27 @@ export default function UserProfile() {
         };
     }, []);
 
+    // useEffect(() => {
+    //     const fetchUserProfilePhoto = async () => {
+    //         try {
+    //             const response = await getUserProfilePhoto(userId);
+    //             const photoData = await response.getData(); // Assuming the response needs to be parsed as JSON
+    //
+    //             // Use base64-js to decode the byte string
+    //             const byteArray = toByteArray(photoData);
+    //             const decodedImage = fromByteArray(byteArray);
+    //
+    //             // Now `decodedImage` contains the binary data of the image
+    //             setUserProfilePicture(decodedImage);
+    //         } catch (error) {
+    //             console.error('Error fetching user profile photo:', error);
+    //         }
+    //     };
+    //
+    //     fetchUserProfilePhoto().then(r => {});
+    // }, [userId]);
+
+
     return(
 
         <>
@@ -60,8 +85,9 @@ export default function UserProfile() {
             <div className="container main profile">
                 <div className="display__flex">
                     <div className="profile__photo">
-                        <img src="/img/Rectangle 176(2).png" alt="User" />
-                        <button className="nav__img change__photo">Изменить фото</button>
+                        {/*{userProfilePicture}*/}
+                        {/*<button className="nav__img change__photo">Изменить фото</button>*/}
+                        <input type="file" className="nav__img change__photo"/>
                     </div>
 
                     <div className="profile__ifo">
