@@ -14,4 +14,5 @@ public class SignUpRequest {
         private String roles;
         private String name;
         private String surname;
+        private String dateOfBirth;
 }

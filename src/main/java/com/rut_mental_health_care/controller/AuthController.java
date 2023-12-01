@@ -20,6 +20,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 import java.util.UUID;
 
 @RestController
@@ -48,21 +51,24 @@ public class AuthController {
 
     @PostMapping("/signUp")
     public ResponseEntity<?> signup(@RequestBody SignUpRequest signUpRequest) throws IOException {
-            User user = new User();
-            user.setUsername(signUpRequest.getUsername());
-            user.setEmail(signUpRequest.getEmail());
-            user.setPassword(signUpRequest.getPassword());
-            user.setRoles("ROLE_USER");
-            user.setName(signUpRequest.getName());
-            user.setSurname(signUpRequest.getSurname());
+        User user = new User();
+        user.setUsername(signUpRequest.getUsername());
+        user.setEmail(signUpRequest.getEmail());
+        user.setPassword(signUpRequest.getPassword());
+        user.setRoles("ROLE_USER");
+        user.setName(signUpRequest.getName());
+        user.setSurname(signUpRequest.getSurname());
 
-            userService.addUser(user);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy", Locale.ENGLISH);
+        LocalDate dateOfBirth = LocalDate.parse(signUpRequest.getDateOfBirth(), formatter);
+        user.setDateOfBirth(dateOfBirth).;
+        userService.addUser(user);
 
-            return ResponseEntity.ok("Success, User Signed Up Successfully");
+        return ResponseEntity.ok("Success, User Signed Up Successfully");
     }
 
     @GetMapping("/exists_by_username")
-    public ResponseEntity<?> exists_by_username (String username) {
+    public ResponseEntity<?> exists_by_username(String username) {
         boolean userExists = userService.existsUserByUsername(username);
         if (userExists) {
             return ResponseEntity.badRequest().body("User with username " + username + " already exists.");
@@ -72,7 +78,7 @@ public class AuthController {
     }
 
     @GetMapping("/exists_by_email")
-    public ResponseEntity<?> exists_by_email (String email) {
+    public ResponseEntity<?> exists_by_email(String email) {
         boolean userExists = userService.existsUserByEmail(email);
         if (userExists) {
             return ResponseEntity.badRequest().body("User with email " + email + " already exists.");

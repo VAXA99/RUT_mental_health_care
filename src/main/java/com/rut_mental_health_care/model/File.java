@@ -26,7 +26,4 @@ public class File {
 
     @Lob
     private byte[] data;
-
-    @OneToOne(mappedBy = "profilePicture", orphanRemoval = true)
-    private User user;
 }
