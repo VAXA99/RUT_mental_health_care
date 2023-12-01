@@ -5,9 +5,12 @@
 }
 
 .profile__photo{
-    width: 230px;
+    width: 280px;
     height: 280px;
     text-align: center;
+}
+.profile__photo__img{
+    border-radius: 50%;
 }
 
 .profile__ifo{

@@ -3,7 +3,7 @@ import './userProfile.css'
 import Header from "../Header/Header";
 import Auth from "../../backend/Auth";
 import {useNavigate} from "react-router-dom";
-import {getUserProfile, getUserProfilePhoto} from "../../backend/UserProfile";
+import {getUserProfile, getUserProfilePhoto, uploadUserProfilePicture} from "../../backend/UserProfile";
 
 
 export default function UserProfile() {
@@ -13,14 +13,30 @@ export default function UserProfile() {
     const [userData, setUserData] = useState({});
     const navigate = useNavigate();
     const [userProfilePicture, setUserProfilePicture] = useState(null);
-
-
-    // setUserProfilePicture(getUserProfilePhoto());
+    const [selectedFile, setSelectedFile] = useState(null);
 
     const handleLogoutAndNavigate = () => {
         setAuthenticated(Auth.logout());
 
         navigate('/');
+    };
+
+    const handleFileChange = (event) => {
+        const file = event.target.files[0];
+        setSelectedFile(file);
+    };
+
+    const handleFileUpload = async () => {
+        try {
+            if (selectedFile) {
+                await uploadUserProfilePicture(userId, selectedFile);
+                // You may want to refresh the user profile picture after a successful upload
+                const imgElement = await getUserProfilePhoto(userId);
+                setUserProfilePicture(imgElement);
+            }
+        } catch (error) {
+            console.error('Error uploading profile picture:', error);
+        }
     };
 
     useEffect(() => {
@@ -53,26 +69,20 @@ export default function UserProfile() {
         };
     }, []);
 
-    // useEffect(() => {
-    //     const fetchUserProfilePhoto = async () => {
-    //         try {
-    //             const response = await getUserProfilePhoto(userId);
-    //             const photoData = await response.getData(); // Assuming the response needs to be parsed as JSON
-    //
-    //             // Use base64-js to decode the byte string
-    //             const byteArray = toByteArray(photoData);
-    //             const decodedImage = fromByteArray(byteArray);
-    //
-    //             // Now `decodedImage` contains the binary data of the image
-    //             setUserProfilePicture(decodedImage);
-    //         } catch (error) {
-    //             console.error('Error fetching user profile photo:', error);
-    //         }
-    //     };
-    //
-    //     fetchUserProfilePhoto().then(r => {});
-    // }, [userId]);
 
+
+    useEffect(() => {
+        const fetchUserProfilePhoto = async () => {
+            try {
+                const imgElement = await getUserProfilePhoto(userId);
+                setUserProfilePicture(imgElement);
+            } catch (error) {
+                console.error('Error fetching user profile photo:', error);
+            }
+        };
+
+        fetchUserProfilePhoto();
+    }, [userId]);
 
     return(
 
@@ -85,9 +95,10 @@ export default function UserProfile() {
             <div className="container main profile">
                 <div className="display__flex">
                     <div className="profile__photo">
-                        {/*{userProfilePicture}*/}
-                        {/*<button className="nav__img change__photo">Изменить фото</button>*/}
-                        <input type="file" className="nav__img change__photo"/>
+                        {userProfilePicture && <img  className='profile__photo__img' height="100%" width="100%" src={userProfilePicture.src}/>}
+                        {!userProfilePicture && <div>Loading...</div>}
+                        <input type="file" className="nav__img change__photo" onChange={handleFileChange} />
+                        <button onClick={handleFileUpload}>Upload Profile Picture</button>
                     </div>
 
                     <div className="profile__ifo">
@@ -106,7 +117,7 @@ export default function UserProfile() {
                         <div className="profile__edit">
                             <div className="profile__edit__info">
                                 <div className="profile__edit__title">Возраст</div>
-                                <input className="profile__edit__input age" type="text" value={userData.age} placeholder="Возраст" />
+                                <input className="profile__edit__input age" type="text" value={userData.age} placeholder="Возраст" readOnly />
                             </div>
                             <div className="profile__edit__info nickname">
                                 <div className="profile__edit__title">Никнейм</div>

@@ -84,11 +84,32 @@ async function getUserProfilePhoto(userId) {
 
         // Display the image using the URL
         const imgElement = document.createElement('img');
+        console.log("Got picture")
         imgElement.src = imageUrl;
         return imgElement;
 
     } catch (error) {
         console.error('Error find picture: ', error);
+        return null;
+    }
+}
+
+async function uploadUserProfilePicture(userId, selectedFile) {
+    try {
+        const longUserId = Number(userId);
+        const formData = new FormData();
+        formData.append('file', selectedFile);
+        const response = await axios.post(`${baseUrl}/profile/uploadProfilePicture/${longUserId}`,
+            formData,
+            {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            });
+        return response.data;
+    } catch (error) {
+        console.error('Failed to upload file: ', error)
+        return null;
     }
 }
 
@@ -100,5 +121,6 @@ export {
     editEmail,
     editBio,
     getUserProfile,
-    getUserProfilePhoto
+    getUserProfilePhoto,
+    uploadUserProfilePicture
 };

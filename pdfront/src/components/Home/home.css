@@ -11,11 +11,10 @@ body{
 
  
 }
-.overflow{
-    overflow: hidden;
+.header__nav__img.profile{
+    border-radius: 50%;
 }
-
-*, 
+*,
 ::before, 
 ::after{
     box-sizing: border-box;
@@ -319,6 +318,13 @@ a:hover{
 
 .display__flex{
     display: flex;
+}
+
+.img__container{
+    margin-right: 8%;
+    vertical-align: middle;
+    width: 40px;
+    height: 40px;
 }
 
 
