@@ -241,6 +241,7 @@ a:hover {
     font-size: 20px;
     font-weight: 400;
     text-align: left;
+    margin: 10px 0;
 
 }
 
@@ -277,6 +278,38 @@ a:hover {
     vertical-align: middle;
     display: flex;
     align-items: center;
+}
+.form__block__link.thread{
+    width: auto;
+    margin-right: -120%;
+
+}
+.display__flex.thread__flex{
+    display: flex;
+    justify-content: space-between;
+}
+.theme__container.main__page{
+    padding: 10px;
+    max-height: 400px;
+    width: 100%;
+    height: 100%;
+}
+.theme__info.main__page{
+    height: 150px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.form__page__subtitle.input.forum__page{
+    color: black;
+    width: 95%;
+    border-radius: 20px;
+    height: 90px;
+}
+.form__page__subtitle.input.forum__page.title{
+    height: 45px;
+    margin-bottom: 5px;
+
 }
 
 

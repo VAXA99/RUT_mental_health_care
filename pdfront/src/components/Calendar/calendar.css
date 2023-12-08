@@ -1,5 +1,5 @@
 .container.main.calendar{
-    width: 80%;
+    width: 85%;
 }
 
 .calendar__form__container{
@@ -11,7 +11,7 @@
 }
 
 .form.calendar{
-    width: 43%;
+    width: 50%;
     margin: 5px 80px 0 0;
     height: 90%;
 }
@@ -61,7 +61,7 @@
     cursor: pointer;
 }
 .button.calendar{
-    margin-top: 40px;
+    margin-top: 10px;
     justify-content: start;
 }
 

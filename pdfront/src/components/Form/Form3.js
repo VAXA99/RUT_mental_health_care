@@ -1,9 +1,9 @@
 import React, {useState} from 'react'
-import CalendarComponent from './CalendarComponent';
-import TimeComponent from "./TimeComponent";
+import CalendarComponent from '../Calendar/CalendarComponent';
+import TimeComponent from "../Calendar/TimeComponent";
 
 
-export default function Calendar({ onDateTimeSelect }) {
+export function Form3({ onDateTimeSelect }) {
 
     const [selectedTime, setSelectedTime] = useState('');
     const [selectedDate, setSelectedDate] = useState(null);
@@ -40,9 +40,28 @@ export default function Calendar({ onDateTimeSelect }) {
                                     <div className='form__page__subtitle calendar'> информация о приеме будет
                                         выслана на вашу почту
                                     </div>
-                                    <TimeComponent onTimeSelect={handleTimeSelection} />
-                                    <div className="selected-time">
-                                        {selectedTime && <p>Выбранное время: {selectedTime}</p>}
+                                    <div className="specialists">
+                                        <div className="spec__element" >
+                                            <img className="spec__img" src="/img/Морозова%203.png" alt="" width="100%" height="100%"/>
+                                            <div className="spec__link"></div>
+                                            <input className='checkbox__none' type="radio" name={1}/>
+                                        </div>
+                                        <div className="spec__element" >
+                                            <img className="spec__img" src="/img/Морозова%203.png" alt="" width="100%" height="100%"/>
+                                            <div className="spec__link"></div>
+                                            <input className='checkbox__none' type="radio" name={1}/>
+                                        </div>
+
+                                        <div className="spec__element" >
+                                            <img className="spec__img" src="/img/Морозова%203.png" alt="" width="100%" height="100%"/>
+                                            <div className="spec__link"></div>
+                                            <input className='checkbox__none' type="radio" name={1}/>
+                                        </div>
+                                        <div className="spec__element" >
+                                            <img className="spec__img" src="/img/Морозова%203.png" alt="" width="100%" height="100%"/>
+                                            <div className="spec__link"></div>
+                                            <input className='' type="radio" name={1}/>
+                                        </div>
                                     </div>
                                 </div>
                                 <CalendarComponent onDateSelect={handleDateSelection} />

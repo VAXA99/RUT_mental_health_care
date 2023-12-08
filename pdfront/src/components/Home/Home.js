@@ -46,7 +46,7 @@ export default function Home() {
                     <TestingForm/>
 
                 </div>
-                <div className="container main">
+                <div className="container main main__page">
                     {authenticated ? (
                         <div className="form main">
                             <div className="form__block">

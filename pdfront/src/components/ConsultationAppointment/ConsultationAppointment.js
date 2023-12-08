@@ -7,6 +7,7 @@ import Menu from "../Menu/Menu";
 import {useNavigate} from "react-router-dom";
 import Auth from "../../backend/Auth";
 import consultation from "../../backend/Consultation";
+import {Form3} from "../Form/Form3";
 
 
 export function ConsultationAppointment() {
@@ -16,6 +17,7 @@ export function ConsultationAppointment() {
 
     const [form1Data, setForm1Data] = useState([]);
     const [form2Data, setForm2Data] = useState("");
+    const [form3Data, setForm3Data] = useState("");
     const [selectedTime, setSelectedTime] = useState("");
     const [selectedDate, setSelectedDate] = useState(null);
 
@@ -25,6 +27,10 @@ export function ConsultationAppointment() {
     };
     const handleForm2Data = (data) => {
         setForm2Data(data);
+        handleNext();
+    };
+    const handleForm3Data = (data) => {
+        setForm3Data(data);
         handleNext();
     };
 
@@ -40,6 +46,9 @@ export function ConsultationAppointment() {
 
     const handleSecondStep = () => {
         setStep(2);
+    };
+    const handleFourthStep = () => {
+        setStep(4);
     };
 
     const handleThirdStep = () => {
@@ -114,6 +123,9 @@ export function ConsultationAppointment() {
                                 <button className="up__block__element" onClick={handleThirdStep}>
                                     3
                                 </button>
+                                <button className="up__block__element" onClick={handleFourthStep}>
+                                    4
+                                </button>
                             </div>
                         )}
                         {step === 2 && (
@@ -126,6 +138,9 @@ export function ConsultationAppointment() {
                                 </button>
                                 <button className="up__block__element" onClick={handleThirdStep}>
                                     3
+                                </button>
+                                <button className="up__block__element" onClick={handleFourthStep}>
+                                    4
                                 </button>
                             </div>
                         )}
@@ -140,6 +155,25 @@ export function ConsultationAppointment() {
                                 <button className="up__block__element blue" onClick={handleThirdStep}>
                                     3
                                 </button>
+                                <button className="up__block__element" onClick={handleFourthStep}>
+                                    4
+                                </button>
+                            </div>
+                        )}
+                        {step === 4 && (
+                            <div>
+                                <button className="up__block__element" onClick={handleFirstStep}>
+                                    1
+                                </button>
+                                <button className="up__block__element" onClick={handleSecondStep}>
+                                    2
+                                </button>
+                                <button className="up__block__element" onClick={handleThirdStep}>
+                                    3
+                                </button>
+                                <button className="up__block__element blue" onClick={handleFourthStep}>
+                                    4
+                                </button>
                             </div>
                         )}
                     </div>
@@ -153,6 +187,9 @@ export function ConsultationAppointment() {
                         <Calendar onDateTimeSelect={handleDateTimeSelect} />
                     )}
                     {step === 4 && (
+                        <Form3 onSubmit={handleForm3Data}/>
+                    )}
+                    {step === 5 && (
                         <div className="button calendar">
                             <button className="next__step" onClick={handleSubmission}>
                                 Записаться

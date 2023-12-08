@@ -148,3 +148,26 @@ input[type=checkbox].checkbox__none{
     outline: none;
 
 }
+
+.specialists{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    margin: 15px 0;
+}
+
+.spec__element{
+    margin: 16px;
+    width: 110px;
+    height: 140px;
+;
+
+}
+.display__flex__mt{
+    margin-top: 20px;
+    display: flex;
+}
+.sub__form__cont{
+    width: 100%;
+}
