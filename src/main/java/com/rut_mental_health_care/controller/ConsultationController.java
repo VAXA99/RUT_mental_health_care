@@ -64,7 +64,7 @@ public class ConsultationController {
     @GetMapping("/allAvailable")
     public ResponseEntity<?> getAvailableConsultationsForDate(@RequestParam String chosenDate, Long psychologistId) {
         try {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy", Locale.ENGLISH);
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.ENGLISH);
             LocalDate localDate = LocalDate.parse(chosenDate, formatter);
             List<ConsultationDto> consultations = consultationService.getAvailableConsultationsForDate(localDate, psychologistId);
             return ResponseEntity.ok(consultations);

@@ -145,5 +145,6 @@ background-color: inherit;
 
 .week__day__element.unavailable{
     background-color: #FF5555;
+    cursor: default;
 }
 

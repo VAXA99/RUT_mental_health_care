@@ -8,6 +8,9 @@ import {useNavigate} from "react-router-dom";
 import Auth from "../../backend/Auth";
 import consultation from "../../backend/Consultation";
 import {Form3} from "../Form/Form3";
+import auth from "../../backend/Auth";
+import axios from "axios";
+import baseUrl from "../../backend/base-url";
 
 
 export function ConsultationAppointment() {
@@ -18,7 +21,7 @@ export function ConsultationAppointment() {
     const [form1Data, setForm1Data] = useState([]);
     const [form2Data, setForm2Data] = useState("");
     const [form3Data, setForm3Data] = useState("");
-    const [selectedTime, setSelectedTime] = useState("");
+    const [selectedConsultation, setSelectedConsultation] = useState([]);
     const [selectedDate, setSelectedDate] = useState(null);
     const [chosenPsychologistId, setChosenPsychologistId] = useState(null);
 
@@ -36,9 +39,8 @@ export function ConsultationAppointment() {
         handleNext();
     };
 
-    const handleDateTimeSelect = ({ selectedTime, selectedDate }) => {
-        setSelectedTime(selectedTime);
-        setSelectedDate(selectedDate);
+    const handleConsultationSelect = ({ selectedConsultation }) => {
+        setSelectedConsultation(selectedConsultation);
         handleNext();
     };
 
@@ -76,27 +78,38 @@ export function ConsultationAppointment() {
         };
     }, []);
 
-    const handleSubmission = () => {
-        // Add any additional logic you need before submission
-        // For example, you might want to send the collected data to a server here
+    const handleSubmission = async () => {
 
-        // Log the gathered information
-        console.log("Tags: ", form1Data);
-        console.log("Additional information: ", form2Data);
-        console.log('Selected Time: ', selectedTime);
-        console.log("Psychologist: ", form3Data);
-        console.log("Psychologist id: ", form3Data.userId);
+        try{
+            // Log the gathered information
+            // console.log("UserId: ", auth.getUserId());
+            // console.log("Tags: ", form1Data);
+            // console.log("Additional information: ", form2Data);
+            // console.log("Selected consultation: ", selectedConsultation)
+            // console.log("Psychologist: ", form3Data);
+            // console.log("Psychologist id: ", form3Data.userId);
 
-        const formattedDate = selectedDate.toLocaleString('en-US', {
-            year: 'numeric',
-            month: '2-digit',
-            day: '2-digit',
-        });
+            const userId = auth.getUserId();
+            const psychProblems = form1Data; // Assuming form2Data is an array of psych problems
+            const description = form2Data.description; // Assuming form2Data has a description property
 
-        console.log('Selected date: ', formattedDate);
-        // console.log(consultation.getAvailableConsultationsForDate(formattedDate, form3Data.userId));
-        // Add any additional logic after submission
-        // For example, navigate to the next page
+            // Create ConsultationRequest object
+            const consultationRequest = {
+                userId,
+                psychProblems,
+                description,
+            };
+
+
+            const response = await axios.post(`${baseUrl}/consultations/setUp/${selectedConsultation.id}`, consultationRequest);
+
+            // Handle the response as needed
+            console.log('Consultation setup response:', response.data);
+        } catch (error) {
+            console.error('Error setting up consultation:', error);
+        }
+
+
     };
 
 
@@ -191,7 +204,7 @@ export function ConsultationAppointment() {
                         <Form3 onSubmit={handleForm3Data}/>
                     )}
                     {step === 4 && (
-                        <Calendar onDateTimeSelect={handleDateTimeSelect} chosenPsychologistId={chosenPsychologistId}
+                        <Calendar onConsultationSelect={handleConsultationSelect} chosenPsychologistId={chosenPsychologistId}
                         />
                     )}
                     {step === 5 && (

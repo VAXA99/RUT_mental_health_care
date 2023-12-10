@@ -1,8 +1,6 @@
 import React, {Component} from 'react';
 import * as calendarFunctions from './calendarFunctions'
 import classNames from 'classnames';
-import axios from "axios";
-import baseUrl from "../../backend/base-url";
 import consultation from "../../backend/Consultation";
 
 
@@ -42,19 +40,19 @@ export default class CalendarComponent extends Component {
 
     handleNextButtonClick = async () => {
         const nextMonth = this.month + 1;
-        const nextYear = nextMonth < 11 ? this.year + 1 : this.year;
+        const nextYear = nextMonth > 11 ? this.year + 1 : this.year;
         const date = new Date(nextYear, nextMonth % 12);
 
         await this.fetchScheduleForMonth(date.getFullYear(), date.getMonth(), this.props.psychologistId);
-        this.setState({ date });
+        this.setState({ date: date });
     };
 
+
     handleSelectChange = async () => {
-        const year = this.yearSelect.value;
-        const month = this.monthSelect.value;
+        const year = Number(this.yearSelect.value);
+        const month = Number(this.monthSelect.value);
 
         const date = new Date(Number(year), Number(month));
-        console.log(date);
         this.setState({ date });
 
         // Fetch the schedule for the selected month
@@ -63,7 +61,6 @@ export default class CalendarComponent extends Component {
 
 
     handleDayClick = (date) => {
-        console.log(date);
         this.setState({selectedDate: date});
 
         // Call the callback function passed from the parent component
