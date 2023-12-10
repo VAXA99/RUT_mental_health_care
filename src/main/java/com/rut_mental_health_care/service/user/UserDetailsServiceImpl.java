@@ -68,11 +68,11 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         return userRepository.existsUserByEmail(email);
     }
 
-    public Long findUserIdByUsername(@Param("username") String username) {
+    public Long findUserIdByUsername(String username) {
         return userRepository.findUserIdByUsername(username);
     }
 
-    public String findUserRolesByUsername(@Param("username") String username) {
+    public String findUserRolesByUsername(String username) {
         return userRepository.findUserRolesByUsername(username);
     }
 

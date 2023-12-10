@@ -74,6 +74,13 @@ public class ConsultationServiceImpl implements ConsultationService {
     }
 
     @Override
+    public boolean hasActiveConsultationSetUp(Long userId) {
+        LocalDateTime now = LocalDateTime.now();
+        List<Consultation> consultations = consultationRepository.hasActiveConsultationSetUp(userId, now);
+        return !consultations.isEmpty();
+    }
+
+    @Override
     public List<ConsultationDto> getAvailableConsultationsForDate(LocalDate chosenDate, Long psychologistId) {
         LocalDateTime startDateTime = chosenDate.atStartOfDay(); // Convert LocalDate to LocalDateTime
         LocalDateTime nextDay = startDateTime.plusDays(1); // Get the next day

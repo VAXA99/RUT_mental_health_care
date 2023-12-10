@@ -16,6 +16,12 @@ public interface ConsultationRepository extends JpaRepository<Consultation, Long
 
     List<Consultation> findAllByPatientId(Long userId);
 
+    @Query("SELECT c FROM Consultation c " +
+            "WHERE c.patient.id = :userId " +
+            "AND c.endsAt > :currentDateTime")
+    List<Consultation> hasActiveConsultationSetUp(@Param("userId") Long userId,
+                                                  @Param("currentDateTime") LocalDateTime currentDateTime);
+
     @Query("SELECT cons FROM Consultation cons " +
             "WHERE cons.startsAt >= :startDate " +
             "AND cons.endsAt < :nextDay " +

@@ -61,6 +61,16 @@ public class ConsultationController {
         }
     }
 
+    @GetMapping("hasActiveConsultationSetUp")
+    public ResponseEntity<?> hasActiveConsultationSetUp(@RequestParam Long userId) {
+        if (consultationService.hasActiveConsultationSetUp(userId)) {
+            return ResponseEntity.badRequest().body("User already has a set up consultation");
+        }
+        else {
+            return ResponseEntity.ok("User has no consultation set up");
+        }
+    }
+
     @GetMapping("/allAvailable")
     public ResponseEntity<?> getAvailableConsultationsForDate(@RequestParam String chosenDate, Long psychologistId) {
         try {
