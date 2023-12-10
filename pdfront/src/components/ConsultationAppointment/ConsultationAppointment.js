@@ -20,6 +20,7 @@ export function ConsultationAppointment() {
     const [form3Data, setForm3Data] = useState("");
     const [selectedTime, setSelectedTime] = useState("");
     const [selectedDate, setSelectedDate] = useState(null);
+    const [chosenPsychologistId, setChosenPsychologistId] = useState(null);
 
     const handleForm1Data = (data) => {
         setForm1Data(data);
@@ -31,6 +32,7 @@ export function ConsultationAppointment() {
     };
     const handleForm3Data = (data) => {
         setForm3Data(data);
+        setChosenPsychologistId(data.userId);
         handleNext();
     };
 
@@ -47,12 +49,13 @@ export function ConsultationAppointment() {
     const handleSecondStep = () => {
         setStep(2);
     };
-    const handleFourthStep = () => {
-        setStep(4);
-    };
 
     const handleThirdStep = () => {
         setStep(3);
+    };
+
+    const handleFourthStep = () => {
+        setStep(4);
     };
 
     const handleNext = () => {
@@ -78,22 +81,23 @@ export function ConsultationAppointment() {
         // For example, you might want to send the collected data to a server here
 
         // Log the gathered information
-        console.log("Form 1 Data:", form1Data);
-        console.log("Form 2 Data:", form2Data);
-        console.log('Selected Time:', selectedTime);
+        console.log("Tags: ", form1Data);
+        console.log("Additional information: ", form2Data);
+        console.log('Selected Time: ', selectedTime);
+        console.log("Psychologist: ", form3Data);
+        console.log("Psychologist id: ", form3Data.userId);
+
         const formattedDate = selectedDate.toLocaleString('en-US', {
             year: 'numeric',
-            month: 'numeric',
-            day: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
         });
+
         console.log('Selected date: ', formattedDate);
-        console.log(consultation.getAvailableConsultationsForDate(formattedDate));
+        // console.log(consultation.getAvailableConsultationsForDate(formattedDate, form3Data.userId));
         // Add any additional logic after submission
         // For example, navigate to the next page
     };
-
-    const converter = (date) => {
-    }
 
 
     return (
@@ -184,15 +188,19 @@ export function ConsultationAppointment() {
                         <Form2 onSubmit={handleForm2Data} />
                     )}
                     {step === 3 && (
-                        <Calendar onDateTimeSelect={handleDateTimeSelect} />
+                        <Form3 onSubmit={handleForm3Data}/>
                     )}
                     {step === 4 && (
-                        <Form3 onSubmit={handleForm3Data}/>
+                        <Calendar onDateTimeSelect={handleDateTimeSelect} chosenPsychologistId={chosenPsychologistId}
+                        />
                     )}
                     {step === 5 && (
                         <div className="button calendar">
                             <button className="next__step" onClick={handleSubmission}>
                                 Записаться
+                            </button>
+                            <button onClick={handleFourthStep}>
+                                fuck go back
                             </button>
                         </div>
                     )}

@@ -25,4 +25,27 @@ export default {
         }
     },
 
+    getAllTags: async () => {
+        try {
+            const response = await axios.get(`${baseUrl}/consultations/getProblems`)
+            return response.data;
+        } catch (error) {
+            console.error('Error getting tags: ', error);
+            return false;
+        }
+    },
+
+    fetchScheduleForMonth: async (year, month, psychologistId) => {
+        try {
+            const response = await axios.get(
+                `${baseUrl}/consultations/getScheduleForMonth?year=${year}&month=${month}&psychologistId=${psychologistId}`
+            );
+
+            return response.data;
+        } catch (error) {
+            console.error('Error fetching schedule:', error);
+            throw error; // Re-throw the error to handle it where the function is called
+        }
+    }
+
 }

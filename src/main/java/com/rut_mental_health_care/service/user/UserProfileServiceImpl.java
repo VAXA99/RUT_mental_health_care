@@ -151,7 +151,7 @@ public class UserProfileServiceImpl implements UserProfileService {
         long totalComments = getTotalCommentsOnUserPosts(userId);
         long totalLikes = getTotalLikesOnUserPosts(userId);
 
-        return new UserProfileDto(username, roles, name, surname, middleName, email, bio, age, postDtos, totalPosts, totalComments, totalLikes);
+        return new UserProfileDto(userId, username, roles, name, surname, middleName, email, bio, age, postDtos, totalPosts, totalComments, totalLikes);
     }
 
     @Override
@@ -160,6 +160,7 @@ public class UserProfileServiceImpl implements UserProfileService {
 
         return psychologists.stream()
                 .map(user -> new UserProfileDto(
+                        user.getId(),
                         user.getName(),
                         user.getSurname(),
                         user.getMiddleName(),

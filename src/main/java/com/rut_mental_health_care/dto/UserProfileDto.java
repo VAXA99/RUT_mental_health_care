@@ -11,6 +11,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserProfileDto {
+    private Long userId;
     private String username;
     private String roles;
     private String name;
@@ -24,7 +25,8 @@ public class UserProfileDto {
     private long totalComments;
     private long totalLikes;
 
-    public UserProfileDto(String name, String surname, String middleName, String bio) {
+    public UserProfileDto(Long userId, String name, String surname, String middleName, String bio) {
+        this.userId = userId;
         this.name = name;
         this.surname = surname;
         this.middleName = middleName;

@@ -1,6 +1,9 @@
 import React, {Component} from 'react';
 import * as calendarFunctions from './calendarFunctions'
 import classNames from 'classnames';
+import axios from "axios";
+import baseUrl from "../../backend/base-url";
+import consultation from "../../backend/Consultation";
 
 
 export default class CalendarComponent extends Component {
@@ -16,7 +19,8 @@ export default class CalendarComponent extends Component {
     state = {
         date: this.props.date,
         currentDate: new Date(),
-        selectedDate: null
+        selectedDate: null,
+        schedule: []
     };
 
     get year() {
@@ -27,29 +31,36 @@ export default class CalendarComponent extends Component {
         return this.state.date.getMonth();
     }
 
-    handlePrevButtonClick = () => {
-        const date = new Date(this.year, this.month - 1)
+    handlePrevButtonClick = async () => {
+        const prevMonth = this.month - 1;
+        const prevYear = prevMonth < 0 ? this.year - 1 : this.year;
+        const date = new Date(prevYear, (prevMonth + 12) % 12);
 
-        this.setState({date});
+        await this.fetchScheduleForMonth(date.getFullYear(), date.getMonth(), this.props.psychologistId);
+        this.setState({ date });
     };
 
-    handleNextButtonClick = () => {
-        const date = new Date(this.year, this.month + 1)
+    handleNextButtonClick = async () => {
+        const nextMonth = this.month + 1;
+        const nextYear = nextMonth < 11 ? this.year + 1 : this.year;
+        const date = new Date(nextYear, nextMonth % 12);
 
-        this.setState({date});
+        await this.fetchScheduleForMonth(date.getFullYear(), date.getMonth(), this.props.psychologistId);
+        this.setState({ date });
     };
 
-    handleSelectChange = () => {
+    handleSelectChange = async () => {
         const year = this.yearSelect.value;
         const month = this.monthSelect.value;
 
-
         const date = new Date(Number(year), Number(month));
-        console.log(date)
-        this.setState({date});
+        console.log(date);
+        this.setState({ date });
 
-
+        // Fetch the schedule for the selected month
+        await this.fetchScheduleForMonth(year, month, this.props.psychologistId);
     };
+
 
     handleDayClick = (date) => {
         console.log(date);
@@ -59,10 +70,34 @@ export default class CalendarComponent extends Component {
         this.props.onDateSelect(date);
     };
 
+    async componentDidMount() {
+        // Call your backend API to get the schedule for the current month
+        const { year, month } = this;
+        const psychologistId = this.props.psychologistId;
+
+        await this.fetchScheduleForMonth(year, month, psychologistId);
+    }
+
+    async fetchScheduleForMonth(year, month, psychologistId) {
+        try {
+            const schedule = await consultation.fetchScheduleForMonth(year, month+1, psychologistId);
+            console.log(schedule);
+            this.setState({ schedule });
+        } catch (error) {
+            // Handle the error as needed
+        }
+    }
+
+
     render() {
-        const {currentDate, selectedDate} = this.state;
+        const {currentDate, selectedDate, schedule} = this.state;
 
         const monthData = calendarFunctions.getMonthData(this.year, this.month)
+
+
+        const consultationDates = schedule.map((item) =>
+            new Date(item.startsAt).toLocaleDateString()
+        );
 
         const {years, monthNames, weekDayNames} = this.props;
         return (
@@ -86,8 +121,8 @@ export default class CalendarComponent extends Component {
                             </select>
                         </div>
                         <div>
-                            <button onClick={this.handlePrevButtonClick} className='month__button'> {'<'} </button>
-                            <button onClick={this.handleNextButtonClick} className='month__button'> {'>'} </button>
+                            <button type={"button"} onClick={this.handlePrevButtonClick} className='month__button'> {'<'} </button>
+                            <button type={"button"} onClick={this.handleNextButtonClick} className='month__button'> {'>'} </button>
                         </div>
                     </div>
                     <table>
@@ -104,20 +139,30 @@ export default class CalendarComponent extends Component {
                         <tbody>
                         {monthData.map((week, index) => (
                             <tr key={index} className="day__number">
-                                {week.map((date, index) => (date ? (
-                                    <td
-                                        key={index}
-                                        className={classNames('week__day__element', {
-                                            ' today': calendarFunctions.areEqual(date, currentDate),
-                                            ' selected': calendarFunctions.areEqual(date, selectedDate),
-                                        })}
-                                        onClick={() => this.handleDayClick(date)}
-                                    >
-                                        {date.getDate()}
-                                    </td>
-                                ) : (
-                                    <td key={index}/>
-                                )))}
+                                {week.map((date, index) => {
+                                    const formattedDate = date
+                                        ? date.toLocaleDateString()
+                                        : null;
+                                    const hasConsultations = consultationDates.includes(
+                                        formattedDate
+                                    );
+                                    return (
+                                        <td
+                                            key={index}
+                                            className={classNames('week__day__element', {
+                                                'today': calendarFunctions.areEqual(date, currentDate),
+                                                'selected': calendarFunctions.areEqual(
+                                                    date,
+                                                    selectedDate
+                                                ),
+                                                'unavailable': !hasConsultations,
+                                            })}
+                                            onClick={hasConsultations ? () => this.handleDayClick(date) : null}
+                                        >
+                                            {date ? date.getDate() : ''}
+                                        </td>
+                                    );
+                                })}
                             </tr>
                         ))}
                         </tbody>

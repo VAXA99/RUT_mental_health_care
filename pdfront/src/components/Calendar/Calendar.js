@@ -3,7 +3,7 @@ import CalendarComponent from './CalendarComponent';
 import TimeComponent from "./TimeComponent";
 
 
-export default function Calendar({ onDateTimeSelect }) {
+export default function Calendar({ onDateTimeSelect, chosenPsychologistId }) {
 
     const [selectedTime, setSelectedTime] = useState('');
     const [selectedDate, setSelectedDate] = useState(null);
@@ -35,17 +35,21 @@ export default function Calendar({ onDateTimeSelect }) {
                             <div className='display__flex__mt calendar'>
                                 <div className='sub__form__cont'>
                                     <div className='select__time'>
-                                        <div className="articles__form calendar">Выберите время и дату</div>
+                                        <div className="articles__form calendar">Выберите дату и время</div>
                                     </div>
                                     <div className='form__page__subtitle calendar'> информация о приеме будет
                                         выслана на вашу почту
                                     </div>
-                                    <TimeComponent onTimeSelect={handleTimeSelection} />
-                                    <div className="selected-time">
-                                        {selectedTime && <p>Выбранное время: {selectedTime}</p>}
-                                    </div>
+                                    {selectedDate && (
+                                        <React.Fragment>
+                                            <TimeComponent onTimeSelect={handleTimeSelection} />
+                                            {/*<div className="selected-time">*/}
+                                            {/*    {selectedTime && <p>Выбранное время: {selectedTime}</p>}*/}
+                                            {/*</div>*/}
+                                        </React.Fragment>
+                                    )}
                                 </div>
-                                <CalendarComponent onDateSelect={handleDateSelection} />
+                                <CalendarComponent onDateSelect={handleDateSelection} psychologistId={chosenPsychologistId}/>
                             </div>
                             <div className="button calendar">
                                 <button className="next__step" type={"submit"}>

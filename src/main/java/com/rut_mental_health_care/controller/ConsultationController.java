@@ -3,7 +3,9 @@ package com.rut_mental_health_care.controller;
 import com.rut_mental_health_care.controller.request.ConsultationRequest;
 import com.rut_mental_health_care.dto.ConsultationDto;
 import com.rut_mental_health_care.model.ConsultationNotification;
+import com.rut_mental_health_care.model.Tag;
 import com.rut_mental_health_care.service.consultation.ConsultationService;
+import com.rut_mental_health_care.service.tag.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,10 +23,22 @@ import java.util.Locale;
 public class ConsultationController {
 
     private final ConsultationService consultationService;
+    private final TagService tagService;
 
     @Autowired
-    public ConsultationController(ConsultationService consultationService) {
+    public ConsultationController(ConsultationService consultationService, TagService tagService) {
         this.consultationService = consultationService;
+        this.tagService = tagService;
+    }
+
+    @GetMapping("/getProblems")
+    public ResponseEntity<List<Tag>> getAllTags() {
+        try {
+            List<Tag> tags = tagService.getAllTags();
+            return ResponseEntity.ok(tags);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
     }
 
     @GetMapping("/notifications")
@@ -80,5 +94,10 @@ public class ConsultationController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error canceling consultation: " + e.getMessage());
         }
+    }
+
+    @GetMapping("/getScheduleForMonth")
+    public ResponseEntity<List<ConsultationDto>> getScheduleForMonth(@RequestParam int year, int month, Long psychologistId) {
+        return ResponseEntity.ok(consultationService.getAllAvailableForMonth(year, month, psychologistId));
     }
 }

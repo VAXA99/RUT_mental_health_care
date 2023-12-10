@@ -60,10 +60,10 @@ async function editBio(userId, newBio) {
 async function getUserProfile(userID) {
     try {
         const longUserId = Number(userID);
-        const response = await axios.get(baseUrl + `/profile/${longUserId}`);
+        const response = await axios.get(`${baseUrl}/profile/${longUserId}`);
         return response.data;
     } catch (error) {
-        console.error('Error find userID:', error);
+        console.error('Error finding userID:', error);
         throw error;
     }
 }
@@ -84,12 +84,12 @@ async function getUserProfilePhoto(userId) {
 
         // Display the image using the URL
         const imgElement = document.createElement('img');
-        console.log("Got picture")
+        console.log("Got picture");
         imgElement.src = imageUrl;
         return imgElement;
 
     } catch (error) {
-        console.error('Error find picture: ', error);
+        console.error('Error finding picture: ', error);
         return null;
     }
 }
@@ -113,6 +113,15 @@ async function uploadUserProfilePicture(userId, selectedFile) {
     }
 }
 
+async function getPsychologistsProfiles() {
+    try {
+        const response = await axios.get(`${baseUrl}/psychologistsProfiles`);
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching psychologists profiles:', error);
+        throw error;
+    }
+}
 
 export {
     editName,
@@ -122,5 +131,6 @@ export {
     editBio,
     getUserProfile,
     getUserProfilePhoto,
-    uploadUserProfilePicture
+    uploadUserProfilePicture,
+    getPsychologistsProfiles
 };

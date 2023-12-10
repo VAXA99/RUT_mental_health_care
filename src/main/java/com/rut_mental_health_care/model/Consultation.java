@@ -32,10 +32,10 @@ public class Consultation {
     private LocalDateTime endsAt;
 
     @Column(name = "is_available")
-    private boolean isAvailable;
+    private boolean available;
 
     @ManyToOne
-    @JoinColumn(nullable = false)
+    @JoinColumn
     private Location location;
 
     private String description;

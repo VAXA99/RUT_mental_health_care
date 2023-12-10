@@ -85,16 +85,7 @@ public class ConsultationServiceImpl implements ConsultationService {
                 .orElseThrow(() -> new EntityNotFoundException("Psychologist not found with id: " + psychologistId));
 
         List<Consultation> consultations = consultationRepository.findAllAvailableConsultationsForDate(startDateTime, nextDay, psychologist);
-        List<ConsultationDto> consultationDtos = consultations.stream()
-                .map(this::convertToConsultationDto)
-                .toList();
-
-        for (ConsultationDto consultationDto: consultationDtos) {
-            List<String> psychProblems = psychProblemRepository.findPsychProblemByConsultationId(consultationDto.getId());
-            consultationDto.setPsychProblems(psychProblems);
-        }
-
-        return consultationDtos;
+        return getConsultationDtos(consultations);
     }
 
     @Override
@@ -208,7 +199,29 @@ public class ConsultationServiceImpl implements ConsultationService {
         consultationRepository.deleteById(consultationId);
     }
 
-    @Scheduled(cron = "0 0 0 * * MON-FRI") // This cron expression triggers the method every day from Monday to Friday at midnight
+    @Override
+    public List<ConsultationDto> getAllAvailableForMonth(int year, int month, Long psychologistId) {
+        LocalDateTime startOfMonth = LocalDateTime.of(year, month, 1, 0, 0);
+        LocalDateTime endOfMonth = startOfMonth.plusMonths(1).minusSeconds(1);
+
+        List<Consultation> consultations = consultationRepository.findAllByAvailableAndStartsAtBetweenAndPsychologistId(true, startOfMonth, endOfMonth, psychologistId);
+        return getConsultationDtos(consultations);
+    }
+
+    private List<ConsultationDto> getConsultationDtos(List<Consultation> consultations) {
+        List<ConsultationDto> consultationDtos = consultations.stream()
+                .map(this::convertToConsultationDto)
+                .toList();
+
+        for (ConsultationDto consultationDto: consultationDtos) {
+            List<String> psychProblems = psychProblemRepository.findPsychProblemByConsultationId(consultationDto.getId());
+            consultationDto.setPsychProblems(psychProblems);
+        }
+
+        return consultationDtos;
+    }
+
+    @Scheduled(cron = "0 0 0 * * MON-SUN") // This cron expression triggers the method every day from Monday to Friday at midnight
     public void generateDailyConsultations() {
         // Get all psychologists from the database
         List<User> psychologists = userRepository.findAllByRoles("ROLE_PSYCHOLOGIST"); // Assuming you have a User class with roles

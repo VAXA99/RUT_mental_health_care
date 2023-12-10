@@ -1,28 +1,45 @@
-import React, {useState} from 'react'
-import CalendarComponent from '../Calendar/CalendarComponent';
-import TimeComponent from "../Calendar/TimeComponent";
+import React, {useEffect, useState} from 'react';
+import {getPsychologistsProfiles, getUserProfilePhoto} from "../../backend/UserProfile";
+
+export function Form3({onSubmit}) {
+    const [psychologists, setPsychologists] = useState([]);
+    const [selectedPsychologist, setSelectedPsychologist] = useState(null);
 
 
-export function Form3({ onDateTimeSelect }) {
+    useEffect(() => {
+        // Fetch psychologist profiles when the component mounts
+        fetchPsychologists();
+    }, []);
 
-    const [selectedTime, setSelectedTime] = useState('');
-    const [selectedDate, setSelectedDate] = useState(null);
-
-    const handleTimeSelection = (time) => {
-        setSelectedTime(time);
+    const fetchPsychologists = async () => {
+        try {
+            const psychologistsData = await getPsychologistsProfiles();
+            // Fetch profile pictures for psychologists
+            const psychologistsWithPictures = await Promise.all(
+                psychologistsData.map(async (psychologist) => {
+                    const profilePicture = await getUserProfilePhoto(psychologist.userId);
+                    return {...psychologist, profilePicture};
+                })
+            );
+            setPsychologists(psychologistsWithPictures);
+        } catch (error) {
+            console.error('Error fetching psychologists:', error);
+        }
     };
 
-    const handleDateSelection = (date) => {
-        setSelectedDate(date);
-    };
-
-    const handleClick = (e) => {
+    const handleSubmit = (e) => {
         e.preventDefault();
-        // Pass the selected date and time to the parent
-        onDateTimeSelect({
-            selectedTime,
-            selectedDate,
-        });
+        if (selectedPsychologist) {
+            // Call the onSubmit callback with the selected psychologist data
+            onSubmit(selectedPsychologist);
+        } else {
+            // Handle the case where no psychologist is selected
+            console.error('No psychologist selected');
+        }
+    };
+
+    const handlePsychologistSelect = (psychologist) => {
+        setSelectedPsychologist(psychologist);
     };
 
     return (
@@ -31,40 +48,34 @@ export function Form3({ onDateTimeSelect }) {
                 <div className="form__page__title">Запись на прием</div>
                 <div className="form main forms">
                     <div className='calendar__form__container'>
-                        <form onSubmit={handleClick}>
+                        <form onSubmit={handleSubmit}>
                             <div className='display__flex__mt calendar'>
                                 <div className='sub__form__cont'>
                                     <div className='select__time'>
                                         <div className="articles__form calendar">Выберите время и дату</div>
                                     </div>
-                                    <div className='form__page__subtitle calendar'> информация о приеме будет
-                                        выслана на вашу почту
+                                    <div className='form__page__subtitle calendar'>
+                                        информация о приеме будет выслана на вашу почту
                                     </div>
                                     <div className="specialists">
-                                        <div className="spec__element" >
-                                            <img className="spec__img" src="/img/Морозова%203.png" alt="" width="100%" height="100%"/>
-                                            <div className="spec__link"></div>
-                                            <input className='checkbox__none' type="radio" name={1}/>
-                                        </div>
-                                        <div className="spec__element" >
-                                            <img className="spec__img" src="/img/Морозова%203.png" alt="" width="100%" height="100%"/>
-                                            <div className="spec__link"></div>
-                                            <input className='checkbox__none' type="radio" name={1}/>
-                                        </div>
-
-                                        <div className="spec__element" >
-                                            <img className="spec__img" src="/img/Морозова%203.png" alt="" width="100%" height="100%"/>
-                                            <div className="spec__link"></div>
-                                            <input className='checkbox__none' type="radio" name={1}/>
-                                        </div>
-                                        <div className="spec__element" >
-                                            <img className="spec__img" src="/img/Морозова%203.png" alt="" width="100%" height="100%"/>
-                                            <div className="spec__link"></div>
-                                            <input className='' type="radio" name={1}/>
-                                        </div>
+                                        {psychologists.map((psychologist, index) => (
+                                            <div className="spec__element"
+                                                 key={index}
+                                                 onClick={() => handlePsychologistSelect(psychologist)}>
+                                                <img
+                                                    className="spec__img"
+                                                    src={psychologist.profilePicture.src}
+                                                    alt=""
+                                                    width="100%"
+                                                    height="100%"
+                                                />
+                                                <div
+                                                    className="spec__link">{`${psychologist.name} ${psychologist.surname}`}</div>
+                                                <input className="checkbox__none" type="radio" name={1}/>
+                                            </div>
+                                        ))}
                                     </div>
                                 </div>
-                                <CalendarComponent onDateSelect={handleDateSelection} />
                             </div>
                             <div className="button calendar">
                                 <button className="next__step" type={"submit"}>
@@ -76,5 +87,5 @@ export function Form3({ onDateTimeSelect }) {
                 </div>
             </div>
         </>
-    )
+    );
 }

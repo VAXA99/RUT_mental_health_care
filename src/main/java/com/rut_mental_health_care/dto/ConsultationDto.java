@@ -19,4 +19,5 @@ public class ConsultationDto {
         private LocalDateTime startsAt;
         private LocalDateTime endsAt;
         private Location location;
+        private boolean available;
 }

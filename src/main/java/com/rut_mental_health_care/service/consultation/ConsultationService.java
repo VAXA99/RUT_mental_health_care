@@ -17,4 +17,6 @@ public interface ConsultationService {
     List<ConsultationDto> getAvailableConsultationsForDate(LocalDate chosenDate, Long psychologistId);
     void setUpConsultation(Long consultationId, ConsultationRequest consultationRequest);
     void cancelConsultation(Long consultationId);
+
+    List<ConsultationDto> getAllAvailableForMonth(int year, int month, Long psychologistId);
 }

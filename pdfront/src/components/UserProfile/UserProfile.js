@@ -108,7 +108,9 @@ export default function UserProfile() {
                         <div className="edit__info">
                             <div className="main__title profile">
                                 {userData.name} {userData.surname}
-                                {userData.email}
+                                <div>
+                                    {userData.email}
+                                </div>
                             </div>
                             <div className="margin__top">
                                 <button className="nav__img profile">
