@@ -2,12 +2,8 @@ package com.rut_mental_health_care.service.consultation;
 
 import com.rut_mental_health_care.controller.request.ConsultationRequest;
 import com.rut_mental_health_care.dto.ConsultationDto;
-import com.rut_mental_health_care.model.ConsultationNotification;
-import com.rut_mental_health_care.model.PsychProblem;
-import com.rut_mental_health_care.model.User;
-import com.rut_mental_health_care.repository.ConsultationNotificationRepository;
-import com.rut_mental_health_care.repository.PsychProblemRepository;
-import com.rut_mental_health_care.repository.UserRepository;
+import com.rut_mental_health_care.model.*;
+import com.rut_mental_health_care.repository.*;
 import com.rut_mental_health_care.service.mail.MailService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
@@ -26,15 +22,13 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
-import com.rut_mental_health_care.model.Consultation;
-import com.rut_mental_health_care.repository.ConsultationRepository;
-
 @Service
 public class ConsultationServiceImpl implements ConsultationService {
     private final ConsultationRepository consultationRepository;
     private final ConsultationNotificationRepository consultationNotificationRepository;
     private final UserRepository userRepository;
     private final PsychProblemRepository psychProblemRepository;
+    private final LocationRepository locationRepository;
     private final MailService mailService;
     private final ModelMapper modelMapper;
 
@@ -46,12 +40,14 @@ public class ConsultationServiceImpl implements ConsultationService {
                                    ConsultationNotificationRepository consultationNotificationRepository,
                                    UserRepository userRepository,
                                    PsychProblemRepository psychProblemRepository,
+                                   LocationRepository locationRepository,
                                    MailService mailService,
                                    ModelMapper modelMapper) {
         this.consultationRepository = consultationRepository;
         this.consultationNotificationRepository = consultationNotificationRepository;
         this.userRepository = userRepository;
         this.psychProblemRepository = psychProblemRepository;
+        this.locationRepository = locationRepository;
         this.mailService = mailService;
         this.modelMapper = modelMapper;
     }
@@ -110,9 +106,12 @@ public class ConsultationServiceImpl implements ConsultationService {
             psychProblems.add(psychProblem_);
         }
 
+        Location location = locationRepository.findById(1L).orElseThrow(() -> new EntityNotFoundException("Location not found with id: " + 1 ));
+
         consultation.setPsychProblems(psychProblems);
         consultation.setDescription(consultationRequest.getDescription());
         consultation.setAvailable(false);
+        consultation.setLocation(location);
 
         consultationRepository.save(consultation);
         sendNotificationOnConsultation(consultation.getId(), setUp);
@@ -221,7 +220,7 @@ public class ConsultationServiceImpl implements ConsultationService {
         return consultationDtos;
     }
 
-    @Scheduled(cron = "0 0 0 * * MON-SUN") // This cron expression triggers the method every day from Monday to Friday at midnight
+    @Scheduled(cron = "0 0 0 * * MON-FRI") // This cron expression triggers the method every day from Monday to Friday at midnight
     public void generateDailyConsultations() {
         // Get all psychologists from the database
         List<User> psychologists = userRepository.findAllByRoles("ROLE_PSYCHOLOGIST"); // Assuming you have a User class with roles
