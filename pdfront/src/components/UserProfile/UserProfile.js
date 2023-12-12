@@ -3,6 +3,7 @@ import './userProfile.css'
 import Auth from "../../backend/Auth";
 import {useNavigate} from "react-router-dom";
 import {getUserProfile, getUserProfilePhoto, uploadUserProfilePicture} from "../../backend/UserProfile";
+import {useUserContext} from "../../UserProvider";
 
 
 export default function UserProfile() {
@@ -11,8 +12,9 @@ export default function UserProfile() {
     const userId= Auth.getUserId();
     const [userData, setUserData] = useState({});
     const navigate = useNavigate();
-    const [userProfilePicture, setUserProfilePicture] = useState(null);
     const [selectedFile, setSelectedFile] = useState(null);
+
+    const { userProfilePicture, setUserProfilePicture } = useUserContext();
 
     const handleLogoutAndNavigate = () => {
         setAuthenticated(Auth.logout());
@@ -29,7 +31,6 @@ export default function UserProfile() {
         try {
             if (selectedFile) {
                 await uploadUserProfilePicture(userId, selectedFile);
-                // You may want to refresh the user profile picture after a successful upload
                 const imgElement = await getUserProfilePhoto(userId);
                 setUserProfilePicture(imgElement);
             }

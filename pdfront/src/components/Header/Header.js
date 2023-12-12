@@ -3,6 +3,7 @@ import {Link, useNavigate} from 'react-router-dom'
 import Auth from '../../backend/Auth'
 import Popup from "../Popup/Popup";
 import {getUserProfilePhoto} from "../../backend/UserProfile";
+import {useUserContext} from "../../UserProvider";
 
 export default function Header() {
 
@@ -10,9 +11,9 @@ export default function Header() {
     const [showPopup, setShowPopup] = useState(false); // State for showing/hiding the popup
     const username = Auth.getUsername();
     const navigate = useNavigate();
-    const [userProfilePicture, setUserProfilePicture] = useState(null);
     const userId= Auth.getUserId();
 
+    const { userProfilePicture, setUserProfilePicture } = useUserContext();
 
     const togglePopup = () => {
         setShowPopup(!showPopup);

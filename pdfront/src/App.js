@@ -26,7 +26,6 @@ import Header from "./components/Header/Header";
 
 function App() {
 
-    const navigate = useNavigate();
 
     const shouldRenderHeader = () => {
         const currentPath = window.location.pathname;
@@ -35,7 +34,7 @@ function App() {
 
     return (
         <div>
-            {shouldRenderHeader() && <Header />} {/* Conditionally render the header */}
+            {shouldRenderHeader() && <Header />}
 
             <Routes>
 
