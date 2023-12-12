@@ -1,5 +1,4 @@
 import Menu from "../Menu/Menu";
-import Header from "../Header/Header";
 import './forum.css'
 import {Link} from "react-router-dom";
 import React from "react";
@@ -7,7 +6,6 @@ import React from "react";
 export function ForumMain() {
     return (
         <>
-            <Header/>
             <div className="display__flex__mt">
                 <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@900&display=swap"
                       rel="stylesheet"/>

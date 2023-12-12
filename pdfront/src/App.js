@@ -7,60 +7,63 @@ import "./components/Articles/articles.css"
 import "./components/Calendar/calendar.css"
 
 import Home from './components/Home/Home.js';
-import Header from './components/Header/Header.js';
 import Sign_up from './components/SignUp/Sign_up.js';
 import {Specialists} from './components/Specialists/Specialists.js';
 import {Forum} from './components/Forum/Forum.js';
 import {Login} from './components/Login/Login.js';
 import {ChangePassword} from './components/Change password/ChangePassword.js';
 
-import {BrowserRouter as Router, Route, Routes} from "react-router-dom";
+import {Route, Routes, useNavigate} from "react-router-dom";
 import {SendEmail} from './components/Send email/SendEmail.js';
 import Articles from './components/Articles/Articles.js';
 import Calendar from './components/Calendar/Calendar.js';
 import UserProfile from "./components/UserProfile/UserProfile";
 import {ConsultationAppointment} from "./components/ConsultationAppointment/ConsultationAppointment";
-import {Form3} from "./components/Form/Form3";
 import {ForumMain} from "./components/Forum/ForumMain";
 import {NewForum} from "./components/Forum/NewForum";
+import Header from "./components/Header/Header";
 
 
 function App() {
 
+    const navigate = useNavigate();
+
+    const shouldRenderHeader = () => {
+        const currentPath = window.location.pathname;
+        return !(currentPath === '/auth' || currentPath === '/sign_up');
+    };
+
     return (
         <div>
+            {shouldRenderHeader() && <Header />} {/* Conditionally render the header */}
 
+            <Routes>
 
-            <Router>
+                <Route exact path='/' element={<Home/>}/>
 
-                <Routes>
+                <Route exact path='/auth' element={<Login/>}/>
 
-                    <Route exact path='/' element={<Home/>}/>
+                <Route exact path='/sign_up' element={<Sign_up/>}/>
 
-                    <Route exact path='/auth' element={<Login/>}/>
+                <Route exact path='/forum' element={<Forum/>}/>
 
-                    <Route exact path='/sign_up' element={<Sign_up/>}/>
+                <Route exact path='/spec' element={<Specialists/>}/>
 
-                    <Route exact path='/forum' element={<Forum/>}/>
+                <Route exact path='/change_pass' element={<ChangePassword/>}/>
 
-                    <Route exact path='/spec' element={<Specialists/>}/>
+                <Route exact path='/send_email' element={<SendEmail/>}/>
 
-                    <Route exact path='/change_pass' element={<ChangePassword/>}/>
+                <Route exact path='/consultation_appointment' element={<ConsultationAppointment/>}/>
 
-                    <Route exact path='/send_email' element={<SendEmail/>}/>
+                <Route exact path='/articles' element={<Articles/>}/>
 
-                    <Route exact path='/consultation_appointment' element={<ConsultationAppointment/>}/>
+                <Route exact path='/calendar' element={<Calendar/>}/>
+                <Route exact path='/user_profile/:username' element={<UserProfile/>}/>
+                <Route exact path='/forum_main' element={<ForumMain/>}/>
+                <Route exact path='/new_forum' element={<NewForum/>}/>
 
-                    <Route exact path='/articles' element={<Articles/>}/>
+            </Routes>
 
-                    <Route exact path='/calendar' element={<Calendar/>}/>
-                    <Route path='/user_profile/:username' element={<UserProfile/>}/>
-                    <Route path='/forum_main' element={<ForumMain/>}/>
-                    <Route path='/new_forum' element={<NewForum/>}/>
-
-                </Routes>
-
-            </Router>
 
         </div>
     );

@@ -2,11 +2,9 @@ import React, {useEffect, useState} from "react";
 import {Form1} from "../Form/Form1";
 import {Form2} from "../Form/Form2";
 import Calendar from "../Calendar/Calendar";
-import Header from "../Header/Header";
 import Menu from "../Menu/Menu";
 import {useNavigate} from "react-router-dom";
 import Auth from "../../backend/Auth";
-import consultation from "../../backend/Consultation";
 import {Form3} from "../Form/Form3";
 import auth from "../../backend/Auth";
 import axios from "axios";
@@ -115,7 +113,6 @@ export function ConsultationAppointment() {
 
     return (
         <>
-            <Header/>
             <div className="display__flex__mt">
                 <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@900&display=swap"
                       rel="stylesheet"/>

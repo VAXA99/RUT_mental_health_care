@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from 'react'
-import Header from '../Header/Header'
 import {Link} from 'react-router-dom';
 import Menu from '../Menu/Menu';
 import RightForm from '../Right form/RightForm';
@@ -21,17 +20,8 @@ export default function Home() {
     }, []);
 
 
-    useEffect(() => {
-        // Код обработчика событий
-        // var popupLink = document.getElementById('popupLink');
-        // var popupWindow = document.getElementById('popupWindow');
-        // var popupClose = document.getElementById('popupClose');
-    }, []); // Пустой массив зависимостей означает, что эффект будет выполнен только при монтировании компонента
-
-
     return (
         <>
-            <Header/>
             <link href="https://fonts.cdnfonts.com/css/sf-pro-display" rel="stylesheet"/>
             <link href="https://fonts.cdnfonts.com/css/forma-djr-banner" rel="stylesheet"/>
             <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@900&display=swap"

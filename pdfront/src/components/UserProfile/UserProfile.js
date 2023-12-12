@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from 'react';
 import './userProfile.css'
-import Header from "../Header/Header";
 import Auth from "../../backend/Auth";
 import {useNavigate} from "react-router-dom";
 import {getUserProfile, getUserProfilePhoto, uploadUserProfilePicture} from "../../backend/UserProfile";
@@ -89,7 +88,6 @@ export default function UserProfile() {
         <>
             <img className="angle top center" src="/img/Star%201.png" alt="Angle" />
             <img className="angle right__home" src="/img/Ellipse 6.png" alt="Ellipse" />
-            <Header />
             <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@900&display=swap" rel="stylesheet" />
             <link href="https://fonts.cdnfonts.com/css/sf-pro-display" rel="stylesheet" />
             <div className="container main profile">

@@ -1,13 +1,10 @@
 import React from 'react'
-import {Link} from "react-router-dom";
 import Menu from '../Menu/Menu';
 import RightForm from '../Right form/RightForm';
-import Header from "../Header/Header";
 
 export function Specialists() {
     return (
         <>
-            <Header/>
             <img className="angle top center" src="/img/Star%201.png"/>
             <img className="angle right__home" src="/img/Ellipse 6.png"/>
             <div className="display__flex__mt">
