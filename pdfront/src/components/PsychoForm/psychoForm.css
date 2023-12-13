@@ -1,0 +1,39 @@
+.psycho__form__head{
+    width: 80%;
+    font-size: 20px;
+    font-weight: 500;
+
+}
+
+.week__days{
+    display: flex;
+    justify-content: space-evenly;
+    margin-bottom: 10px;
+}
+.container.main.psycho__form{
+    margin: 0;
+    width: 70%;
+}
+.week__numbers{
+    padding: 10px;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+
+}
+.week__numbers__element{
+    width: 45px;
+    height: 45px;
+    text-align: center;
+    border-radius: 50%;
+    line-height: 40px;
+    border: 3px solid black;
+    cursor: pointer;
+}
+
+.week__numbers__element:focus {
+
+    border: inherit;
+    background-color: #FFB44E;
+}

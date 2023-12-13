@@ -95,11 +95,17 @@ export default function UserProfile() {
             <div className="container main profile">
                 <div className="display__flex">
                     <div className="profile__photo">
-                        {userProfilePicture && <img  className='profile__photo__img' height="100%" width="100%" src={userProfilePicture.src}/>}
+                        {userProfilePicture && <img  className='profile__photo__img' height="100%" width="90%" src={userProfilePicture.src}/>}
                         {!userProfilePicture && <div>Loading...</div>}
                         <label className="input-file">
                             <input type="file" className="input-file" onChange={handleFileChange} />
-                            <span>Выберите файл</span>
+                            <span className="input-file-btn">Выберите файл</span>
+                            <div><span className="input-file-text">Максимум 10мб</span></div>
+                            {/*TODO изменить handleFileChange, добавить в него метод изменения ласт спан
+                             <div><span className="input-file-text">{fileName}}</span></div>*/}
+                            {/*<span className="input-file-text">Максимум 10мб</span>*/}
+                           {/* <span>Выберите файл</span>*/}
+
                         </label>
                         <button className="img__update__button" onClick={handleFileUpload}>Изменить фото</button>
                     </div>

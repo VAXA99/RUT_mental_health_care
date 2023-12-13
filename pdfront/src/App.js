@@ -23,6 +23,7 @@ import {ConsultationAppointment} from "./components/ConsultationAppointment/Cons
 import {Form3} from "./components/Form/Form3";
 import {ForumMain} from "./components/Forum/ForumMain";
 import {NewForum} from "./components/Forum/NewForum";
+import PsychoForm from "./components/PsychoForm/PsychoForm";
 
 
 function App() {
@@ -54,9 +55,14 @@ function App() {
                     <Route exact path='/articles' element={<Articles/>}/>
 
                     <Route exact path='/calendar' element={<Calendar/>}/>
+
                     <Route path='/user_profile/:username' element={<UserProfile/>}/>
+
                     <Route path='/forum_main' element={<ForumMain/>}/>
+
                     <Route path='/new_forum' element={<NewForum/>}/>
+
+                    <Route path='/psycho_form' element={<PsychoForm/>}/>
 
                 </Routes>
 
