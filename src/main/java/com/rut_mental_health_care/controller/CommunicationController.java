@@ -33,6 +33,16 @@ public class CommunicationController {
         }
     }
 
+    @GetMapping("/mostPopular")
+    public ResponseEntity<List<PostDto>> getPostsFromMostPopularToLeast() {
+        try {
+            List<PostDto> feed = communicationService.getPostsFromMostPopularToLeast();
+            return ResponseEntity.ok(feed);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+
     @GetMapping("/post/{postId}")
     public ResponseEntity<PostDto> getPostById(@PathVariable Long postId) {
         try {
