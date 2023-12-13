@@ -11,6 +11,14 @@ import java.util.List;
 @Repository
 public interface PostRepository extends JpaRepository<Post, Long> {
 
+    @Query("SELECT p FROM Post p " +
+            "ORDER BY p.createdAt DESC ")
+    List<Post> getPostsFromNewestToOldest();
+
+    @Query("SELECT p FROM Post p " +
+            "ORDER BY (SIZE(p.likes) + SIZE(p.comments)) DESC")
+    List<Post> getPostsFromMostPopularToLeast();
+
     // Query to get the like count for a post
     @Query("SELECT COUNT(l) FROM Like l WHERE l.post = :post AND l.isLike = true")
     long getLikeCount(@Param("post") Post post);

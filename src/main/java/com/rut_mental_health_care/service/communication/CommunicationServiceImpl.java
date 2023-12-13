@@ -43,18 +43,16 @@ public class CommunicationServiceImpl implements CommunicationService {
 
     @Override
     public List<PostDto> getFeed() {
-        List<Post> posts = postRepository.findAll();
-        List<PostDto> postDtos = posts.stream()
-                .map(this::convertToPostDTO)
-                .collect(Collectors.toList());
-        for (PostDto postDto: postDtos) {
-            List<String> tagNames = tagRepository.findTagsByPostId(postDto.getId());
-            postDto.setTagNames(tagNames);
-        }
-
-        return postDtos;
+        List<Post> posts = postRepository.getPostsFromNewestToOldest();
+        return getPostDtos(posts);
     }
 
+    @Override
+    public List<PostDto> getPostsFromMostPopularToLeast() {
+        List<Post> posts = postRepository.getPostsFromMostPopularToLeast();
+        return getPostDtos(posts);
+    }
+    
     @Override
     public PostDto getPostWithComments(Long postId) {
         Post post = postRepository.findById(postId)
@@ -246,4 +244,15 @@ public class CommunicationServiceImpl implements CommunicationService {
         return commentDto;
     }
 
+    private List<PostDto> getPostDtos(List<Post> posts) {
+        List<PostDto> postDtos = posts.stream()
+                .map(this::convertToPostDTO)
+                .collect(Collectors.toList());
+        for (PostDto postDto: postDtos) {
+            List<String> tagNames = tagRepository.findTagsByPostId(postDto.getId());
+            postDto.setTagNames(tagNames);
+        }
+
+        return postDtos;
+    }
 }
