@@ -253,6 +253,10 @@ a:hover{
     display: flex;
 }
 
+.spec__link.img{
+    top: -30%;
+}
+
 
 
 

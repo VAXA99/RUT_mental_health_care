@@ -22,6 +22,7 @@ import {ConsultationAppointment} from "./components/ConsultationAppointment/Cons
 import {ForumMain} from "./components/Forum/ForumMain";
 import {NewForum} from "./components/Forum/NewForum";
 import Header from "./components/Header/Header";
+import PsychoForm from "./components/PsychoForm/PsychoForm";
 
 
 function App() {
@@ -56,12 +57,17 @@ function App() {
 
                 <Route exact path='/articles' element={<Articles/>}/>
 
-                <Route exact path='/calendar' element={<Calendar/>}/>
-                <Route exact path='/user_profile/:username' element={<UserProfile/>}/>
-                <Route exact path='/forum_main' element={<ForumMain/>}/>
-                <Route exact path='/new_forum' element={<NewForum/>}/>
+                    <Route exact path='/calendar' element={<Calendar/>}/>
 
-            </Routes>
+                    <Route path='/user_profile/:username' element={<UserProfile/>}/>
+
+                    <Route path='/forum_main' element={<ForumMain/>}/>
+
+                    <Route path='/new_forum' element={<NewForum/>}/>
+
+                    <Route path='/psycho_form' element={<PsychoForm/>}/>
+
+                </Routes>
 
 
         </div>

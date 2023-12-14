@@ -10,7 +10,7 @@
     text-align: center;
 }
 .profile__photo__img{
-    border-radius: 50%;
+    border-radius: 45%;
 }
 
 .profile__ifo{
@@ -139,9 +139,7 @@ textarea{
 
 }
 
-.input-file{
 
-}
 
 .img__update__button{
     background-color: aquamarine;
@@ -150,11 +148,11 @@ textarea{
     border: none;
     outline: none;
     width: auto;
-    margin-top: 20px;
     cursor: pointer;
+    margin-top: 10px;
 
 }
-.input-file span {
+/*.input-file span {
 
     font-size: 14px;
     vertical-align: middle;
@@ -166,7 +164,7 @@ textarea{
     line-height: 22px;
     padding: 10px 20px;
     margin: 10px;
-}
+}*/
 .input-file input[type=file] {
     margin-top: 10px;
     display: block;
@@ -174,3 +172,20 @@ textarea{
     height: 0;
 }
 
+.input-file-text{
+    padding: 0 10px;
+    line-height: 40px;
+    display: inline-block;
+}
+.input-file-btn {
+    font-size: 14px;
+    vertical-align: middle;
+    color: rgb(255 255 255);
+    text-align: center;
+    cursor: pointer;
+    border-radius: 20px;
+    background-color: #FF8F8F;
+    line-height: 22px;
+    padding: 10px 20px;
+    margin-top: 20px;
+}
