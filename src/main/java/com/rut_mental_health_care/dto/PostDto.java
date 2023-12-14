@@ -22,4 +22,5 @@ public class PostDto {
     private long likeCount;
     private long dislikeCount;
     private long commentCount;
+    private boolean scrollingUserHasLiked;
 }

@@ -24,9 +24,9 @@ public class CommunicationController {
     }
 
     @GetMapping("/feed")
-    public ResponseEntity<List<PostDto>> getFeed() {
+    public ResponseEntity<List<PostDto>> getFeed(@RequestParam Long scrollingUserId) {
         try {
-            List<PostDto> feed = communicationService.getFeed();
+            List<PostDto> feed = communicationService.getFeed(scrollingUserId);
             return ResponseEntity.ok(feed);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
@@ -34,9 +34,9 @@ public class CommunicationController {
     }
 
     @GetMapping("/mostPopular")
-    public ResponseEntity<List<PostDto>> getPostsFromMostPopularToLeast() {
+    public ResponseEntity<List<PostDto>> getPostsFromMostPopularToLeast(Long scrollingUserId) {
         try {
-            List<PostDto> feed = communicationService.getPostsFromMostPopularToLeast();
+            List<PostDto> feed = communicationService.getPostsFromMostPopularToLeast(scrollingUserId);
             return ResponseEntity.ok(feed);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
