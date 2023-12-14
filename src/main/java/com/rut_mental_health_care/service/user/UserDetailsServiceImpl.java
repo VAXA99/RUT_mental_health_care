@@ -94,9 +94,17 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     public String validatePasswordResetToken(String token) {
         final PasswordResetToken passToken = passwordResetTokenRepository.findByToken(token);
 
-        return !isTokenFound(passToken) ? "invalidToken"
-                : isTokenExpired(passToken) ? "expired"
-                : null;
+        if (!isTokenFound(passToken)) {
+            passwordResetTokenRepository.deleteByToken(token);
+            return "invalidToken";
+        }
+        else if (isTokenExpired(passToken)) {
+            passwordResetTokenRepository.deleteByToken(token);
+            return "expired";
+        }
+        else {
+            return null;
+        }
     }
 
     private boolean isTokenFound(PasswordResetToken passToken) {
@@ -112,6 +120,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         if (isPasswordChanged(user, password)) {
             user.setPassword(encoder.encode(password));
             userRepository.save(user);
+            passwordResetTokenRepository.deleteByUser(user);
             return true;
         }
         return false;
