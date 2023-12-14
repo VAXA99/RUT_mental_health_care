@@ -34,7 +34,7 @@ public class CommunicationController {
     }
 
     @GetMapping("/mostPopular")
-    public ResponseEntity<List<PostDto>> getPostsFromMostPopularToLeast(Long scrollingUserId) {
+    public ResponseEntity<List<PostDto>> getPostsFromMostPopularToLeast(@RequestParam Long scrollingUserId) {
         try {
             List<PostDto> feed = communicationService.getPostsFromMostPopularToLeast(scrollingUserId);
             return ResponseEntity.ok(feed);

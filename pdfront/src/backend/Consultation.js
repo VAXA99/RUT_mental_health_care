@@ -1,11 +1,16 @@
 import axios from "axios";
 import baseUrl from "./base-url";
 
+let BASE_URL = baseUrl + '/consultations';
+const api = axios.create({
+    baseURL: BASE_URL,
+});
+
 export default {
 
     getAvailableConsultationsForDate: async (chosenDate) => {
         try {
-            const response = await axios.get(baseUrl + `/consultations/allAvailable?chosenDate=${chosenDate}`);
+            const response = await api.get(`/allAvailable?chosenDate=${chosenDate}`);
             return {success: response.data, error: null};
         } catch (error) {
             console.error('Error getting consultations: ', error);
@@ -15,7 +20,7 @@ export default {
 
     formSubmission: async (data) => {
         try {
-            const  response = await axios.post(baseUrl + '/consultations/setUp', {
+            const  response = await api.post('/setUp', {
 
             });
             return response.data;
@@ -27,7 +32,7 @@ export default {
 
     getAllTags: async () => {
         try {
-            const response = await axios.get(`${baseUrl}/consultations/getProblems`)
+            const response = await api.get(`/getProblems`)
             return response.data;
         } catch (error) {
             console.error('Error getting tags: ', error);
@@ -37,8 +42,8 @@ export default {
 
     fetchScheduleForMonth: async (year, month, psychologistId) => {
         try {
-            const response = await axios.get(
-                `${baseUrl}/consultations/getScheduleForMonth?year=${year}&month=${month}&psychologistId=${psychologistId}`
+            const response = await api.get(
+                `/getScheduleForMonth?year=${year}&month=${month}&psychologistId=${psychologistId}`
             );
 
             return response.data;

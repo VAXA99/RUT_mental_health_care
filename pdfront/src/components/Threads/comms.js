@@ -1,7 +1,7 @@
 import Menu from "../Menu/Menu";
 import React from "react";
 
-export function Forum() {
+export function Comms() {
     return (
         <>
             <div className="display__flex__mt">

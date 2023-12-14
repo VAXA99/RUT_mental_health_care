@@ -8,6 +8,7 @@ import Auth from "../../backend/Auth";
 
 export default function Home() {
     const [authenticated, setAuthenticated] = useState(Auth.isTokenValid);
+    const [userRole, setUserRole] = useState(Auth.getUserRole());
 
     useEffect(() => {
         const intervalId = setInterval(() => {
@@ -37,7 +38,7 @@ export default function Home() {
 
                 </div>
                 <div className="container main main__page">
-                    {authenticated ? (
+                    {authenticated && userRole === "ROLE_USER" ? (
                         <div className="form main">
                             <div className="form__block">
                                 <div className="form__block__title">Запишитесь на прием</div>

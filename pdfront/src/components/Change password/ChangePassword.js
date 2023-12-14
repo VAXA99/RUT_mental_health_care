@@ -42,7 +42,7 @@ export const ChangePassword = () => {
     };
 */
 
-    //TODO handle bad credentials
+    //TODO change password logic
     return (
         <div className='body'>
             <link href="https://fonts.cdnfonts.com/css/sf-pro-display" rel="stylesheet"/>

@@ -2,7 +2,7 @@ import Menu from "../Menu/Menu";
 import './forum.css'
 import React from "react";
 
-export function NewForum() {
+export function ThreadCreation() {
     return (
         <>
             <div className="display__flex__mt">
@@ -42,14 +42,14 @@ export function NewForum() {
                                 name="textarea"
                                 className="form__page__subtitle input forum__page title"
                                 defaultValue={""}
-                                placeholder={"Напишите заголовок, если нужно"}
+                                placeholder={"Напишите заголовок"}
                             ></textarea>
                             <br/>
                             <textarea
                                 name="textarea"
                                 className="form__page__subtitle input forum__page"
                                 defaultValue={""}
-                                placeholder={"Начните что думаете"}
+                                placeholder={"Начните, что думаете"}
                             ></textarea>
                         </div>
                     </div>

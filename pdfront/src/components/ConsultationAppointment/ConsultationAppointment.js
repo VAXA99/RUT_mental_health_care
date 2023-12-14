@@ -79,17 +79,9 @@ export function ConsultationAppointment() {
     const handleSubmission = async () => {
 
         try{
-            // Log the gathered information
-            // console.log("UserId: ", auth.getUserId());
-            // console.log("Tags: ", form1Data);
-            // console.log("Additional information: ", form2Data);
-            // console.log("Selected consultation: ", selectedConsultation)
-            // console.log("Psychologist: ", form3Data);
-            // console.log("Psychologist id: ", form3Data.userId);
-
             const userId = auth.getUserId();
-            const psychProblems = form1Data; // Assuming form2Data is an array of psych problems
-            const description = form2Data.description; // Assuming form2Data has a description property
+            const psychProblems = form1Data;
+            const description = form2Data.description;
 
             // Create ConsultationRequest object
             const consultationRequest = {

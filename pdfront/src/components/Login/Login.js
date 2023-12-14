@@ -37,7 +37,6 @@ export const Login = () => {
         }
     }, [navigate]);
 
-    //TODO handle bad credentials
     return (
         <div className='body'>
             <link href="https://fonts.cdnfonts.com/css/sf-pro-display" rel="stylesheet"/>

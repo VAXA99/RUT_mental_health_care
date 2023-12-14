@@ -1,11 +1,15 @@
 import axios from "axios";
 import baseUrl from "./base-url";
 
+let BASE_URL = baseUrl + '/profile';
+const api = axios.create({
+    baseURL: BASE_URL,
+});
 
 // Function to edit name by user ID
 async function editName(userId, newName) {
     try {
-        await axios.patch(`${baseUrl}/profile/editName/${userId}?newName=${newName}`);
+        await api.patch(`/editName/${userId}?newName=${newName}`);
     } catch (error) {
         console.error('Error editing name:', error);
         throw error;
@@ -15,7 +19,7 @@ async function editName(userId, newName) {
 // Function to edit surname by user ID
 async function editSurname(userId, newSurname) {
     try {
-        await axios.patch(`${baseUrl}/profile/editSurname/${userId}?newSurname=${newSurname}`);
+        await api.patch(`/editSurname/${userId}?newSurname=${newSurname}`);
     } catch (error) {
         console.error('Error editing surname:', error);
         throw error;
@@ -25,7 +29,7 @@ async function editSurname(userId, newSurname) {
 // Function to edit middle name by user ID
 async function editMiddleName(userId, newMiddleName) {
     try {
-        await axios.patch(`${baseUrl}/profile/editMiddleName/${userId}`, {
+        await api.patch(`/editMiddleName/${userId}`, {
             newMiddleName
         });
     } catch (error) {
@@ -37,7 +41,7 @@ async function editMiddleName(userId, newMiddleName) {
 // Function to edit email by user ID
 async function editEmail(userId, newEmail) {
     try {
-        await axios.patch(`${baseUrl}/profile/editEmail/${userId}`, {
+        await api.patch(`/editEmail/${userId}`, {
             newEmail
         });
     } catch (error) {
@@ -49,7 +53,7 @@ async function editEmail(userId, newEmail) {
 // Function to edit bio by user ID
 async function editBio(userId, newBio) {
     try {
-        await axios.patch(`${baseUrl}/profile/editBio/${userId}`,{
+        await api.patch(`/editBio/${userId}`,{
             newBio
         });
     } catch (error) {
@@ -60,7 +64,7 @@ async function editBio(userId, newBio) {
 async function getUserProfile(userID) {
     try {
         const longUserId = Number(userID);
-        const response = await axios.get(`${baseUrl}/profile/${longUserId}`);
+        const response = await api.get(`/${longUserId}`);
         return response.data;
     } catch (error) {
         console.error('Error finding userID:', error);
@@ -71,7 +75,7 @@ async function getUserProfile(userID) {
 async function getUserProfilePhoto(userId) {
     try {
         const longUserId = Number(userId);
-        const response = await axios.get(`${baseUrl}/profile/profilePicture/${longUserId}`, {
+        const response = await api.get(`/profilePicture/${longUserId}`, {
             responseType: 'arraybuffer',
         });
         const imageData = response.data;
@@ -99,7 +103,7 @@ async function uploadUserProfilePicture(userId, selectedFile) {
         const longUserId = Number(userId);
         const formData = new FormData();
         formData.append('file', selectedFile);
-        const response = await axios.post(`${baseUrl}/profile/uploadProfilePicture/${longUserId}`,
+        const response = await api.post(`/uploadProfilePicture/${longUserId}`,
             formData,
             {
                 headers: {
@@ -115,7 +119,7 @@ async function uploadUserProfilePicture(userId, selectedFile) {
 
 async function getPsychologistsProfiles() {
     try {
-        const response = await axios.get(`${baseUrl}/psychologistsProfiles`);
+        const response = await api.get(`/psychologistsProfiles`);
         return response.data;
     } catch (error) {
         console.error('Error fetching psychologists profiles:', error);
