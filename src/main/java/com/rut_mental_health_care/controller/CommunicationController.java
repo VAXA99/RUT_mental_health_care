@@ -1,8 +1,10 @@
 package com.rut_mental_health_care.controller;
 
 import com.rut_mental_health_care.controller.request.CommentRequest;
+import com.rut_mental_health_care.controller.request.FeedRequest;
 import com.rut_mental_health_care.controller.request.PostRequest;
 import com.rut_mental_health_care.dto.PostDto;
+import com.rut_mental_health_care.model.Tag;
 import com.rut_mental_health_care.service.communication.CommunicationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,25 +26,25 @@ public class CommunicationController {
     }
 
     @GetMapping("/feed")
-    public ResponseEntity<List<PostDto>> getFeed(@RequestParam Long scrollingUserId) {
+    public ResponseEntity<?> getFeed(@RequestBody FeedRequest feedRequest) {
         try {
-            List<PostDto> feed = communicationService.getFeed(scrollingUserId);
+            List<PostDto> feed = communicationService.getFeed(feedRequest.getScrollingUserId(), feedRequest.getFeedType(), feedRequest.getTagNames());
             return ResponseEntity.ok(feed);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while fetching the feed.");
+
+        }
+    }
+
+    @GetMapping("/allAvailableTags")
+    public ResponseEntity<List<Tag>> getAllAvailableTags() {
+        try {
+            List<Tag> tags = communicationService.getAllAvailableTags();
+            return ResponseEntity.ok(tags);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
-
-    @GetMapping("/mostPopular")
-    public ResponseEntity<List<PostDto>> getPostsFromMostPopularToLeast(@RequestParam Long scrollingUserId) {
-        try {
-            List<PostDto> feed = communicationService.getPostsFromMostPopularToLeast(scrollingUserId);
-            return ResponseEntity.ok(feed);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
-        }
-    }
-
     @GetMapping("/post/{postId}")
     public ResponseEntity<PostDto> getPostById(@PathVariable Long postId) {
         try {

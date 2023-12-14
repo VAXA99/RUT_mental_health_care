@@ -1,6 +1,7 @@
 package com.rut_mental_health_care.repository;
 
 import com.rut_mental_health_care.model.Post;
+import com.rut_mental_health_care.model.Tag;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -44,4 +45,7 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     long getTotalCommentsOnUserPosts(@Param("userId") Long userId);
 
     List<Post> findAllByUserId(Long userId);
+
+    @Query("SELECT DISTINCT p FROM Post p JOIN FETCH p.tags t WHERE t IN :tags")
+    List<Post> findAllByTags(@Param("tags") List<Tag> tags);
 }

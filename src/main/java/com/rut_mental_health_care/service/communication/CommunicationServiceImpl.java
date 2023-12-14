@@ -41,11 +41,29 @@ public class CommunicationServiceImpl implements CommunicationService {
         this.modelMapper = modelMapper;
     }
 
-    @Override
-    public List<PostDto> getFeed(Long scrollingUserId) {
-        List<Post> posts = postRepository.getPostsFromNewestToOldest();
-        List<PostDto> postDtos =  getPostDtos(posts);
-        for (PostDto postDto: postDtos) {
+    public enum FeedType {
+        NEWEST_TO_OLDEST,
+        MOST_POPULAR_TO_LEAST,
+        BY_TAGS
+    }
+
+    public List<PostDto> getFeed(Long scrollingUserId, String strFeedType, List<String> tagNames) {
+        FeedType feedType = FeedType.valueOf(strFeedType);
+        List<Post> posts = switch (feedType) {
+            case NEWEST_TO_OLDEST -> postRepository.getPostsFromNewestToOldest();
+            case MOST_POPULAR_TO_LEAST -> postRepository.getPostsFromMostPopularToLeast();
+            case BY_TAGS -> {
+                List<Tag> tags = tagNames.stream()
+                        .map(tagName -> tagRepository.findByDescription(tagName)
+                                .orElseThrow(() -> new EntityNotFoundException("Tag not found with name: " + tagName)))
+                        .collect(Collectors.toList());
+                yield postRepository.findAllByTags(tags);
+            }
+            default -> throw new IllegalArgumentException("Unsupported feed type: " + feedType);
+        };
+
+        List<PostDto> postDtos = getPostDtos(posts);
+        for (PostDto postDto : postDtos) {
             postDto.setScrollingUserHasLiked(likeRepository.existsByPostIdAndUserId(postDto.getId(), scrollingUserId));
         }
 
@@ -53,16 +71,10 @@ public class CommunicationServiceImpl implements CommunicationService {
     }
 
     @Override
-    public List<PostDto> getPostsFromMostPopularToLeast(Long scrollingUserId) {
-        List<Post> posts = postRepository.getPostsFromMostPopularToLeast();
-        List<PostDto> postDtos =  getPostDtos(posts);
-        for (PostDto postDto: postDtos) {
-            postDto.setScrollingUserHasLiked(likeRepository.existsByPostIdAndUserId(postDto.getId(), scrollingUserId));
-        }
-
-        return postDtos;
+    public List<Tag> getAllAvailableTags() {
+        return tagRepository.findAll();
     }
-    
+
     @Override
     public PostDto getPostWithComments(Long postId) {
         Post post = postRepository.findById(postId)
@@ -215,6 +227,11 @@ public class CommunicationServiceImpl implements CommunicationService {
     @Async
     @Transactional
     public void deletePost(Long postId) {
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new EntityNotFoundException("Post not found with ID: " + postId));
+
+        post.getTags().clear();
+
         postRepository.deleteById(postId);
     }
 

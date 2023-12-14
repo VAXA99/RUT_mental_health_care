@@ -1,13 +1,13 @@
 package com.rut_mental_health_care.service.communication;
 
-import com.rut_mental_health_care.dto.CommentDto;
 import com.rut_mental_health_care.dto.PostDto;
+import com.rut_mental_health_care.model.Tag;
 
 import java.util.List;
 public interface CommunicationService {
 
-    List<PostDto> getFeed(Long scrollingUserId);
-    List<PostDto> getPostsFromMostPopularToLeast(Long scrollingUserId);
+    List<PostDto> getFeed(Long scrollingUserId, String feedType, List<String> tagNames);
+    List<Tag> getAllAvailableTags();
     PostDto getPostWithComments(Long postId);
     void likePost(Long postId, Long userId, Boolean isLike);
     void commentPost(Long postId, Long userId, String content);
