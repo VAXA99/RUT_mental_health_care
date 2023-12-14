@@ -1,9 +1,9 @@
 import React, {useEffect, useState} from 'react';
 import './userProfile.css'
-import Header from "../Header/Header";
 import Auth from "../../backend/Auth";
 import {useNavigate} from "react-router-dom";
 import {getUserProfile, getUserProfilePhoto, uploadUserProfilePicture} from "../../backend/UserProfile";
+import {useUserContext} from "../../UserProvider";
 
 
 export default function UserProfile() {
@@ -12,8 +12,9 @@ export default function UserProfile() {
     const userId= Auth.getUserId();
     const [userData, setUserData] = useState({});
     const navigate = useNavigate();
-    const [userProfilePicture, setUserProfilePicture] = useState(null);
     const [selectedFile, setSelectedFile] = useState(null);
+
+    const { userProfilePicture, setUserProfilePicture } = useUserContext();
 
     const handleLogoutAndNavigate = () => {
         setAuthenticated(Auth.logout());
@@ -30,7 +31,6 @@ export default function UserProfile() {
         try {
             if (selectedFile) {
                 await uploadUserProfilePicture(userId, selectedFile);
-                // You may want to refresh the user profile picture after a successful upload
                 const imgElement = await getUserProfilePhoto(userId);
                 setUserProfilePicture(imgElement);
             }
@@ -89,17 +89,22 @@ export default function UserProfile() {
         <>
             <img className="angle top center" src="/img/Star%201.png" alt="Angle" />
             <img className="angle right__home" src="/img/Ellipse 6.png" alt="Ellipse" />
-            <Header />
             <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@900&display=swap" rel="stylesheet" />
             <link href="https://fonts.cdnfonts.com/css/sf-pro-display" rel="stylesheet" />
             <div className="container main profile">
                 <div className="display__flex">
                     <div className="profile__photo">
-                        {userProfilePicture && <img  className='profile__photo__img' height="100%" width="100%" src={userProfilePicture.src}/>}
+                        {userProfilePicture && <img  className='profile__photo__img' height="100%" width="90%" src={userProfilePicture.src}/>}
                         {!userProfilePicture && <div>Loading...</div>}
                         <label className="input-file">
                             <input type="file" className="input-file" onChange={handleFileChange} />
-                            <span>Выберите файл</span>
+                            <span className="input-file-btn">Выберите файл</span>
+                            <div><span className="input-file-text">Максимум 10мб</span></div>
+                            {/*TODO изменить handleFileChange, добавить в него метод изменения ласт спан
+                             <div><span className="input-file-text">{fileName}}</span></div>*/}
+                            {/*<span className="input-file-text">Максимум 10мб</span>*/}
+                           {/* <span>Выберите файл</span>*/}
+
                         </label>
                         <button className="img__update__button" onClick={handleFileUpload}>Изменить фото</button>
                     </div>

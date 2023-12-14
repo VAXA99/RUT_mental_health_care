@@ -142,14 +142,15 @@ textarea{
 
 }
 
-input[type=checkbox].checkbox__none{
+input[type=radio].checkbox__none{
     border-radius: 50%;
     border: 1px solid #F1F1F1;
     outline: none;
+    margin-top: -30px;
 
 }
 
-.specialists{
+.specialists.checkbox{
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
@@ -157,7 +158,7 @@ input[type=checkbox].checkbox__none{
     margin: 15px 0;
 }
 
-.spec__element{
+.spec__element.checkbox{
     margin: 16px;
     width: 110px;
     height: 140px;
@@ -170,4 +171,24 @@ input[type=checkbox].checkbox__none{
 }
 .sub__form__cont{
     width: 100%;
+}
+.spec__link{
+    position: relative;
+    top:-40%;
+    left: 10%;
+    color: white;
+    font-size: 17px;
+    font-weight: 600;
+}
+
+.spec__link.middlename{
+    font-size: 13px;
+    font-weight: 600;
+}
+.specialists.checkbox{
+    margin-bottom: 60px;
+}
+
+.spec__img.checkbox{
+    border-radius: 20px;
 }

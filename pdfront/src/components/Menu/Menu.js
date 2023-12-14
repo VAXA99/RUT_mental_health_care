@@ -22,7 +22,7 @@ export default function Menu() {
                     {location.pathname !== '/articles' && <Link to={'/articles'}>
                         <div className="form info">Библиотека</div>
                     </Link>}
-                    {location.pathname !== '/forum' && <Link to={'/forum'}>
+                    {location.pathname !== '/feed' && <Link to={'/feed'}>
                         <div className="form info">Тред</div>
                     </Link>}
                     {location.pathname !== '/' && <Link to={'/'}>

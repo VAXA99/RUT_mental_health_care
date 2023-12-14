@@ -1,13 +1,10 @@
 import Menu from "../Menu/Menu";
-import Header from "../Header/Header";
 import './forum.css'
-import {Link} from "react-router-dom";
 import React from "react";
 
-export function NewForum() {
+export function ThreadCreation() {
     return (
         <>
-            <Header/>
             <div className="display__flex__mt">
                 <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@900&display=swap"
                       rel="stylesheet"/>
@@ -45,14 +42,14 @@ export function NewForum() {
                                 name="textarea"
                                 className="form__page__subtitle input forum__page title"
                                 defaultValue={""}
-                                placeholder={"Напишите заголовок, если нужно"}
+                                placeholder={"Напишите заголовок"}
                             ></textarea>
                             <br/>
                             <textarea
                                 name="textarea"
                                 className="form__page__subtitle input forum__page"
                                 defaultValue={""}
-                                placeholder={"Начните что думаете"}
+                                placeholder={"Начните, что думаете"}
                             ></textarea>
                         </div>
                     </div>

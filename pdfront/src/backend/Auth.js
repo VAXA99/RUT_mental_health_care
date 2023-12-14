@@ -2,6 +2,10 @@ import {jwtDecode} from "jwt-decode";
 import axios from "axios";
 import baseUrl from "./base-url";
 
+let BASE_URL = baseUrl + '/auth';
+const api = axios.create({
+    baseURL: BASE_URL,
+});
 export default {
 
     isTokenValid: () => {
@@ -36,7 +40,7 @@ export default {
 
     signIn: async (username, password) => {
         try {
-            const response = await axios.post(baseUrl + '/auth/signIn', {
+            const response = await api.post('/signIn', {
                 username,
                 password,
             });
@@ -49,7 +53,7 @@ export default {
 
     signUp: async (email, username, password, name, surname, dateOfBirth) => {
         try {
-            const response = await axios.post(baseUrl + '/auth/signUp', {
+            const response = await api.post('/signUp', {
                 email,
                 username,
                 password,
@@ -74,7 +78,7 @@ export default {
 
     isUsernameValid: async (username) => {
         try {
-            const response = await axios.get(baseUrl + '/auth/exists_by_username',
+            const response = await api.get('/exists_by_username',
                 {
                     params: {
                         username: username
@@ -90,7 +94,7 @@ export default {
 
     isEmailValid: async (email) => {
         try {
-            const response = await axios.get(baseUrl + '/auth/exists_by_email',
+            const response = await api.get('/exists_by_email',
                 {
                     params: {
                         email: email
@@ -112,9 +116,17 @@ export default {
 
     },
 
-    getUsername: () => {
+    getUsernameFromToken: () => {
         try {
             return jwtDecode(localStorage.getItem('token')).sub;
+        } catch (error) {
+            return null;
+        }
+    },
+
+    getUserRole: () => {
+        try {
+            return jwtDecode(localStorage.getItem('token')).roles;
         } catch (error) {
             return null;
         }

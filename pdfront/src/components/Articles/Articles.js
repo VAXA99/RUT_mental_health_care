@@ -1,6 +1,4 @@
 import React, {useEffect} from 'react'
-import Header from '../Header/Header'
-import {Link} from 'react-router-dom'
 import './articles.css'
 import Menu from "../Menu/Menu";
 import RightForm from "../Right form/RightForm";
@@ -8,7 +6,6 @@ import RightForm from "../Right form/RightForm";
 export default function Articles() {
     return (
         <>
-            <Header/>
             <link href="https://fonts.cdnfonts.com/css/sf-pro-display" rel="stylesheet"/>
             <link href="https://fonts.cdnfonts.com/css/forma-djr-banner" rel="stylesheet"/>
             <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@900&display=swap"

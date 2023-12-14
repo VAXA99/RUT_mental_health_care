@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from 'react'
-import Header from '../Header/Header'
 import {Link} from 'react-router-dom';
 import Menu from '../Menu/Menu';
 import RightForm from '../Right form/RightForm';
@@ -9,6 +8,7 @@ import Auth from "../../backend/Auth";
 
 export default function Home() {
     const [authenticated, setAuthenticated] = useState(Auth.isTokenValid);
+    const [userRole, setUserRole] = useState(Auth.getUserRole());
 
     useEffect(() => {
         const intervalId = setInterval(() => {
@@ -21,17 +21,8 @@ export default function Home() {
     }, []);
 
 
-    useEffect(() => {
-        // Код обработчика событий
-        // var popupLink = document.getElementById('popupLink');
-        // var popupWindow = document.getElementById('popupWindow');
-        // var popupClose = document.getElementById('popupClose');
-    }, []); // Пустой массив зависимостей означает, что эффект будет выполнен только при монтировании компонента
-
-
     return (
         <>
-            <Header/>
             <link href="https://fonts.cdnfonts.com/css/sf-pro-display" rel="stylesheet"/>
             <link href="https://fonts.cdnfonts.com/css/forma-djr-banner" rel="stylesheet"/>
             <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@900&display=swap"
@@ -47,7 +38,7 @@ export default function Home() {
 
                 </div>
                 <div className="container main main__page">
-                    {authenticated ? (
+                    {authenticated && userRole === "ROLE_USER" ? (
                         <div className="form main">
                             <div className="form__block">
                                 <div className="form__block__title">Запишитесь на прием</div>
