@@ -6,8 +6,8 @@ import com.rut_mental_health_care.dto.PostDto;
 import java.util.List;
 public interface CommunicationService {
 
-    List<PostDto> getFeed();
-    List<PostDto> getPostsFromMostPopularToLeast();
+    List<PostDto> getFeed(Long scrollingUserId);
+    List<PostDto> getPostsFromMostPopularToLeast(Long scrollingUserId);
     PostDto getPostWithComments(Long postId);
     void likePost(Long postId, Long userId, Boolean isLike);
     void commentPost(Long postId, Long userId, String content);

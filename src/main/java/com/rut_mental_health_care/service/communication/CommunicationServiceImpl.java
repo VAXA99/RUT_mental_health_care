@@ -42,15 +42,25 @@ public class CommunicationServiceImpl implements CommunicationService {
     }
 
     @Override
-    public List<PostDto> getFeed() {
+    public List<PostDto> getFeed(Long scrollingUserId) {
         List<Post> posts = postRepository.getPostsFromNewestToOldest();
-        return getPostDtos(posts);
+        List<PostDto> postDtos =  getPostDtos(posts);
+        for (PostDto postDto: postDtos) {
+            postDto.setScrollingUserHasLiked(likeRepository.existsByPostIdAndUserId(postDto.getId(), scrollingUserId));
+        }
+
+        return postDtos;
     }
 
     @Override
-    public List<PostDto> getPostsFromMostPopularToLeast() {
+    public List<PostDto> getPostsFromMostPopularToLeast(Long scrollingUserId) {
         List<Post> posts = postRepository.getPostsFromMostPopularToLeast();
-        return getPostDtos(posts);
+        List<PostDto> postDtos =  getPostDtos(posts);
+        for (PostDto postDto: postDtos) {
+            postDto.setScrollingUserHasLiked(likeRepository.existsByPostIdAndUserId(postDto.getId(), scrollingUserId));
+        }
+
+        return postDtos;
     }
     
     @Override

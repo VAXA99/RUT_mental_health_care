@@ -11,7 +11,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public interface ConsultationService {
+public interface  ConsultationService {
     List<ConsultationNotification> getAllConsNotifications();
     List<ConsultationDto> getAllConsultations(Long userId);
     public boolean hasActiveConsultationSetUp(Long userId);
