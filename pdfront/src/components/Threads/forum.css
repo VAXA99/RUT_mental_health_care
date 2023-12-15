@@ -166,6 +166,7 @@ a:hover {
     color: #204757;
 }
 
+
 .form__block__info {
     font-weight: 500;
     font-size: 20px;
@@ -312,6 +313,61 @@ a:hover {
 
 }
 
+.next__step.thread__creation{
+    margin: 20px 0;
 
+}
 
+.search__thread{
+    width: 100%;
+    font-size: 20px;
+    padding: 10px 0;
+}
 
+.display__flex.thread__flex.search__thread{
+    width: 100%;
+}
+
+.display__flex.thread__flex.search__thread.select {
+    width: 100%;
+    outline: none;
+    padding: 10px 15px;
+    font-size: 20px;
+    border-radius: 20px;
+    background-color: white;
+    appearance: none;
+    border: none;
+}
+
+.display__flex.thread__flex.search__thread.select option {
+    width: auto;
+}
+
+.display__flex.thread__flex.search__thread.select option:checked {
+    color: #92D5F1;
+    width: auto;
+    display: inline; /* Display options inline */
+    margin-right: 10px; /* Adjust spacing between options */
+}
+/* Style for the custom select container */
+
+.form main.form__left{
+    left: 0;
+}
+
+input[type="checkbox"] {
+    width: 0;
+}
+input[type="checkbox"]:checked + .form.info.problem {
+    color: #92D5F1;
+}
+
+/* Additional styles for focus */
+.problem__button:focus .form.info.problem {
+    color: #92D5F1;
+}
+
+/* Optional: cursor pointer styles */
+.form.info.problem {
+    cursor: pointer;
+}
