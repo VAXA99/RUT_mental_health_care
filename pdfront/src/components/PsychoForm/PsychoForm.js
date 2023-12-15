@@ -12,7 +12,6 @@ export default function PsychoForm() {
 
     return (
         <>
-            <Header/>
             <link href="https://fonts.cdnfonts.com/css/sf-pro-display" rel="stylesheet"/>
             <link href="https://fonts.cdnfonts.com/css/forma-djr-banner" rel="stylesheet"/>
             <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@900&display=swap"

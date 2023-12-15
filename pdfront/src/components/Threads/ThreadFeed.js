@@ -5,6 +5,7 @@ import {getUserProfilePhoto} from "../../backend/UserProfile";
 import communication from "../../backend/Communication";
 import {Link} from "react-router-dom";
 import auth from "../../backend/Auth";
+import Select from "react-select/base";
 
 export function ThreadFeed() {
 
@@ -23,7 +24,6 @@ export function ThreadFeed() {
 
         fetchPosts();
     }, []);
-
 
     const [userProfilePictures, setUserProfilePictures] = useState({});
 
@@ -99,8 +99,36 @@ export function ThreadFeed() {
                             <div className="form__block__link thread">
                                 <Link to={'/thread_creation'}>Создать тред</Link>
                             </div>
-                        </div>
 
+                        </div>
+                    </div>
+                    <div className="form main form__left">
+
+                        <div className="display__inline">
+                            {[
+                                "Суицидальность",
+                                "Депрессия",
+                                "Утомляемость",
+                                "Проблемы на работе",
+                                "Проблемы в отношениях",
+                                "Перемены настрояния",
+                                "Потеря близкого человека",
+                                "Девиантное поведение",
+                                "Алкоголизм",
+                                "Перемены настрояния",
+                                "Потеря близкого человека",
+                            ].map((problem, index) => (
+                                <button key={index} className="problem__button">
+                                    <label>
+                                        <input className='checkbox__none'
+                                               type="checkbox"
+                                               value={problem}
+                                        />
+                                        <div className="form info problem">{problem}</div>
+                                    </label>
+                                </button>
+                            ))}
+                        </div>
                     </div>
                     {posts.map((post) => (
                         <div key={post.id} className="form main">

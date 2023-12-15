@@ -70,7 +70,7 @@ export function ThreadCreation() {
                                     "Перемены настрояния",
                                     "Потеря близкого человека",
                                 ].map((problem, index) => (
-                                    <div key={index} className="problem__button">
+                                    <button key={index} className="problem__button focus">
                                         <label>
                                             <input className='checkbox__none'
                                                    type="checkbox"
@@ -78,7 +78,7 @@ export function ThreadCreation() {
                                             />
                                             <div className="form info problem">{problem}</div>
                                         </label>
-                                    </div>
+                                    </button>
                                 ))}
                             </div>
                         </div>
@@ -91,7 +91,9 @@ export function ThreadCreation() {
                         ></textarea>
 
                     </div>
-
+                    <button className="next__step thread__creation" type={"submit"}>
+                        Опубликовать
+                    </button>
 
                 </div>
             </div>
