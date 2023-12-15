@@ -17,4 +17,8 @@ public class Article {
 
     @Column(columnDefinition = "TEXT")
     private String content;
+
+    @ManyToOne
+    @JoinColumn(nullable = false)
+    private User user;
 }
