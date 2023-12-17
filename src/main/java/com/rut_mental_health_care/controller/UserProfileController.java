@@ -29,9 +29,14 @@ public class UserProfileController {
         this.userProfileService = userProfileService;
     }
 
-    @GetMapping("/{userId}")
+    @GetMapping("user/{userId}")
     public UserProfileDto getUserProfile(@PathVariable Long userId) {
         return userProfileService.getUserProfile(userId);
+    }
+
+    @GetMapping("username/{username}")
+    public UserProfileDto getUserProfile(@PathVariable String username) {
+        return userProfileService.getUserProfile(username);
     }
 
     @PutMapping("edit/{userId}")

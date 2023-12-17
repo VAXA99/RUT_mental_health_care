@@ -22,6 +22,7 @@ public class ArticleController {
     }
 
     @PostMapping("/write")
+    @PreAuthorize("hasRole('ROLE_PSYCHOLOGIST')")
     public ResponseEntity<String> writeArticle(@RequestBody ArticleRequest articleRequest) {
         try {
             articleService.writeArticle(articleRequest.getUserId(),
@@ -34,6 +35,7 @@ public class ArticleController {
     }
 
     @PatchMapping("/edit/{articleId}")
+    @PreAuthorize("hasRole('ROLE_PSYCHOLOGIST')")
     public ResponseEntity<String> editArticle(@PathVariable Long articleId, @RequestBody ArticleRequest articleRequest) {
         try {
             articleService.editArticle(articleId,
@@ -46,6 +48,7 @@ public class ArticleController {
     }
 
     @DeleteMapping("/delete/{articleId}")
+    @PreAuthorize("hasRole('ROLE_PSYCHOLOGIST')")
     public ResponseEntity<String> deleteArticle(@PathVariable Long articleId) {
         try {
             articleService.deleteArticle(articleId);

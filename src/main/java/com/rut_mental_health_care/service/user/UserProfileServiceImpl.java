@@ -176,6 +176,12 @@ public class UserProfileServiceImpl implements UserProfileService {
     }
 
     @Override
+    public UserProfileDto getUserProfile(String username) {
+        Long userId = userRepository.findUserIdByUsername(username);
+        return getUserProfile(userId);
+    }
+
+    @Override
     @Async
     public void editUserProfile(Long userId,
                                 String username,

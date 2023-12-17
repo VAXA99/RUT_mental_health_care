@@ -12,6 +12,7 @@ import java.util.List;
 
 public interface UserProfileService {
     UserProfileDto getUserProfile(Long userId);
+    UserProfileDto getUserProfile(String username);
 
     void editUserProfile(Long userId,
                          String username,
