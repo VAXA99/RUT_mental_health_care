@@ -52,7 +52,7 @@ export function Form3({onSubmit}) {
                             <div className='display__flex__mt calendar'>
                                 <div className='sub__form__cont'>
                                     <div className='select__time'>
-                                        <div className="articles__form calendar">Выберите специталиста</div>
+                                        <div className="articles__form calendar">Выберите специалиста</div>
                                     </div>
                                     <div className='form__page__subtitle calendar'>
                                         информация о приеме будет выслана на вашу почту

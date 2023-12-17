@@ -16,3 +16,29 @@
     top: -2px;
     left: -2%;
 }
+.next__step.article{
+    align-items: center;
+    width: auto;
+    height: 50px;
+    margin-left: 20px;
+}
+
+.display__flex.article{
+    align-items: center;
+}
+
+.input-file-btn.article{
+    margin-bottom: -10px;
+    color: black;
+    font-size: 17px;
+    border-radius: 10px;
+    padding: 10px 50px;
+    font-weight: 600;
+    background-color: inherit;
+    border: #92D5F1 dashed 4px ;
+}
+
+.input-file.article{
+    margin-top: 10px;
+
+}

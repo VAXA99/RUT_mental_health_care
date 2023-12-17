@@ -2,6 +2,7 @@ import React, {useEffect} from 'react'
 import './articles.css'
 import Menu from "../Menu/Menu";
 import RightForm from "../Right form/RightForm";
+import {Link} from "react-router-dom";
 
 export default function Articles() {
     return (
@@ -20,7 +21,11 @@ export default function Articles() {
 
                 </div>
                 <div className="container main">
-                    <div className="articles__form">Статьи</div>
+                    <div className='display__flex article'>
+                        <div className="articles__form">Статьи</div>
+                        <Link to={'/create_article'} className="next__step article">Создать</Link>
+                    </div>
+
                     <div className="form main article">
                         <div className="img__position"><img src="/img/Rectangle 183.png" alt="" width="100%"
                                                             height="100%"/></div>

@@ -1,6 +1,5 @@
 import axios from "axios";
 import baseUrl from "./base-url";
-import qs from "qs";
 
 
 const BASE_URL = baseUrl + '/posts';
