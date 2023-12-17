@@ -49,9 +49,9 @@ public class CommunicationController {
     }
 
     @GetMapping("/post/{postId}")
-    public ResponseEntity<PostDto> getPostById(@PathVariable Long postId) {
+    public ResponseEntity<PostDto> getPostById(@PathVariable Long postId, @RequestParam Long scrollingUserId) {
         try {
-            PostDto post = communicationService.getPostWithComments(postId);
+            PostDto post = communicationService.getPostWithComments(scrollingUserId, postId);
             return ResponseEntity.ok(post);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
