@@ -107,19 +107,18 @@ public class CommunicationServiceImpl implements CommunicationService {
         Like existingLike = likeRepository.findByPostIdAndUserId(postId, userId);
 
         if (existingLike != null) {
-
-            if (existingLike.getIsLike().equals(isLike)) {
+            likeRepository.delete(existingLike);
+/*            if (existingLike.getIsLike().equals(isLike)) {
                 likeRepository.delete(existingLike);
             } else {
                 existingLike.setIsLike(isLike);
-            }
+            }*/
         } else {
-            // If no existing like is found, create a new Like entity and save it
             Like like = new Like();
             like.setUser(user);
             like.setPost(post);
             like.setIsLike(isLike);
-            // Save the like entity
+
             likeRepository.save(like);
         }
 
@@ -212,10 +211,11 @@ public class CommunicationServiceImpl implements CommunicationService {
     @Override
     @Async
     @Transactional
-    public void editPost(Long postId, String newContent) {
+    public void editPost(Long postId, String newTitle, String newContent) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new EntityNotFoundException("Post not found with ID: " + postId));
 
+        post.setTitle(newTitle);
         post.setContent(newContent);
         post.setIsEdited(true);
 

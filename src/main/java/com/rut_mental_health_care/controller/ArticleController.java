@@ -1,5 +1,6 @@
 package com.rut_mental_health_care.controller;
 
+import com.rut_mental_health_care.controller.request.ArticleRequest;
 import com.rut_mental_health_care.model.Article;
 import com.rut_mental_health_care.service.article.ArticleService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,9 +22,11 @@ public class ArticleController {
     }
 
     @PostMapping("/write")
-    public ResponseEntity<String> writeArticle(@RequestBody Article article) {
+    public ResponseEntity<String> writeArticle(@RequestBody ArticleRequest articleRequest) {
         try {
-            articleService.writeArticle(article);
+            articleService.writeArticle(articleRequest.getUserId(),
+                    articleRequest.getTitle(),
+                    articleRequest.getContent());
             return ResponseEntity.status(HttpStatus.CREATED).body("Article created successfully");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error creating article");
@@ -31,9 +34,11 @@ public class ArticleController {
     }
 
     @PatchMapping("/edit/{articleId}")
-    public ResponseEntity<String> editArticle(@PathVariable Long articleId, @RequestParam String newContent) {
+    public ResponseEntity<String> editArticle(@PathVariable Long articleId, @RequestBody ArticleRequest articleRequest) {
         try {
-            articleService.editArticle(articleId, newContent);
+            articleService.editArticle(articleId,
+                    articleRequest.getTitle(),
+                    articleRequest.getContent());
             return ResponseEntity.ok("Article edited successfully");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error editing article");

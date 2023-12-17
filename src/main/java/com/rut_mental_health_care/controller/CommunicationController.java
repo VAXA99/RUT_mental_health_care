@@ -28,7 +28,9 @@ public class CommunicationController {
     @PostMapping("/feed")
     public ResponseEntity<?> getFeed(@RequestBody FeedRequest feedRequest) {
         try {
-            List<PostDto> feed = communicationService.getFeed(feedRequest.getScrollingUserId(), feedRequest.getFeedType(), feedRequest.getTagNames());
+            List<PostDto> feed = communicationService.getFeed(feedRequest.getScrollingUserId(),
+                    feedRequest.getFeedType(),
+                    feedRequest.getTagNames());
             return ResponseEntity.ok(feed);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while fetching the feed.");
@@ -69,11 +71,10 @@ public class CommunicationController {
     @PostMapping("/write")
     public ResponseEntity<String> writePost(@RequestBody PostRequest postRequest) {
         try {
-            communicationService.writePost
-                    (postRequest.getUserId(),
-                            postRequest.getTitle(),
-                            postRequest.getContent(),
-                            postRequest.getTagNames());
+            communicationService.writePost(postRequest.getUserId(),
+                    postRequest.getTitle(),
+                    postRequest.getContent(),
+                    postRequest.getTagNames());
             return ResponseEntity.status(HttpStatus.CREATED).body("Post created successfully");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error creating post");
@@ -83,8 +84,7 @@ public class CommunicationController {
     @PostMapping("/comment/post/{postId}")
     public ResponseEntity<String> commentPost(@PathVariable Long postId, @RequestBody CommentRequest commentRequest) {
         try {
-            communicationService.commentPost(
-                    postId,
+            communicationService.commentPost(postId,
                     commentRequest.getUserId(),
                     commentRequest.getContent()
             );
@@ -97,8 +97,7 @@ public class CommunicationController {
     @PostMapping("/reply/comment/{commentId}")
     public ResponseEntity<String> replyToComment(@PathVariable Long commentId, @RequestBody CommentRequest commentRequest) {
         try {
-            communicationService.replyToComment(
-                    commentId,
+            communicationService.replyToComment(commentId,
                     commentRequest.getUserId(),
                     commentRequest.getContent()
             );
@@ -111,7 +110,8 @@ public class CommunicationController {
     @PatchMapping("/edit/comment/{commentId}")
     public ResponseEntity<String> editComment(@PathVariable Long commentId, @RequestBody CommentRequest commentRequest) {
         try {
-            communicationService.editComment(commentId, commentRequest.getContent());
+            communicationService.editComment(commentId,
+                    commentRequest.getContent());
             return ResponseEntity.ok("Comment edited successfully");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error editing comment");
@@ -131,7 +131,9 @@ public class CommunicationController {
     @PatchMapping("/edit/post/{postId}")
     public ResponseEntity<String> editPost(@PathVariable Long postId, @RequestBody PostRequest postRequest) {
         try {
-            communicationService.editPost(postId, postRequest.getContent());
+            communicationService.editPost(postId,
+                    postRequest.getTitle(),
+                    postRequest.getContent());
             return ResponseEntity.ok("Post edited successfully");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error editing post");
