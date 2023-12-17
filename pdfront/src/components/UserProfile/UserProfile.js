@@ -4,15 +4,19 @@ import Auth from "../../backend/Auth";
 import {useNavigate} from "react-router-dom";
 import {getUserProfile, getUserProfilePhoto, uploadUserProfilePicture} from "../../backend/UserProfile";
 import {useUserContext} from "../../UserProvider";
+import UserProfileInfo from "./UserProfileInfo";
+import EditUserProfileInfo from "./EditUserProfileInfo";
 
 
 export default function UserProfile() {
 
+    const [step, setStep] = useState(1);
     const [authenticated, setAuthenticated] = useState(Auth.isTokenValid);
     const userId= Auth.getUserId();
     const [userData, setUserData] = useState({});
     const navigate = useNavigate();
     const [selectedFile, setSelectedFile] = useState(null);
+    const [showPopup, setShowPopup] = useState(false);
 
     const { userProfilePicture, setUserProfilePicture } = useUserContext();
 
@@ -84,6 +88,13 @@ export default function UserProfile() {
         fetchUserProfilePhoto();
     }, [userId]);
 
+    const togglePopup = () => {
+        setShowPopup(!showPopup);
+
+    };
+    const handleStep = () => {
+        setStep( step+1);
+    };
     return(
 
         <>
@@ -108,57 +119,8 @@ export default function UserProfile() {
                         </label>
                         <button className="img__update__button" onClick={handleFileUpload}>Изменить фото</button>
                     </div>
-
-                    <div className="profile__ifo">
-                        <div className="edit__info">
-                            <div className="main__title profile">
-                                {userData.name} {userData.surname}
-                                <div>
-                                    {userData.email}
-                                </div>
-                            </div>
-                            <div className="margin__top">
-                                <button className="nav__img profile">
-                                    <img src="/img/Small FAB.png" alt="FAB" />
-                                </button>
-                            </div>
-                        </div>
-                        <div className="worker">студент</div>
-                        <div className="profile__edit">
-                            <div className="profile__edit__info">
-                                <div className="profile__edit__title">Возраст</div>
-                                <input className="profile__edit__input age" type="text" value={userData.age} placeholder="Возраст" readOnly />
-                            </div>
-                            <div className="profile__edit__info nickname">
-                                <div className="profile__edit__title">Никнейм</div>
-                                <input className="profile__edit__input nickname" type="text" value={userData.username} placeholder="Юзернейм" />
-                            </div>
-                        </div>
-                        <div className="profile__edit">
-                            <div className="profile__edit__info email">
-                                <div className="profile__edit__title">Email</div>
-                                <input className="profile__edit__input email" type="email" value={userData.email} placeholder="Емэил" />
-                            </div>
-                            <div className="profile__edit__info age">
-                                <div className="profile__edit__title">Количество постов</div>
-                                <input className="profile__edit__input age" type="text" value={userData.totalPosts} placeholder="---" />
-                            </div>
-                        </div>
-                        <div className="profile__edit__info textarea">
-                            <div className="profile__edit__title">Обо мне</div>
-                            <div className="problems__input profile">
-                                <textarea className="profile__edit__title" value={userData.bio} />
-                            </div>
-                        </div>
-                        <button onClick={handleLogoutAndNavigate} className="nav__img profile">
-                            <div className="display__flex">
-                                <div className="log__out">Выйти из аккаунта</div>
-                                <div>
-                                    <img src="/img/Group 89.png" alt="Group 89" />
-                                </div>
-                            </div>
-                        </button>
-                    </div>
+                        <UserProfileInfo />
+                        {/*<EditUserProfileInfo />*/}
                 </div>
             </div>
         </>
