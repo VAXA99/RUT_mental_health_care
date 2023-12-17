@@ -88,7 +88,6 @@ async function getUserProfilePhoto(userId) {
 
         // Display the image using the URL
         const imgElement = document.createElement('img');
-        console.log("Got picture");
         imgElement.src = imageUrl;
         return imgElement;
 

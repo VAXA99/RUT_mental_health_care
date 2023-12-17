@@ -12,16 +12,6 @@ export function Comms() {
                 <img className="angle right__home" src="/img/Ellipse 6.png"/>
                 <div className="container left">
                     <Menu/>
-                    <div className="form left">
-                        <div className="form__title">Популярное</div>
-                        <div className="form__main">
-                            <div className="popular"><a href="/login.htm"># что то</a></div>
-                            <div className="popular"><a href="/login.htm"># Как то</a></div>
-                            <div className="popular"><a href="/login.htm"># Помощь</a></div>
-                            <div className="popular"><a href="/login.htm"># Депрессия</a></div>
-                            <div className="popular"><a href="/login.htm"># Заполнитель</a></div>
-                        </div>
-                    </div>
                 </div>
                 <div className="container main">
                     <div className="form main">

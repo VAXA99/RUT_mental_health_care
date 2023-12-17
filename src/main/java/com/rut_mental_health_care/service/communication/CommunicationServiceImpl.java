@@ -183,7 +183,6 @@ public class CommunicationServiceImpl implements CommunicationService {
     }
 
     @Override
-    @Async
     @Transactional
     public void writePost(Long userId, String title, String content, List<String> tagNames) {
         User user = userRepository.findById(userId)
@@ -261,7 +260,7 @@ public class CommunicationServiceImpl implements CommunicationService {
         commentDto.setCreatedAt(comment.getCreatedAt());
 
         // Set the postDto based on the relationships in Comment
-        commentDto.setPostDto(convertToPostDTO(comment.getPost()));
+//        commentDto.setPostDto(convertToPostDTO(comment.getPost()));
 
         // Check if there is a parent comment and avoid infinite recursion
         if (comment.getParentComment() != null) {

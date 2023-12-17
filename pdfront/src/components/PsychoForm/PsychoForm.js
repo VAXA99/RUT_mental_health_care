@@ -1,11 +1,6 @@
-import React, {useEffect, useState} from 'react'
-import Header from '../Header/Header'
-import {Link} from 'react-router-dom';
+import React from 'react'
 import Menu from '../Menu/Menu';
 import "./psychoForm.css"
-import RightForm from '../Right form/RightForm';
-import TestingForm from '../TestingForm/TestingForm';
-import Auth from "../../backend/Auth";
 
 
 export default function PsychoForm() {

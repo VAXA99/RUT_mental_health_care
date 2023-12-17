@@ -13,7 +13,7 @@ import {Comms} from './components/Threads/comms.js';
 import {Login} from './components/Login/Login.js';
 import {ChangePassword} from './components/Change password/ChangePassword.js';
 
-import {Route, Routes, useNavigate} from "react-router-dom";
+import {Route, Routes} from "react-router-dom";
 import {SendEmail} from './components/Send email/SendEmail.js';
 import Articles from './components/Articles/Articles.js';
 import Calendar from './components/Calendar/Calendar.js';
@@ -23,6 +23,7 @@ import {ThreadFeed} from "./components/Threads/ThreadFeed";
 import {ThreadCreation} from "./components/Threads/ThreadCreation";
 import Header from "./components/Header/Header";
 import PsychoForm from "./components/PsychoForm/PsychoForm";
+import ProtectedRoute from "./ProtectedRoute";
 
 function App() {
 
@@ -39,18 +40,16 @@ function App() {
                 <Route exact path='/' element={<Home/>}/>
                 <Route exact path='/auth' element={<Login/>}/>
                 <Route exact path='/sign_up' element={<Sign_up/>}/>
-                {/*<Route exact path='/forum' element={<Comms/>}/>*/}
                 <Route exact path='/spec' element={<Specialists/>}/>
-                <Route exact path='/change_pass' element={<ChangePassword/>}/>
-                <Route exact path='/send_email' element={<SendEmail/>}/>
-                <Route exact path='/consultation_appointment' element={<ConsultationAppointment/>}/>
-                <Route exact path='/articles' element={<Articles/>}/>
-                <Route exact path='/calendar' element={<Calendar/>}/>
-                <Route exact path='/user_profile/:username' element={<UserProfile/>}/>
-                <Route exact path='/feed' element={<ThreadFeed/>}/>
-                <Route exact path='/thread_creation' element={<ThreadCreation/>}/>
-                <Route exact path='/thread/:thread_title' element={<Comms/>}/>
-                <Route path='/psycho_form' element={<PsychoForm/>}/>
+                <Route path='/articles' element={<Articles/>}/>
+                <Route path='/change_pass' element={<ProtectedRoute element={<ChangePassword />} />} />
+                <Route path='/send_email' element={<ProtectedRoute element={<SendEmail />} />} />
+                <Route path='/consultation_appointment' element={<ProtectedRoute element={<ConsultationAppointment />} />} />
+                <Route path='/user_profile/:username' element={<ProtectedRoute element={<UserProfile />} />} />
+                <Route path='/feed' element={<ProtectedRoute element={<ThreadFeed />} />} />
+                <Route path='/thread_creation' element={<ProtectedRoute element={<ThreadCreation />} />} />
+                <Route path='/thread/:postId' element={<ProtectedRoute element={<Comms />} />} />
+                <Route path='/psycho_form' element={<ProtectedRoute element={<PsychoForm />} />} />
             </Routes>
 
         </div>

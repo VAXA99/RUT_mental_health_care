@@ -1,8 +1,102 @@
 import Menu from "../Menu/Menu";
 import './forum.css'
-import React from "react";
+import React, {useEffect, useState} from "react";
+import consultation from "../../backend/Consultation";
+import communication from "../../backend/Communication";
+import auth from "../../backend/Auth";
 
 export function ThreadCreation() {
+    const [selectedProblems, setSelectedProblems] = useState([]);
+    const [problemsFromBackend, setProblemsFromBackend] = useState([]);
+    const [customTags, setCustomTags] = useState([]);
+    const [currentTag, setCurrentTag] = useState('');
+    const [title, setTitle] = useState("");
+    const [content, setContent] = useState("");
+
+    useEffect(() => {
+        // Fetch problems from the backend when the component mounts
+        const fetchProblems = async () => {
+            try {
+                // Assuming your backend API provides a function to get problems
+                const problems = await consultation.getAllTags();
+                setProblemsFromBackend(problems);
+            } catch (error) {
+                console.error("Error fetching problems from the backend", error);
+            }
+        };
+
+        fetchProblems();
+    }, []);
+
+    const handleCheckboxChange = (problem) => {
+        // Update the selected problems based on checkbox changes
+        const updatedProblems = [...selectedProblems];
+        const index = updatedProblems.indexOf(problem);
+
+        if (index !== -1) {
+            updatedProblems.splice(index, 1);
+        } else {
+            updatedProblems.push(problem);
+        }
+
+        setSelectedProblems(updatedProblems);
+    };
+
+    const handleTagInputChange = (event) => {
+        setCurrentTag(event.target.value);
+    };
+
+    const handleTagInputKeyDown = (event) => {
+        if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault(); // Prevents the default behavior of adding a new line in the textarea
+
+            if (currentTag.trim() !== '') {
+                setCustomTags([...customTags, currentTag.trim()]);
+                setCurrentTag('');
+            }
+        }
+    };
+
+    const handleTagDelete = (index) => {
+        const updatedTags = [...customTags];
+        updatedTags.splice(index, 1);
+        setCustomTags(updatedTags);
+    };
+
+    const handleTitleChange = (e) => {
+        setTitle(e.target.value);
+    };
+
+    const handleContentChange = (e) => {
+        setContent(e.target.value);
+    };
+
+    const capitalizeFirstLetter = (string) => {
+        return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
+    };
+
+    const handleSubmit = async () => {
+        try {
+            const allTags = [...customTags, ...selectedProblems].map(tag =>
+                capitalizeFirstLetter(tag.trim())
+            );
+
+            const postRequest = {
+                userId: auth.getUserId(),
+                title: title,
+                content: content,
+                tagNames: allTags,
+            };
+
+            console.log(postRequest);
+            const response = await communication.writePost(postRequest);
+            console.log(response); // Handle the response as needed
+        } catch (error) {
+            console.error('Error creating post', error); // Handle errors as needed
+        }
+    };
+
+
     return (
         <>
             <div className="display__flex__mt">
@@ -13,16 +107,6 @@ export function ThreadCreation() {
                 <img className="angle right__home" src="/img/Ellipse 6.png"/>
                 <div className="container left">
                     <Menu/>
-                    <div className="form left">
-                        <div className="form__title">Популярное</div>
-                        <div className="form__main">
-                            <div className="popular"><a href="/login.htm"># что то</a></div>
-                            <div className="popular"><a href="/login.htm"># Как то</a></div>
-                            <div className="popular"><a href="/login.htm"># Помощь</a></div>
-                            <div className="popular"><a href="/login.htm"># Депрессия</a></div>
-                            <div className="popular"><a href="/login.htm"># Заполнитель</a></div>
-                        </div>
-                    </div>
                 </div>
                 <div className="container main">
                     <div className="form main">
@@ -42,6 +126,7 @@ export function ThreadCreation() {
                                 name="textarea"
                                 className="form__page__subtitle input forum__page title"
                                 defaultValue={""}
+                                onChange={handleTitleChange}
                                 placeholder={"Напишите заголовок"}
                             ></textarea>
                             <br/>
@@ -49,6 +134,7 @@ export function ThreadCreation() {
                                 name="textarea"
                                 className="form__page__subtitle input forum__page"
                                 defaultValue={""}
+                                onChange={handleContentChange}
                                 placeholder={"Начните, что думаете"}
                             ></textarea>
                         </div>
@@ -57,26 +143,16 @@ export function ThreadCreation() {
                         <div className="form__theme">Выберите теги</div>
                         <div className="theme__container main__page">
                             <div className="display__inline">
-                                {[
-                                    "Суицидальность",
-                                    "Депрессия",
-                                    "Утомляемость",
-                                    "Проблемы на работе",
-                                    "Проблемы в отношениях",
-                                    "Перемены настрояния",
-                                    "Потеря близкого человека",
-                                    "Девиантное поведение",
-                                    "Алкоголизм",
-                                    "Перемены настрояния",
-                                    "Потеря близкого человека",
-                                ].map((problem, index) => (
-                                    <button key={index} className="problem__button focus">
+                                {problemsFromBackend.map((problem, index) => (
+                                    <button key={index} className="problem__button">
                                         <label>
-                                            <input className='checkbox__none'
-                                                   type="checkbox"
-                                                   value={problem}
+                                            <input
+                                                className="checkbox__none"
+                                                type="checkbox"
+                                                value={problem.description}
+                                                onChange={() => handleCheckboxChange(problem.description)}
                                             />
-                                            <div className="form info problem">{problem}</div>
+                                            <div className="form info problem">{problem.description}</div>
                                         </label>
                                     </button>
                                 ))}
@@ -86,12 +162,27 @@ export function ThreadCreation() {
                         <textarea
                             name="textarea"
                             className="form__page__subtitle input forum__page new__forum"
-                            defaultValue={""}
-                            placeholder={"Напишите заголовок, если нужно"}
+                            value={currentTag}
+                            onChange={handleTagInputChange}
+                            onKeyDown={handleTagInputKeyDown}
+                            placeholder={"Тег добавится по ентеру или по пробелу"}
                         ></textarea>
-
+                        <div className="tags-container">
+                            {customTags.map((tag, index) => (
+                                <div key={index} className="tag">
+                                    {tag}
+                                    <button
+                                        type="button"
+                                        className="tag-delete-button"
+                                        onClick={() => handleTagDelete(index)}
+                                    >
+                                        Delete
+                                    </button>
+                                </div>
+                            ))}
+                        </div>
                     </div>
-                    <button className="next__step thread__creation" type={"submit"}>
+                    <button className="next__step thread__creation" type={"submit"} onClick={handleSubmit}>
                         Опубликовать
                     </button>
 

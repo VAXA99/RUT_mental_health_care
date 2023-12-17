@@ -25,7 +25,7 @@ public class CommunicationController {
         this.communicationService = communicationService;
     }
 
-    @GetMapping("/feed")
+    @PostMapping("/feed")
     public ResponseEntity<?> getFeed(@RequestBody FeedRequest feedRequest) {
         try {
             List<PostDto> feed = communicationService.getFeed(feedRequest.getScrollingUserId(), feedRequest.getFeedType(), feedRequest.getTagNames());
@@ -45,6 +45,7 @@ public class CommunicationController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
+
     @GetMapping("/post/{postId}")
     public ResponseEntity<PostDto> getPostById(@PathVariable Long postId) {
         try {
@@ -70,9 +71,9 @@ public class CommunicationController {
         try {
             communicationService.writePost
                     (postRequest.getUserId(),
-                    postRequest.getTitle(),
-                    postRequest.getContent(),
-                    postRequest.getTagNames());
+                            postRequest.getTitle(),
+                            postRequest.getContent(),
+                            postRequest.getTagNames());
             return ResponseEntity.status(HttpStatus.CREATED).body("Post created successfully");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error creating post");

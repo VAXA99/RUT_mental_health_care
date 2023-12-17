@@ -49,6 +49,8 @@ export default function Header() {
         }
     }, [authenticated, userId, setUserProfilePicture]);
 
+    //todo figure out how to make header not to disappear when you are navigated back to main page from /auth and /signup
+
     return (
         <div>
             <div className="container head">
