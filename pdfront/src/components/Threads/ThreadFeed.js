@@ -8,7 +8,8 @@ import auth from "../../backend/Auth";
 import consultation from "../../backend/Consultation";
 
 export function ThreadFeed() {
-
+    const [postsWithPopup, setPostsWithPopup] = useState({});
+    const [showPopup, setShowPopup] = useState(false);
     const [posts, setPosts] = useState([]);
     const [sortType, setSortType] = useState("NEWEST_TO_OLDEST");
     const [userProfilePictures, setUserProfilePictures] = useState({});
@@ -71,6 +72,12 @@ export function ThreadFeed() {
         } catch (error) {
             console.error("Error fetching posts from the backend", error);
         }
+    };
+    const togglePopup = (postId) => {
+        setPostsWithPopup((prevPostsWithPopup) => ({
+            ...prevPostsWithPopup,
+            [postId]: !prevPostsWithPopup[postId],
+        }));
     };
 
 
@@ -179,16 +186,16 @@ export function ThreadFeed() {
                                     </label>
                                 </button>
                             ))}
-                            <button type="button" onClick={() => handleSearch(selectedProblems, "BY_TAGS")}>
-                                {/*<img src="../../../public/img/Search%20icon.png"/>*/}
-                                Поиск
+                            <button className='border__none input__search' type="button" onClick={() => handleSearch(selectedProblems, "BY_TAGS")}>
+                                <img src="/img/Search%20icon.png" width='25%'/>
+
                             </button>
                         </div>
                     </div>
-                    <button onClick={() => handleSort("NEWEST_TO_OLDEST")}>
+                    <button className="next__step threads" onClick={() => handleSort("NEWEST_TO_OLDEST")}>
                         Sort by Newest to Oldest
                     </button>
-                    <button onClick={() => handleSort("MOST_POPULAR_TO_LEAST")}>
+                    <button className="next__step threads" onClick={() => handleSort("MOST_POPULAR_TO_LEAST")}>
                         Sort by Most Popular to Least
                     </button>
                     {posts.map((post) => (
@@ -220,7 +227,17 @@ export function ThreadFeed() {
                                     </button>
                                     <div className="like__count">{post.likeCount}</div>
                                 </div>
+
                             </div>
+                            <button className='edit__img__container' onClick={() => togglePopup(post.id)}>
+                                <img src="/img/троеточие.png" alt="" width='100%' height='100%'/>
+                            </button>
+                            {postsWithPopup[post.id] &&
+                                <div className='parametr__buttons__container'>
+                                <div><button className='post'>edit</button></div>
+                                <div><button className='post delete'>delete</button></div>
+                            </div>}
+
                         </div>
                     ))}
                 </div>

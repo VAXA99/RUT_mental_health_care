@@ -165,8 +165,65 @@ a:hover {
     font-size: 25px;
     color: #204757;
 }
+.edit__img__container{
+    position: relative;
+    bottom: 120px;
+    right: 0;
+    z-index: 100;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    border: none;
+    background-color: inherit;
+}
+
+.parametr__buttons__container {
+    position: absolute;
+    top: 50px; /* Выберите подходящее значение для расположения кнопок относительно троеточия */
+    right: 0;
+    z-index: 100;
+    background-color: white;
+    width: 100px;
+    border-radius: 10px;
+    font-size: 20px;
+    padding: 0 0 3px 0;
 
 
+
+}
+
+.post{
+    width: 90%;
+    padding: 3px 0;
+    border-radius: 10px;
+    background-color: mediumspringgreen;
+    border: none;
+    cursor: pointer;
+    text-align: center;
+}
+.post.delete{
+    background-color: #FF7C7C;
+}
+
+.border__none{
+    border: none;
+    background-color: inherit;
+    cursor: pointer;
+}
+
+.next__step.threads{
+    margin-right: 20px;
+    padding: 5px 10px ;
+    font-size: 15px;
+
+}
+
+.border__none.input__search {
+    position: absolute;
+    right: 0;
+    transform: translate(0, -50%);
+    top: 50%;
+}
 .form__block__info {
     font-weight: 500;
     font-size: 20px;

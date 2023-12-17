@@ -13,7 +13,8 @@
     border-radius: 45%;
 }
 
-.profile__ifo{
+.profile__info{
+    position: relative;
     margin-left: 5%;
     width: 60%;
 }
@@ -188,4 +189,26 @@ textarea{
     line-height: 22px;
     padding: 10px 20px;
     margin-top: 20px;
+}
+
+.edit__profile__info{
+    position: absolute;
+    top: 2%;
+    right: 0;
+}
+
+.profile__edit__input.edit{
+    background-color: #DEDEDE;
+    width: 90%;
+}
+.profile__edit.first{
+    width: 120%;
+}
+
+.profile__info.edit{
+    width: 70%;
+}
+
+.profile__edit__info.edit{
+    margin: 0;
 }
