@@ -10,6 +10,7 @@ import EditUserProfileInfo from "./EditUserProfileInfo";
 
 export default function UserProfile() {
 
+    const [step, setStep] = useState(1);
     const [authenticated, setAuthenticated] = useState(Auth.isTokenValid);
     const userId= Auth.getUserId();
     const [userData, setUserData] = useState({});
@@ -91,6 +92,9 @@ export default function UserProfile() {
         setShowPopup(!showPopup);
 
     };
+    const handleStep = () => {
+        setStep( step+1);
+    };
     return(
 
         <>
@@ -115,12 +119,8 @@ export default function UserProfile() {
                         </label>
                         <button className="img__update__button" onClick={handleFileUpload}>Изменить фото</button>
                     </div>
-
-                    <UserProfileInfo/>
-                    {showPopup &&
-                        <EditUserProfileInfo/>
-                    }
-
+                        <UserProfileInfo />
+                        {/*<EditUserProfileInfo />*/}
                 </div>
             </div>
         </>
