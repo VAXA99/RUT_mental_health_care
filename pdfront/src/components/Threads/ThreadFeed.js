@@ -8,7 +8,8 @@ import auth from "../../backend/Auth";
 import consultation from "../../backend/Consultation";
 
 export function ThreadFeed() {
-
+    const [postsWithPopup, setPostsWithPopup] = useState({});
+    const [showPopup, setShowPopup] = useState(false);
     const [posts, setPosts] = useState([]);
     const [sortType, setSortType] = useState("NEWEST_TO_OLDEST");
     const [userProfilePictures, setUserProfilePictures] = useState({});
@@ -19,13 +20,9 @@ export function ThreadFeed() {
     useEffect(() => {
         // Fetch problems from the backend when the component mounts
         const fetchProblems = async () => {
-            try {
-                // Assuming your backend API provides a function to get problems
-                const problems = await consultation.getAllTags();
-                setProblemsFromBackend(problems);
-            } catch (error) {
-                console.error("Error fetching problems from the backend", error);
-            }
+            // Assuming your backend API provides a function to get problems
+            const problems = await consultation.getAllTags();
+            setProblemsFromBackend(problems);
         };
 
         fetchProblems();
@@ -46,45 +43,40 @@ export function ThreadFeed() {
     };
 
     const handleSort = async (newSortType) => {
-        try {
-            const scrollingUerId = auth.getUserId();
+        const scrollingUerId = auth.getUserId();
 
-            // Update the sort type state
-            setSortType(newSortType);
+        // Update the sort type state
+        setSortType(newSortType);
 
 
-            // Make the request to get the feed based on the updated sort type
-            const data = await communication.getFeed(scrollingUerId, newSortType, []);
-            setPosts(data);
-        } catch (error) {
-            console.error("Error fetching posts from the backend", error);
-        }
+        // Make the request to get the feed based on the updated sort type
+        const data = await communication.getFeed(scrollingUerId, newSortType, []);
+        setPosts(data);
+
     };
 
     const handleSearch = async (tagNames, newFeedType) => {
-        try {
-            const scrollingUerId = auth.getUserId();
+        const scrollingUerId = auth.getUserId();
 
-            // Make the request to get the feed based on the updated sort type and tags
-            const data = await communication.getFeed(scrollingUerId, newFeedType, tagNames);
-            setPosts(data);
-        } catch (error) {
-            console.error("Error fetching posts from the backend", error);
-        }
+        // Make the request to get the feed based on the updated sort type and tags
+        const data = await communication.getFeed(scrollingUerId, newFeedType, tagNames);
+        setPosts(data);
+    };
+    const togglePopup = (postId) => {
+        setPostsWithPopup((prevPostsWithPopup) => ({
+            ...prevPostsWithPopup,
+            [postId]: !prevPostsWithPopup[postId],
+        }));
     };
 
 
     useEffect(() => {
         const fetchPosts = async () => {
-            try {
-                const scrollingUerId = auth.getUserId();
+            const scrollingUerId = auth.getUserId();
 
-                // Make the initial request to get the feed with the default sort type
-                const data = await communication.getFeed(scrollingUerId, sortType, []);
-                setPosts(data);
-            } catch (error) {
-                console.error("Error fetching posts from the backend", error);
-            }
+            // Make the initial request to get the feed with the default sort type
+            const data = await communication.getFeed(scrollingUerId, sortType, []);
+            setPosts(data);
         };
 
         fetchPosts();
@@ -93,15 +85,11 @@ export function ThreadFeed() {
 
     useEffect(() => {
         const fetchUserProfilePhoto = async (userId) => {
-            try {
-                const imgElement = await getUserProfilePhoto(userId);
-                setUserProfilePictures((prevProfilePictures) => ({
-                    ...prevProfilePictures,
-                    [userId]: imgElement,
-                }));
-            } catch (error) {
-                console.error('Error fetching user profile photo:', error);
-            }
+            const imgElement = await getUserProfilePhoto(userId);
+            setUserProfilePictures((prevProfilePictures) => ({
+                ...prevProfilePictures,
+                [userId]: imgElement,
+            }));
         };
 
         // Fetch user profile picture for each post
@@ -141,7 +129,6 @@ export function ThreadFeed() {
     };
 
 
-
     return (
         <>
             <div className="display__flex__mt">
@@ -179,16 +166,16 @@ export function ThreadFeed() {
                                     </label>
                                 </button>
                             ))}
-                            <button type="button" onClick={() => handleSearch(selectedProblems, "BY_TAGS")}>
-                                {/*<img src="../../../public/img/Search%20icon.png"/>*/}
-                                Поиск
+                            <button className='border__none input__search' type="button" onClick={() => handleSearch(selectedProblems, "BY_TAGS")}>
+                                <img src="/img/Search%20icon.png" width='25%'/>
+
                             </button>
                         </div>
                     </div>
-                    <button onClick={() => handleSort("NEWEST_TO_OLDEST")}>
+                    <button className="next__step threads" onClick={() => handleSort("NEWEST_TO_OLDEST")}>
                         Sort by Newest to Oldest
                     </button>
-                    <button onClick={() => handleSort("MOST_POPULAR_TO_LEAST")}>
+                    <button className="next__step threads" onClick={() => handleSort("MOST_POPULAR_TO_LEAST")}>
                         Sort by Most Popular to Least
                     </button>
                     {posts.map((post) => (
@@ -221,6 +208,15 @@ export function ThreadFeed() {
                                     <div className="like__count">{post.likeCount}</div>
                                 </div>
                             </div>
+                            <button className='edit__img__container' onClick={() => togglePopup(post.id)}>
+                                <img src="/img/троеточие.png" alt="" width='100%' height='100%'/>
+                            </button>
+                            {postsWithPopup[post.id] &&
+                                <div className='parametr__buttons__container'>
+                                <div><button className='post'>edit</button></div>
+                                <div><button className='post delete'>delete</button></div>
+                            </div>}
+
                         </div>
                     ))}
                 </div>

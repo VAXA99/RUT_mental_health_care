@@ -1,6 +1,5 @@
 import axios from "axios";
 import baseUrl from "./base-url";
-import qs from "qs";
 
 
 const BASE_URL = baseUrl + '/posts';
@@ -41,5 +40,22 @@ export default {
             throw error;
         }
     },
+
+    getPost: async (postId, scrollingUserId) => {
+        try {
+            const response = await api.get(`/post/${postId}?scrollingUserId=${scrollingUserId}`);
+            return response.data;
+        } catch (error) {
+            console.error("Error getting post from backend", error);
+        }
+    },
+
+    commentPost: async (postId, commentRequest) => {
+        try {
+            return await api.post(`/comment/post/${postId}`, commentRequest);
+        } catch (error) {
+            console.error("error commenting", error);
+        }
+    }
 
 }
