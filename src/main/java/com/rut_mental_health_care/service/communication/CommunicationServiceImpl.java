@@ -76,19 +76,23 @@ public class CommunicationServiceImpl implements CommunicationService {
     }
 
     @Override
-    public PostDto getPostWithComments(Long postId) {
+    public PostDto getPostWithComments(Long scrollingUserId, Long postId) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new EntityNotFoundException("Post not found with ID: " + postId));
 
         List<Comment> comments = commentRepository.findCommentByPostId(postId);
+        List<String> tagNames = tagRepository.findTagsByPostId(postId);
+
+
 
         PostDto postDto = convertToPostDTO(post);
         List<CommentDto> commentDtos = comments.stream()
                 .map(this::convertToCommentDTO)
                 .collect(Collectors.toList());
 
+        postDto.setScrollingUserHasLiked(likeRepository.existsByPostIdAndUserId(postDto.getId(), scrollingUserId));
         postDto.setCommentDtos(commentDtos);
-
+        postDto.setTagNames(tagNames);
 
         return postDto;
     }

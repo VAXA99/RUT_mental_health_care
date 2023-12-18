@@ -8,6 +8,7 @@ import com.rut_mental_health_care.repository.UserRepository;
 import com.rut_mental_health_care.security.UserDetailsImpl;
 import com.rut_mental_health_care.service.file.FileService;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.data.repository.query.Param;
@@ -86,9 +87,29 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                 .orElseThrow(() -> new EntityNotFoundException("User not found"));
     }
 
+    @Transactional
     public void createPasswordResetTokenForUser(User user, String token) {
+        deletePasswordResetToken(user);
         PasswordResetToken myToken = new PasswordResetToken(token, user);
         passwordResetTokenRepository.save(myToken);
+    }
+
+    private boolean isTokenFound(PasswordResetToken passToken) {
+        return passToken != null;
+    }
+
+    private boolean isTokenExpired(PasswordResetToken passToken) {
+        final Calendar cal = Calendar.getInstance();
+        return passToken.getExpiryDate().before(cal.getTime());
+    }
+
+    private boolean isPasswordChanged(User user, String newPassword) {
+        // Compare the new password with the old hashed password
+        return !encoder.matches(newPassword, user.getPassword());
+    }
+
+    private void deletePasswordResetToken(User user) {
+        passwordResetTokenRepository.deleteByUser(user);
     }
 
     public String validatePasswordResetToken(String token) {
@@ -107,28 +128,18 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         }
     }
 
-    private boolean isTokenFound(PasswordResetToken passToken) {
-        return passToken != null;
-    }
 
-    private boolean isTokenExpired(PasswordResetToken passToken) {
-        final Calendar cal = Calendar.getInstance();
-        return passToken.getExpiryDate().before(cal.getTime());
-    }
-
+    @Transactional
     public boolean changeUserPassword(User user, String password) {
         if (isPasswordChanged(user, password)) {
             user.setPassword(encoder.encode(password));
             userRepository.save(user);
-            passwordResetTokenRepository.deleteByUser(user);
+            deletePasswordResetToken(user);
             return true;
         }
         return false;
     }
 
-    private boolean isPasswordChanged(User user, String newPassword) {
-        // Compare the new password with the old hashed password
-        return !encoder.matches(newPassword, user.getPassword());
-    }
+
 
 }

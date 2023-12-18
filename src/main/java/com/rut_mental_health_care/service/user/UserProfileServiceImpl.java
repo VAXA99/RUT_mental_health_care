@@ -45,68 +45,72 @@ public class UserProfileServiceImpl implements UserProfileService {
         this.modelMapper = modelMapper;
     }
 
-    @Override
     public String getUserUsername(Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("User not found with ID:" + userId));
         return user.getUsername();
     }
 
-    @Override
     public String getUserRoles(Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("User not found with ID:" + userId));
         return user.getRoles();
     }
 
-    @Override
+    public String getUserPhoneNumber(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("User not found with ID:" + userId));
+        return user.getPhoneNumber();
+    }
+
     public String getUserName(Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("User not found with ID:" + userId));
         return user.getName();
     }
 
-    @Override
     public String getUserSurname(Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("User not found with ID:" + userId));
         return user.getSurname();
     }
 
-    @Override
     public String getUserMiddleName(Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("User not found with ID:" + userId));
         return user.getMiddleName();
     }
 
-    @Override
     public String getUserEmail(Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("User not found with ID:" + userId));
         return user.getEmail();
     }
 
-    @Override
     public String getUserBio(Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("User not found with ID:" + userId));
         return user.getInformation();
     }
 
-    @Override
+
+    public LocalDate getUserDateOfBirth(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("User not found with ID:" + userId));
+        return user.getDateOfBirth();
+    }
+
     public int getUserAge(Long userId) {
         return userRepository.countUserAge(userId);
     }
 
-    @Override
-    @Transactional
-    public File getProfilePicture(Long userId) {
-        return fileService.findByUserId(userId);
+    public int getUserSex(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("User not found with ID:" + userId));
+        return user.getSex();
     }
 
-    @Override
-    public List<PostDto> getUserPosts(Long userId) {
+    private List<PostDto> getUserPosts(Long userId) {
         List<Post> posts = postRepository.findAllByUserId(userId);
         List<PostDto> postDtos = posts.stream()
                 .map(post -> {
@@ -120,18 +124,15 @@ public class UserProfileServiceImpl implements UserProfileService {
         return postDtos;
     }
 
-    @Override
-    public long getUserPostCount(Long userId) {
+    private long getUserPostCount(Long userId) {
         return postRepository.getUserPostCount(userId);
     }
 
-    @Override
-    public long getTotalLikesOnUserPosts(Long userId) {
+    private long getTotalLikesOnUserPosts(Long userId) {
         return postRepository.getTotalLikesOnUserPosts(userId);
     }
 
-    @Override
-    public long getTotalCommentsOnUserPosts(Long userId) {
+    private long getTotalCommentsOnUserPosts(Long userId) {
         return postRepository.getTotalCommentsOnUserPosts(userId);
     }
 
@@ -140,21 +141,73 @@ public class UserProfileServiceImpl implements UserProfileService {
 
         String username = getUserUsername(userId);
         String roles = getUserRoles(userId);
+        String phoneNumber = getUserPhoneNumber(userId);
         String name = getUserName(userId);
         String surname = getUserSurname(userId);
         String middleName = getUserMiddleName(userId);
         String email = getUserEmail(userId);
         String bio = getUserBio(userId);
+        LocalDate dateOfBirth = getUserDateOfBirth(userId);
         int age = getUserAge(userId);
-        List<PostDto> postDtos= getUserPosts(userId);
+        int sex = getUserSex(userId);
+        List<PostDto> postDtos = getUserPosts(userId);
         long totalPosts = getUserPostCount(userId);
         long totalComments = getTotalCommentsOnUserPosts(userId);
         long totalLikes = getTotalLikesOnUserPosts(userId);
 
-        return new UserProfileDto(userId, username, roles, name, surname, middleName, email, bio, age, postDtos, totalPosts, totalComments, totalLikes);
+
+        return new UserProfileDto(
+                userId,
+                username,
+                roles,
+                phoneNumber,
+                name,
+                surname,
+                middleName,
+                email,
+                bio,
+                dateOfBirth,
+                age,
+                sex,
+                postDtos,
+                totalPosts,
+                totalComments,
+                totalLikes);
     }
 
     @Override
+    public UserProfileDto getUserProfile(String username) {
+        Long userId = userRepository.findUserIdByUsername(username);
+        return getUserProfile(userId);
+    }
+
+    @Override
+    @Async
+    public void editUserProfile(Long userId,
+                                String username,
+                                String phoneNumber,
+                                String name,
+                                String surname,
+                                String middleName,
+                                String email,
+                                String bio,
+                                LocalDate dateOfBirth,
+                                Integer sex) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("User not found with ID:" + userId));
+        editUserUsername(user, username);
+        editUserPhoneNumber(user, phoneNumber);
+        editUserName(user, name);
+        editUserSurname(user, surname);
+        editUserMiddleName(user, middleName);
+        editUserEmail(user, email);
+        editUserBio(user, bio);
+        editUserDateOfBirth(user, dateOfBirth);
+        editUserSex(user, sex);
+
+        userRepository.save(user);
+    }
+
     public List<UserProfileDto> getPsychologistsProfile() {
         List<User> psychologists = userRepository.findAllByRoles("ROLE_PSYCHOLOGIST");
 
@@ -169,66 +222,45 @@ public class UserProfileServiceImpl implements UserProfileService {
                 .collect(Collectors.toList());
     }
 
-    @Override
-    @Async
-    public void editUsername(Long userId, String newUsername) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new EntityNotFoundException("User not found with ID:" + userId));
-        user.setUsername(newUsername);
-        userRepository.save(user);
+    private void editUserUsername(User user, String username) {
+        user.setUsername(username);
     }
 
-    @Override
-    @Async
-    public void editName(Long userId, String newName) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new EntityNotFoundException("User not found with ID:" + userId));
-        user.setName(newName);
-        userRepository.save(user);
+    private void editUserPhoneNumber(User user, String phoneNumber) {
+        user.setPhoneNumber(phoneNumber);
     }
 
-    @Override
-    @Async
-    public void editSurname(Long userId, String newSurname) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new EntityNotFoundException("User not found with ID:" + userId));
-        user.setSurname(newSurname);
-        userRepository.save(user);
+    private void editUserName(User user, String name) {
+        user.setName(name);
     }
 
-    @Override
-    @Async
-    public void editMiddleName(Long userId, String newMiddleName) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new EntityNotFoundException("User not found with ID:" + userId));
-        user.setMiddleName(newMiddleName);
-        userRepository.save(user);
+    private void editUserSurname(User user, String surname) {
+        user.setSurname(surname);
     }
 
-    @Override
-    @Async
-    public void editEmail(Long userId, String newEmail) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new EntityNotFoundException("User not found with ID:" + userId));
-        user.setEmail(newEmail);
-        userRepository.save(user);
+    private void editUserMiddleName(User user, String middleName) {
+        user.setMiddleName(middleName);
     }
 
-    @Override
-    @Async
-    public void editBio(Long userId, String newBio) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new EntityNotFoundException("User not found with ID:" + userId));
-        user.setInformation(newBio);
-        userRepository.save(user);
+    private void editUserEmail(User user, String email) {
+        user.setEmail(email);
     }
 
-    @Override
-    @Transactional
-    public void editUserDateOfBirth(Long userId, LocalDate dateOfBirth) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new EntityNotFoundException("User not found with ID:" + userId));
+    private void editUserBio(User user, String bio) {
+        user.setInformation(bio);
+    }
+
+    private void editUserDateOfBirth(User user, LocalDate dateOfBirth) {
         user.setDateOfBirth(dateOfBirth);
+    }
+
+    private void editUserSex(User user, Integer sex) {
+        user.setSex(sex);
+    }
+
+    @Transactional
+    public File getProfilePicture(Long userId) {
+        return fileService.findByUserId(userId);
     }
 
     @Override

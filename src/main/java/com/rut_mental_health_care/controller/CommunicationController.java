@@ -9,6 +9,7 @@ import com.rut_mental_health_care.service.communication.CommunicationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -49,9 +50,9 @@ public class CommunicationController {
     }
 
     @GetMapping("/post/{postId}")
-    public ResponseEntity<PostDto> getPostById(@PathVariable Long postId) {
+    public ResponseEntity<PostDto> getPostById(@PathVariable Long postId, @RequestParam Long scrollingUserId) {
         try {
-            PostDto post = communicationService.getPostWithComments(postId);
+            PostDto post = communicationService.getPostWithComments(scrollingUserId, postId);
             return ResponseEntity.ok(post);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);

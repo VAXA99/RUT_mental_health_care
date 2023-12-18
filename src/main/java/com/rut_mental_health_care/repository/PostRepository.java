@@ -20,6 +20,11 @@ public interface PostRepository extends JpaRepository<Post, Long> {
             "ORDER BY (SIZE(p.likes) + SIZE(p.comments)) DESC")
     List<Post> getPostsFromMostPopularToLeast();
 
+    @Query("SELECT p FROM Post p " +
+            "WHERE p.user.id = :userId " +
+            "ORDER BY p.createdAt DESC ")
+    List<Post> findAllByUserId(@Param("userId") Long userId);
+
     // Query to get the like count for a post
     @Query("SELECT COUNT(l) FROM Like l WHERE l.post = :post AND l.isLike = true")
     long getLikeCount(@Param("post") Post post);
@@ -43,8 +48,6 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     // Query to get the total number of comments on user's posts
     @Query("SELECT COUNT(c) FROM Comment c WHERE c.post.user.id = :userId")
     long getTotalCommentsOnUserPosts(@Param("userId") Long userId);
-
-    List<Post> findAllByUserId(Long userId);
 
     @Query("SELECT DISTINCT p FROM Post p JOIN FETCH p.tags t WHERE t IN :tags")
     List<Post> findAllByTags(@Param("tags") List<Tag> tags);

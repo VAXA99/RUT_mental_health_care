@@ -1,5 +1,6 @@
 package com.rut_mental_health_care.controller;
 
+import com.rut_mental_health_care.controller.request.UserProfileRequest;
 import com.rut_mental_health_care.dto.UserProfileDto;
 import com.rut_mental_health_care.model.File;
 import com.rut_mental_health_care.service.user.UserProfileService;
@@ -28,43 +29,35 @@ public class UserProfileController {
         this.userProfileService = userProfileService;
     }
 
-    @GetMapping("/{userId}")
+    @GetMapping("user/{userId}")
     public UserProfileDto getUserProfile(@PathVariable Long userId) {
         return userProfileService.getUserProfile(userId);
     }
 
-    @PatchMapping("/editUsername/{userId}")
-    public void editUsername(@PathVariable Long userId, @RequestParam String newUsername) {
-        userProfileService.editUsername(userId, newUsername);
+    @GetMapping("username/{username}")
+    public UserProfileDto getUserProfile(@PathVariable String username) {
+        return userProfileService.getUserProfile(username);
     }
 
-    @PatchMapping("/editName/{userId}")
-    public void editName(@PathVariable Long userId, @RequestParam String newName) {
-        userProfileService.editName(userId, newName);
-    }
+    @PutMapping("edit/{userId}")
+    public ResponseEntity<?> editUserProfile(@PathVariable Long userId, @RequestBody UserProfileRequest userProfileRequest) {
+        try {
+            userProfileService.editUserProfile(userId,
+                    userProfileRequest.getUsername(),
+                    userProfileRequest.getPhoneNumber(),
+                    userProfileRequest.getName(),
+                    userProfileRequest.getSurname(),
+                    userProfileRequest.getMiddleName(),
+                    userProfileRequest.getEmail(),
+                    userProfileRequest.getBio(),
+                    userProfileRequest.getDateOfBirth(),
+                    userProfileRequest.getSex()
+            );
 
-    @PatchMapping("/editSurname/{userId}")
-    public void editSurname(@PathVariable Long userId, @RequestParam String newSurname) {
-        userProfileService.editSurname(userId, newSurname);
-    }
-
-    @PatchMapping("/editMiddleName/{userId}")
-    public void editMiddleName(@PathVariable Long userId, @RequestParam String newMiddleName) {
-        userProfileService.editMiddleName(userId, newMiddleName);
-    }
-
-    @PatchMapping("/editEmail/{userId}")
-    public void editEmail(@PathVariable Long userId, @RequestParam String newEmail) {
-        userProfileService.editEmail(userId, newEmail);
-    }
-
-    @PatchMapping("/editBio/{userId}")
-    public void editBio(@PathVariable Long userId, @RequestParam String newBio) {
-        userProfileService.editBio(userId, newBio);
-    }
-    @PatchMapping("/editDateOfBirth/{userId}")
-    public void editDateOfBirth(@PathVariable Long userId, @RequestParam LocalDate dateOfBirth) {
-        userProfileService.editUserDateOfBirth(userId, dateOfBirth);
+            return ResponseEntity.ok(null);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while updating user profile.");
+        }
     }
 
     @GetMapping("/psychologistsProfiles")

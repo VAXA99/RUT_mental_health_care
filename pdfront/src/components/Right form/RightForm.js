@@ -26,15 +26,6 @@ export default function RightForm(){
         </div>
         <div className="info__block">
             <div className="info__block__title">
-                Кабинеты
-            </div>
-            <div className="info__block__info">
-                
-                <br/><br/><br/><br/><br/>
-            </div>
-        </div>
-        <div className="info__block">
-            <div className="info__block__title">
                Наши соц сети
             </div>
             <div className="info__block__info media">

@@ -11,28 +11,25 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface UserProfileService {
-    String getUserUsername(Long userId);
-    String getUserRoles(Long userId);
-    String getUserName(Long userId);
-    String getUserSurname(Long userId);
-    String getUserMiddleName(Long userId);
-    String getUserEmail(Long userId);
-    String getUserBio(Long userId);
-    int getUserAge(Long userId);
-    File getProfilePicture(Long userId);
-    List<PostDto> getUserPosts(Long userId);
-    long getUserPostCount(Long userId);
-    long getTotalLikesOnUserPosts(Long userId);
-    long getTotalCommentsOnUserPosts(Long userId);
     UserProfileDto getUserProfile(Long userId);
+    UserProfileDto getUserProfile(String username);
+
+    void editUserProfile(Long userId,
+                         String username,
+                         String phoneNumber,
+                         String name,
+                         String surname,
+                         String middleName,
+                         String email,
+                         String bio,
+                         LocalDate dateOfBirth,
+                         Integer sex);
+
     List<UserProfileDto> getPsychologistsProfile();
-    void editUsername(Long userId, String newUsername);
-    void editName(Long userId, String newName);
-    void editSurname(Long userId, String newSurname);
-    void editMiddleName(Long userId, String newMiddleName);
-    void editEmail(Long userId, String newEmail);
-    void editBio(Long userId, String newBio);
-    void editUserDateOfBirth(Long userId, LocalDate dateOfBirth);
+
+    File getProfilePicture(Long userId);
+
     void uploadProfilePicture(Long userId, MultipartFile file) throws IOException;
+
     void deleteProfilePicture(Long userId) throws IOException;
 }

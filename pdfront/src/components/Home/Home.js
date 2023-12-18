@@ -50,8 +50,7 @@ export default function Home() {
                         </div>
                     ) : (
                         <div></div>
-                    )
-                    }
+                    )}
                     <div className="main__links">
                         <div className="links top">
                             <div className="links__components">
