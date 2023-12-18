@@ -8,10 +8,9 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDate;
 import java.util.List;
 
-//add dateOfBirth
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 public class UserProfileDto {
     private Long userId;
     private String username;
@@ -26,6 +25,7 @@ public class UserProfileDto {
     private int age;
     private int sex;
     private List<PostDto> postDtos;
+    private List<ArticleDto> articleDtos;
     private long totalPosts;
     private long totalComments;
     private long totalLikes;
