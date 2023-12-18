@@ -16,6 +16,7 @@ export default function UserProfile() {
     const [userData, setUserData] = useState({});
     const navigate = useNavigate();
     const [selectedFile, setSelectedFile] = useState(null);
+    const [userRole, setUserRole] = useState(Auth.getUserRole());
     const [showPopup, setShowPopup] = useState(false);
 
     const { userProfilePicture, setUserProfilePicture } = useUserContext();
@@ -113,8 +114,6 @@ export default function UserProfile() {
                             <div><span className="input-file-text">Максимум 10мб</span></div>
                             {/*TODO изменить handleFileChange, добавить в него метод изменения ласт спан
                              <div><span className="input-file-text">{fileName}}</span></div>*/}
-                            {/*<span className="input-file-text">Максимум 10мб</span>*/}
-                           {/* <span>Выберите файл</span>*/}
 
                         </label>
                         <button className="img__update__button" onClick={handleFileUpload}>Изменить фото</button>

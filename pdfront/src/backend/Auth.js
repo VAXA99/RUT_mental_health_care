@@ -51,7 +51,7 @@ export default {
         }
     },
 
-    signUp: async (email, username, password, name, surname, dateOfBirth) => {
+    signUp: async (email, username, password, name, surname, dateOfBirth, sex) => {
         try {
             const response = await api.post('/signUp', {
                 email,
@@ -59,7 +59,8 @@ export default {
                 password,
                 name,
                 surname,
-                dateOfBirth
+                dateOfBirth,
+                sex
             });
             return {success: response.status === 200, error: null};
         } catch (error) {
