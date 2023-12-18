@@ -65,6 +65,9 @@
     justify-content: start;
 }
 
+.width{
+    width: 100%;
+}
 .month{
     margin-bottom: 20px;
     display: flex;

@@ -2,6 +2,7 @@
     width: 80%;
     font-size: 20px;
     font-weight: 500;
+    margin-right: auto;
 
 }
 
@@ -11,9 +12,10 @@
     margin-bottom: 10px;
 }
 .container.main.psycho__form{
-    margin: 0;
-    width: 70%;
+    margin-right: auto;
+
 }
+
 .week__numbers{
     padding: 10px;
 
@@ -32,8 +34,71 @@
     cursor: pointer;
 }
 
-.week__numbers__element:focus {
-
+.week__numbers__element.focus {
     border: inherit;
-    background-color: #FFB44E;
+    background:
+            radial-gradient(107.03% 105.64% at 14.49% -10.91%, #FFD700 0%,
+            rgba(255, 255, 255, 0.00) 100%), #FFB44E;
+}
+
+.sub__form__cont.psycho__form{
+    width: 100%;
+}
+
+.left__spans{
+    font-size: 18px;
+    font-weight: 400;
+    color: black;
+    width: 35%;
+    background-color: #92D5F1;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    padding: 5px;
+    border-radius: 30px;
+    text-align: center;
+    justify-content: space-evenly;
+
+}
+
+.left__spans.focus{
+    background:
+            radial-gradient(107.03% 105.64% at 14.49% -10.91%, #FFD700 0%,
+            rgba(255, 255, 255, 0.00) 100%), #FFB44E;
+}
+
+.recording__time{
+
+    color: white;
+    font-weight: 600;
+}
+
+.recording__number{
+    font-size: 25px;
+    font-weight: 600;
+    text-align: center;
+    height: 30px;
+    width: 30px;
+    line-height: 30px;
+    border-radius: 50%;
+    background-color: white;
+}
+
+.recording__name{
+    width: 100%;
+    text-align: center;
+    font-size: 25px;
+    font-weight: 600;
+}
+.recording__row{
+    margin-bottom: 30px;
+    display: flex;
+    align-items: center;
+    height: 50px;
+    background-color: rgba(146, 213, 241, 0.2);
+    border-radius: 20px;
+}
+
+.recording__row.focus{
+    background-color: white;
 }
