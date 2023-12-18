@@ -6,65 +6,9 @@ const api = axios.create({
     baseURL: BASE_URL,
 });
 
-// Function to edit name by user ID
-async function editName(userId, newName) {
+async function getUserProfile(username) {
     try {
-        await api.patch(`/editName/${userId}?newName=${newName}`);
-    } catch (error) {
-        console.error('Error editing name:', error);
-        throw error;
-    }
-}
-
-// Function to edit surname by user ID
-async function editSurname(userId, newSurname) {
-    try {
-        await api.patch(`/editSurname/${userId}?newSurname=${newSurname}`);
-    } catch (error) {
-        console.error('Error editing surname:', error);
-        throw error;
-    }
-}
-
-// Function to edit middle name by user ID
-async function editMiddleName(userId, newMiddleName) {
-    try {
-        await api.patch(`/editMiddleName/${userId}`, {
-            newMiddleName
-        });
-    } catch (error) {
-        console.error('Error editing middle name:', error);
-        throw error;
-    }
-}
-
-// Function to edit email by user ID
-async function editEmail(userId, newEmail) {
-    try {
-        await api.patch(`/editEmail/${userId}`, {
-            newEmail
-        });
-    } catch (error) {
-        console.error('Error editing email:', error);
-        throw error;
-    }
-}
-
-// Function to edit bio by user ID
-async function editBio(userId, newBio) {
-    try {
-        await api.patch(`/editBio/${userId}`,{
-            newBio
-        });
-    } catch (error) {
-        console.error('Error editing bio:', error);
-        throw error;
-    }
-}
-async function getUserProfile(userID) {
-    try {
-        const longUserId = Number(userID);
-        const response = await api.get(`/${longUserId}`);
+        const response = await api.get(`/username/${username}`);
         return response.data;
     } catch (error) {
         console.error('Error finding userID:', error);
@@ -72,10 +16,9 @@ async function getUserProfile(userID) {
     }
 }
 
-async function getUserProfilePhoto(userId) {
+async function getUserProfilePhoto(username) {
     try {
-        const longUserId = Number(userId);
-        const response = await api.get(`/profilePicture/${longUserId}`, {
+        const response = await api.get(`/profilePicture/${username}`, {
             responseType: 'arraybuffer',
         });
         const imageData = response.data;
@@ -122,18 +65,24 @@ async function getPsychologistsProfiles() {
         return response.data;
     } catch (error) {
         console.error('Error fetching psychologists profiles:', error);
-        throw error;
+        return null;
+    }
+}
+
+async function updateUserProfile(userId, userProfileRequest) {
+    try {
+        const response = await api.post(`/edit/${userId}`, userProfileRequest);
+        return response.data;
+    } catch (error) {
+        console.error('Error updating user profile: ', error);
+        return null;
     }
 }
 
 export {
-    editName,
-    editSurname,
-    editMiddleName,
-    editEmail,
-    editBio,
     getUserProfile,
     getUserProfilePhoto,
     uploadUserProfilePicture,
-    getPsychologistsProfiles
+    getPsychologistsProfiles,
+    updateUserProfile
 };

@@ -1,29 +1,17 @@
-import React, {useEffect, useState} from 'react';
-import axios from 'axios';
-import {format, utcToZonedTime} from 'date-fns-tz';
-import baseUrl from '../../backend/base-url';
+import React, { useEffect, useState } from 'react';
+import { format } from 'date-fns-tz';
+import consultation from "../../backend/Consultation";
 
 export default function TimeComponent({ onTimeSelect, selectedDate, psychologistId }) {
     const [availableTimes, setAvailableTimes] = useState([]);
-
     const [consultations, setConsultations] = useState([]);
+    const [pressedButton, setPressedButton] = useState(null);
 
     useEffect(() => {
         // Fetch available consultations for the selected date
         const fetchConsultations = async () => {
-            try {
-                const formattedDate = format(selectedDate, 'yyyy-MM-dd', { timeZone: 'Europe/Moscow' });
-                const response = await axios.get(`${baseUrl}/consultations/allAvailable`, {
-                    params: {
-                        chosenDate: formattedDate,
-                        psychologistId,
-                    },
-                });
-
-                setConsultations(response.data);
-            } catch (error) {
-                console.error('Error fetching available consultations:', error);
-            }
+            const response = await consultation.getAllAvailable(selectedDate, psychologistId);
+            setConsultations(response.data);
         };
 
         // Call the fetchConsultations function when selectedDate or psychologistId changes
@@ -35,13 +23,15 @@ export default function TimeComponent({ onTimeSelect, selectedDate, psychologist
     const handleTimeClick = (time) => {
         // Find the consultation corresponding to the selected time
         const selectedConsultation = consultations.find(
-            (consultation) => format(new Date(consultation.startsAt), 'HH:mm', { timeZone: 'Europe/Moscow' }) === time
+            (consultation) =>
+                format(new Date(consultation.startsAt), 'HH:mm', { timeZone: 'Europe/Moscow' }) === time
         );
 
-        console.log("selected consultation: ", selectedConsultation);
+        console.log('selected consultation: ', selectedConsultation);
 
         // Check if the clicked time is available before calling onTimeSelect
         if (selectedConsultation) {
+            setPressedButton(time);
             onTimeSelect(selectedConsultation);
         } else {
             // Optionally provide user feedback that the time is not available
@@ -49,20 +39,20 @@ export default function TimeComponent({ onTimeSelect, selectedDate, psychologist
         }
     };
 
-
     return (
         <>
             <div className='time__buttons'>
                 {['10:00', '12:00', '14:00', '16:00'].map((time) => {
                     // Find the consultation for the current time
                     const consultationForTime = consultations.find(
-                        (consultation) => format(new Date(consultation.startsAt), 'HH:mm', { timeZone: 'Europe/Moscow' }) === time
+                        (consultation) =>
+                            format(new Date(consultation.startsAt), 'HH:mm', { timeZone: 'Europe/Moscow' }) === time
                     );
 
                     return (
                         <button
                             key={time}
-                            className={`form time${consultationForTime ? '' : ' unavailable'}`}
+                            className={`form time${consultationForTime ? (pressedButton === time ? ' pressed' : '') : ' unavailable'}`}
                             type='button'
                             onClick={() => handleTimeClick(time)}
                             disabled={!consultationForTime}

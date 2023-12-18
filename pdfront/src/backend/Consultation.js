@@ -1,5 +1,6 @@
 import axios from "axios";
 import baseUrl from "./base-url";
+import {format} from "date-fns-tz";
 
 let BASE_URL = baseUrl + '/consultations';
 const api = axios.create({
@@ -49,7 +50,39 @@ export default {
             return response.data;
         } catch (error) {
             console.error('Error fetching schedule:', error);
-            throw error; // Re-throw the error to handle it where the function is called
+            return false; // Re-throw the error to handle it where the function is called
+        }
+    },
+
+    setUpConsultation: async (consultationId, consultationRequest) => {
+        try {
+            await api.post(`/setUp/${consultationId}`, consultationRequest);
+        } catch (error) {
+            console.error('Error setting up consultation: ', error);
+            return false;
+        }
+    },
+
+    getAllAvailable: async (chosenDate, psychologistId) => {
+        try {
+            const formattedDate = format(chosenDate, 'yyyy-MM-dd', { timeZone: 'Europe/Moscow' });
+            return await axios.get(`${baseUrl}/consultations/allAvailable`, {
+                params: {
+                    chosenDate: formattedDate,
+                    psychologistId,
+                },
+            });
+        } catch (error) {
+            console.error('Error fetching available consultations:', error);
+        }
+    },
+
+    hasActiveConsultationSetUp: async (stringUserId) => {
+        try {
+            const userId = Number(stringUserId);
+            const response = await api.get(`/hasActiveConsultationSetUp?userId=${userId}`);
+        } catch (error) {
+            console.error(error);
         }
     }
 

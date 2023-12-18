@@ -52,7 +52,7 @@
 
 .form.time{
     width: 40%;
-    padding: 15px 20px;
+    padding: 5px 20px;
     margin-right: 30px;
     margin: 35px 40px 10px 0;
     font-size: 32px;
@@ -60,11 +60,20 @@
     border: none;
     cursor: pointer;
 }
+
+.form.time.pressed {
+    background-color: #170f49;
+    color: #FFB44E; /* Optional: Change text color for better visibility */
+}
+
 .button.calendar{
     margin-top: 10px;
     justify-content: start;
 }
 
+.width{
+    width: 100%;
+}
 .month{
     margin-bottom: 20px;
     display: flex;

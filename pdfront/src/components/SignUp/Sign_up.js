@@ -10,6 +10,7 @@ export default function Sign_up() {
     const [name, setName] = useState('');
     const [surname, setSurname] = useState('');
     const [dob, setDob] = useState(null);
+    const [sex, setSex] = useState(null);
 
     const [usernameError, setUsernameError] = useState('');
     const [emailError, setEmailError] = useState('');
@@ -47,7 +48,7 @@ export default function Sign_up() {
         setEmptyCredentialsError('');
         setSomeError('');
 
-        if (!username || !email || !password || !name || !surname || !dob) {
+        if (!username || !email || !password || !name || !surname || !dob || sex) {
             setEmptyCredentialsError("All fields must be filled");
             return;
         }
@@ -165,6 +166,17 @@ export default function Sign_up() {
                                     max={(new Date(new Date().setFullYear(new Date().getFullYear() - 16))).toISOString().split('T')[0]}
                                     onChange={(e) => setDob(e.target.value)}
                                 />
+                            </div>
+                            <div>
+                                <select
+                                className="auth__input"
+                                placeholder='Пол'
+                                value={sex}
+                                onChange={(e) => setSex(e.target.value)}
+                            >
+                                <option value="1">Мужчина</option>
+                                <option value="2">Женщина</option>
+                            </select>
                             </div>
 
                             {emptyCredentialsError && <div className="auth__error sign__up">{emptyCredentialsError}</div>}

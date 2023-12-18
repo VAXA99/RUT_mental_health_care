@@ -173,10 +173,10 @@ export function ThreadFeed() {
                         </div>
                     </div>
                     <button className="next__step threads" onClick={() => handleSort("NEWEST_TO_OLDEST")}>
-                        Sort by Newest to Oldest
+                        Отсортировать от новго к старому
                     </button>
                     <button className="next__step threads" onClick={() => handleSort("MOST_POPULAR_TO_LEAST")}>
-                        Sort by Most Popular to Least
+                        Отсротировать по популярности
                     </button>
                     {posts.map((post) => (
                         <div key={post.id} className="form main">

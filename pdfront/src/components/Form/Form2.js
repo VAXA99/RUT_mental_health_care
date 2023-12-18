@@ -1,9 +1,13 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 
-export function Form2({onSubmit}) {
+export function Form2({onSubmit, initialData}) {
 
-    const [thoughts, setThoughts] = useState("");
+    const [thoughts, setThoughts] = useState(initialData?.thoughts || "");
 
+    useEffect(() => {
+        // Update the thoughts when initialData changes
+        setThoughts(initialData?.thoughts || "");
+    }, [initialData]);
     const handleTextareaChange = (e) => {
         // Update the thoughts based on textarea changes
         setThoughts(e.target.value);
@@ -34,7 +38,7 @@ export function Form2({onSubmit}) {
                             <textarea
                                 name="textarea"
                                 className="form__page__subtitle input"
-                                defaultValue={""}
+                                value={thoughts}
                                 onChange={handleTextareaChange}
                                 placeholder={"Начните писать (необязательно)"}
                             ></textarea>

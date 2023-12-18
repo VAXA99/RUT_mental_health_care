@@ -217,7 +217,8 @@ public class UserProfileServiceImpl implements UserProfileService {
                         user.getName(),
                         user.getSurname(),
                         user.getMiddleName(),
-                        user.getInformation()
+                        user.getInformation(),
+                        user.getUsername()
                 ))
                 .collect(Collectors.toList());
     }
@@ -259,7 +260,8 @@ public class UserProfileServiceImpl implements UserProfileService {
     }
 
     @Transactional
-    public File getProfilePicture(Long userId) {
+    public File getProfilePicture(String username) {
+        Long userId = userRepository.findUserIdByUsername(username);
         return fileService.findByUserId(userId);
     }
 

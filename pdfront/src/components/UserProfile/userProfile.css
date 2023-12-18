@@ -73,13 +73,16 @@
 
 }
 .profile__edit__input.age {
+    cursor: default;
     width: 55%;
 }
 .profile__edit__input.nickname {
+    cursor: default;
     width: 80%;
 
 }
 .profile__edit__input.email {
+    cursor: default;
     width: 100%;
 }
 

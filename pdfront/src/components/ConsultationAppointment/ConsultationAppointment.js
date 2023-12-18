@@ -9,19 +9,41 @@ import {Form3} from "../Form/Form3";
 import auth from "../../backend/Auth";
 import axios from "axios";
 import baseUrl from "../../backend/base-url";
+import {useUserContext} from "../../UserProvider";
+import FormSubmission from "../Form/FormSubmission";
+import consultation from "../../backend/Consultation";
 
 
 export function ConsultationAppointment() {
-    const [authenticated, setAuthenticated] = useState(Auth.isTokenValid);
     const [step, setStep] = useState(1);
-    const navigate = useNavigate();
-
     const [form1Data, setForm1Data] = useState([]);
     const [form2Data, setForm2Data] = useState("");
     const [form3Data, setForm3Data] = useState("");
     const [selectedConsultation, setSelectedConsultation] = useState([]);
-    const [selectedDate, setSelectedDate] = useState(null);
     const [chosenPsychologistId, setChosenPsychologistId] = useState(null);
+    const navigate = useNavigate();
+    const [hasActiveConsultation, setHasActiveConsultation] = useState(null);
+
+    useEffect(() => {
+        const checkActiveConsultation = async () => {
+            try {
+                // Assuming you have access to the user ID in your component
+                const stringUserId = auth.getUserId(); // Replace with the actual user ID
+                await consultation.hasActiveConsultationSetUp(stringUserId);
+                setHasActiveConsultation(true); // Set to true if the user has an active consultation
+            } catch (error) {
+                console.error(error);
+                setHasActiveConsultation(false); // Set to false if there's an error or no active consultation
+            } finally {
+                // Show an alert and navigate back
+                alert("У вас уже есть активная запись\nВы не можете записаться до посещения консултации");
+                navigate(-1); // Navigates back one step in the history stack
+            }
+        };
+
+        checkActiveConsultation();
+    }, [navigate]);
+
 
     const handleForm1Data = (data) => {
         setForm1Data(data);
@@ -62,45 +84,6 @@ export function ConsultationAppointment() {
         setStep((prevStep) => prevStep + 1);
     };
 
-    useEffect(() => {
-        const intervalId = setInterval(() => {
-            const tokenValid = Auth.isTokenValid();
-            setAuthenticated(tokenValid);
-            if (!tokenValid) {
-                navigate("/auth")
-            }
-        }, 1000); // Check every second
-
-        return () => {
-            clearInterval(intervalId);
-        };
-    }, []);
-
-    const handleSubmission = async () => {
-
-        try{
-            const userId = auth.getUserId();
-            const psychProblems = form1Data;
-            const description = form2Data.description;
-
-            // Create ConsultationRequest object
-            const consultationRequest = {
-                userId,
-                psychProblems,
-                description,
-            };
-
-
-            const response = await axios.post(`${baseUrl}/consultations/setUp/${selectedConsultation.id}`, consultationRequest);
-
-            // Handle the response as needed
-            console.log('Consultation setup response:', response.data);
-        } catch (error) {
-            console.error('Error setting up consultation:', error);
-        }
-
-
-    };
 
 
     return (
@@ -184,27 +167,20 @@ export function ConsultationAppointment() {
                         )}
                     </div>
                     {step === 1 && (
-                        <Form1 onSubmit={handleForm1Data} />
+                        <Form1 onSubmit={handleForm1Data} initialData={form1Data}/>
                     )}
                     {step === 2 && (
-                        <Form2 onSubmit={handleForm2Data} />
+                        <Form2 onSubmit={handleForm2Data} initialData={form2Data} />
                     )}
                     {step === 3 && (
-                        <Form3 onSubmit={handleForm3Data}/>
+                        <Form3 onSubmit={handleForm3Data} initialData={form3Data}/>
                     )}
                     {step === 4 && (
                         <Calendar onConsultationSelect={handleConsultationSelect} chosenPsychologistId={chosenPsychologistId}
                         />
                     )}
                     {step === 5 && (
-                        <div className="button calendar">
-                            <button className="next__step" onClick={handleSubmission}>
-                                Записаться
-                            </button>
-                            <button onClick={handleFourthStep}>
-                                fuck go back
-                            </button>
-                        </div>
+                        <FormSubmission selectedConsultation={selectedConsultation} thoughts={form2Data} problems={form1Data} onBackStep={handleFirstStep}/>
                     )}
                 </div>
 

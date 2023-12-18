@@ -122,7 +122,7 @@ export default class CalendarComponent extends Component {
                             <button type={"button"} onClick={this.handleNextButtonClick} className='month__button'> {'>'} </button>
                         </div>
                     </div>
-                    <table>
+                    <table className='width'>
 
                         <thead>
                         <tr className='week__day'>
