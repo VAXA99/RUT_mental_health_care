@@ -21,4 +21,8 @@ public class Article {
     @ManyToOne
     @JoinColumn(nullable = false)
     private User user;
+
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "article_picture_id", referencedColumnName = "id")
+    private File articlePicture;
 }

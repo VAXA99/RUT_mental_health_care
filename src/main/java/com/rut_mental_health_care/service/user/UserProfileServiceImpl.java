@@ -263,6 +263,7 @@ public class UserProfileServiceImpl implements UserProfileService {
         user.setSex(sex);
     }
 
+    @Override
     @Transactional
     public File getProfilePicture(String username) {
         Long userId = userRepository.findUserIdByUsername(username);
