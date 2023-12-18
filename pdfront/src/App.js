@@ -23,7 +23,7 @@ import {ConsultationAppointment} from "./components/ConsultationAppointment/Cons
 import {ThreadFeed} from "./components/Threads/ThreadFeed";
 import {ThreadCreation} from "./components/Threads/ThreadCreation";
 import Header from "./components/Header/Header";
-import PsychoForm from "./components/PsychoForm/PsychoForm";
+import PsychoSchedule from "./components/PsychoForm/psychoSchedule";
 import ProtectedRoute from "./ProtectedRoute";
 
 function App() {
@@ -50,8 +50,8 @@ function App() {
                 <Route path='/feed' element={<ProtectedRoute element={<ThreadFeed />} />} />
                 <Route path='/thread_creation' element={<ProtectedRoute element={<ThreadCreation />} />} />
                 <Route path='/thread/:postId' element={<ProtectedRoute element={<Comms />} />} />
-                <Route path='/psycho_form' element={<ProtectedRoute element={<PsychoForm />} />} />
-                <Route path='/create_article' element={<CreateArticle/>}  />
+                <Route path='/psycho_schedule' element={<ProtectedRoute element={<PsychoSchedule />} />} />
+                <Route path='/create_article' element={<ProtectedRoute element={<CreateArticle/>}/>} />
             </Routes>
 
         </div>

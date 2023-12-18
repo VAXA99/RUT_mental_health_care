@@ -27,7 +27,7 @@ public interface UserProfileService {
 
     List<UserProfileDto> getPsychologistsProfile();
 
-    File getProfilePicture(Long userId);
+    File getProfilePicture(String username);
 
     void uploadProfilePicture(Long userId, MultipartFile file) throws IOException;
 

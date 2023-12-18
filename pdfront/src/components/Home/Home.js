@@ -1,9 +1,10 @@
 import React, {useEffect, useState} from 'react'
-import {Link} from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
 import Menu from '../Menu/Menu';
 import RightForm from '../Right form/RightForm';
 import TestingForm from '../TestingForm/TestingForm';
 import Auth from "../../backend/Auth";
+import consultation from "../../backend/Consultation";
 
 
 export default function Home() {
@@ -48,6 +49,15 @@ export default function Home() {
                                 <Link to={'/consultation_appointment'}>Записаться</Link>
                             </div>
                         </div>
+                    ) : userRole === "ROLE_PSYCHOLOGIST" ? (
+                        <div className="form main">
+                            <div className="form__block">
+                                <div className="form__block__title">Ваше расписание</div>
+                            </div>
+                            <div className="form__block__link">
+                                <Link to={'/psycho_schedule'}>Расписание</Link>
+                            </div>
+                        </div>
                     ) : (
                         <div></div>
                     )}
@@ -58,7 +68,7 @@ export default function Home() {
                                     <img className="main__links__comp" src="/img/Студентам.png" alt="" width="105%"
                                          height="105%"/>
                                     <div className="links__subcomp">
-                                        <div className="links__comp__text">Студентам <br/>и аспирантам</div>
+                                    <div className="links__comp__text">Студентам <br/>и аспирантам</div>
                                         <img src="/img/Arrow%202.png" alt=""/>
                                     </div>
                                 </Link>

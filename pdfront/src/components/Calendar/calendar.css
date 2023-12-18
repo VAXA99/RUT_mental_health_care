@@ -60,6 +60,12 @@
     border: none;
     cursor: pointer;
 }
+
+.form.time.pressed {
+    background-color: #170f49;
+    color: #FFB44E; /* Optional: Change text color for better visibility */
+}
+
 .button.calendar{
     margin-top: 10px;
     justify-content: start;

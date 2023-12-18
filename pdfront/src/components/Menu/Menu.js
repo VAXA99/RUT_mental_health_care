@@ -2,10 +2,12 @@ import React, {useEffect, useState} from 'react';
 import {Link, useLocation} from 'react-router-dom';
 import './menu.css';
 import Auth from "../../backend/Auth";
+import auth from "../../backend/Auth";
 
 export default function Menu() {
     const location = useLocation();
     const [authenticated, setAuthenticated] = useState(Auth.isTokenValid);
+    const userRole = auth.getUserRole();
 
     useEffect(() => {
         const intervalId = setInterval(() => {
@@ -28,9 +30,6 @@ export default function Menu() {
                     {authenticated && location.pathname !== '/consultation_appointment' && <Link to={'/consultation_appointment'}>
                         <div className="form info">Как записаться</div>
                     </Link>}
-                    {/*{location.pathname !== '/articles' && <Link to={'/articles'}>*/}
-                    {/*    <div className="form info">Самопомощь</div>*/}
-                    {/*</Link>}*/}
                     {location.pathname !== '/articles' && <Link to={'/articles'}>
                         <div className="form info">Библиотека</div>
                     </Link>}
@@ -39,6 +38,9 @@ export default function Menu() {
                     </Link>}
                     {location.pathname !== '/' && <Link to={'/'}>
                         <div className="form info">Главная</div>
+                    </Link>}
+                    {location.pathname !== '/psycho_schedule' && userRole === "ROLE_PSYCHOLOGIST" && <Link to={'/psycho_schedule'}>
+                        <div className="form info">Расписание</div>
                     </Link>}
                 </div>
         </div>

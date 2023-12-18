@@ -37,4 +37,13 @@ public class UserProfileDto {
         this.middleName = middleName;
         this.bio = bio;
     }
+
+    public UserProfileDto(Long userId, String name, String surname, String middleName, String bio, String username) {
+        this.userId = userId;
+        this.name = name;
+        this.surname = surname;
+        this.middleName = middleName;
+        this.bio = bio;
+        this.username = username;
+    }
 }

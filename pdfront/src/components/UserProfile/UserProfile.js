@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import './userProfile.css'
 import Auth from "../../backend/Auth";
-import {useNavigate} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import {getUserProfile, getUserProfilePhoto, uploadUserProfilePicture} from "../../backend/UserProfile";
 import {useUserContext} from "../../UserProvider";
 import UserProfileInfo from "./UserProfileInfo";
@@ -10,22 +10,17 @@ import EditUserProfileInfo from "./EditUserProfileInfo";
 
 export default function UserProfile() {
 
-    const [step, setStep] = useState(1);
-    const [authenticated, setAuthenticated] = useState(Auth.isTokenValid);
-    const userId= Auth.getUserId();
-    const [userData, setUserData] = useState({});
-    const navigate = useNavigate();
+    const scrollingUserId = Auth.getUserId();
     const [selectedFile, setSelectedFile] = useState(null);
-    const [userRole, setUserRole] = useState(Auth.getUserRole());
-    const [showPopup, setShowPopup] = useState(false);
+    const {username} = useParams();
+    const scrollingUserUsername = Auth.getUsernameFromToken();
+    const [isEditing, setIsEditing] = useState(false);
+
+    const toggleEditProfile = () => {
+        setIsEditing((prev) => !prev);
+    };
 
     const { userProfilePicture, setUserProfilePicture } = useUserContext();
-
-    const handleLogoutAndNavigate = () => {
-        setAuthenticated(Auth.logout());
-
-        navigate('/');
-    };
 
     const handleFileChange = (event) => {
         const file = event.target.files[0];
@@ -35,8 +30,8 @@ export default function UserProfile() {
     const handleFileUpload = async () => {
         try {
             if (selectedFile) {
-                await uploadUserProfilePicture(userId, selectedFile);
-                const imgElement = await getUserProfilePhoto(userId);
+                await uploadUserProfilePicture(scrollingUserId, selectedFile);
+                const imgElement = await getUserProfilePhoto(scrollingUserId);
                 setUserProfilePicture(imgElement);
             }
         } catch (error) {
@@ -44,42 +39,11 @@ export default function UserProfile() {
         }
     };
 
-    useEffect(() => {
-        const fetchUserProfile = () => {
-            getUserProfile(userId)
-                .then((data) => {
-                    setUserData(data);
-                    console.log(data.age);
-                })
-                .catch((error) => {
-                    // Handle error if needed
-                    console.error('Error fetching user profile:', error);
-                });
-        };
-
-        fetchUserProfile();
-    }, []);
-
-    useEffect(() => {
-        const intervalId = setInterval(() => {
-            const tokenValid = Auth.isTokenValid();
-            setAuthenticated(tokenValid);
-            if (!tokenValid) {
-                navigate("/auth")
-            }
-        }, 1000); // Check every second
-
-        return () => {
-            clearInterval(intervalId);
-        };
-    }, []);
-
-
 
     useEffect(() => {
         const fetchUserProfilePhoto = async () => {
             try {
-                const imgElement = await getUserProfilePhoto(userId);
+                const imgElement = await getUserProfilePhoto(username);
                 setUserProfilePicture(imgElement);
             } catch (error) {
                 console.error('Error fetching user profile photo:', error);
@@ -87,15 +51,8 @@ export default function UserProfile() {
         };
 
         fetchUserProfilePhoto();
-    }, [userId]);
+    }, [scrollingUserId]);
 
-    const togglePopup = () => {
-        setShowPopup(!showPopup);
-
-    };
-    const handleStep = () => {
-        setStep( step+1);
-    };
     return(
 
         <>
@@ -108,18 +65,28 @@ export default function UserProfile() {
                     <div className="profile__photo">
                         {userProfilePicture && <img  className='profile__photo__img' height="100%" width="90%" src={userProfilePicture.src}/>}
                         {!userProfilePicture && <div>Loading...</div>}
-                        <label className="input-file">
-                            <input type="file" className="input-file" onChange={handleFileChange} />
-                            <span className="input-file-btn">Выберите файл</span>
-                            <div><span className="input-file-text">Максимум 10мб</span></div>
-                            {/*TODO изменить handleFileChange, добавить в него метод изменения ласт спан
+                        {username === scrollingUserUsername &&
+                            <div>
+                                <label className="input-file">
+                                    <input type="file" className="input-file" onChange={handleFileChange}/>
+                                    <span className="input-file-btn">Выберите файл</span>
+                                    <div><span className="input-file-text">Максимум 10мб</span></div>
+                                    {/*TODO изменить handleFileChange, добавить в него метод изменения ласт спан
                              <div><span className="input-file-text">{fileName}}</span></div>*/}
 
-                        </label>
-                        <button className="img__update__button" onClick={handleFileUpload}>Изменить фото</button>
+                                </label>
+
+                                <button className="img__update__button" onClick={handleFileUpload}>Изменить фото
+                                </button>
+
+                            </div>
+                        }
                     </div>
-                        <UserProfileInfo />
-                        {/*<EditUserProfileInfo />*/}
+                    {isEditing ? (
+                        <EditUserProfileInfo toggleEditProfile={toggleEditProfile}/>
+                    ) : (
+                        <UserProfileInfo toggleEditProfile={toggleEditProfile}/>
+                    )}
                 </div>
             </div>
         </>

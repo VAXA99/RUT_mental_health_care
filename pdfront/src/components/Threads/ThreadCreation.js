@@ -118,9 +118,6 @@ export function ThreadCreation() {
                     <div className="form main">
                         <div className="theme__container main__page">
                             <div className="display__flex">
-                                <div className="theme__img"><img src="/img/меню__.png" width="100%" height="100%"
-                                                                 alt=""/></div>
-                                <div className="form__theme">VAXO009</div>
                             </div>
                             <textarea
                                 name="textarea"

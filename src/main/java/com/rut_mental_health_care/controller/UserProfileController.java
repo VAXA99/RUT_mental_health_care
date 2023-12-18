@@ -29,17 +29,17 @@ public class UserProfileController {
         this.userProfileService = userProfileService;
     }
 
-    @GetMapping("user/{userId}")
+    @GetMapping("/user/{userId}")
     public UserProfileDto getUserProfile(@PathVariable Long userId) {
         return userProfileService.getUserProfile(userId);
     }
 
-    @GetMapping("username/{username}")
+    @GetMapping("/username/{username}")
     public UserProfileDto getUserProfile(@PathVariable String username) {
         return userProfileService.getUserProfile(username);
     }
 
-    @PutMapping("edit/{userId}")
+    @PutMapping("/edit/{userId}")
     public ResponseEntity<?> editUserProfile(@PathVariable Long userId, @RequestBody UserProfileRequest userProfileRequest) {
         try {
             userProfileService.editUserProfile(userId,
@@ -65,9 +65,9 @@ public class UserProfileController {
         return userProfileService.getPsychologistsProfile();
     }
 
-    @GetMapping("/profilePicture/{userId}")
-    public ResponseEntity<byte[]> getProfilePicture(@PathVariable Long userId) {
-        File file = userProfileService.getProfilePicture(userId);
+    @GetMapping("/profilePicture/{username}")
+    public ResponseEntity<byte[]> getProfilePicture(@PathVariable String username) {
+        File file = userProfileService.getProfilePicture(username);
 
         if (file == null) {
             return ResponseEntity.notFound()

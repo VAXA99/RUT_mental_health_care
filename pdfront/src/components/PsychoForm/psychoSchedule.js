@@ -1,11 +1,10 @@
 import React from 'react'
 import Menu from '../Menu/Menu';
 import "./psychoForm.css"
-import Calendar from "../Calendar/Calendar";
 import CalendarComponent from "../Calendar/CalendarComponent";
 
 
-export default function PsychoForm() {
+export default function PsychoSchedule() {
 
     return (
         <>

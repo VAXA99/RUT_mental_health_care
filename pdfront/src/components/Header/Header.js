@@ -38,7 +38,7 @@ export default function Header() {
         if (authenticated) {
             const fetchUserProfilePhoto = async () => {
                 try {
-                    const imgElement = await getUserProfilePhoto(userId);
+                    const imgElement = await getUserProfilePhoto(username);
                     setUserProfilePicture(imgElement);
                 } catch (error) {
                     console.error('Error fetching user profile photo:', error);

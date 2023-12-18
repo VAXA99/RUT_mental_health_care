@@ -10,22 +10,39 @@ import auth from "../../backend/Auth";
 import axios from "axios";
 import baseUrl from "../../backend/base-url";
 import {useUserContext} from "../../UserProvider";
+import FormSubmission from "../Form/FormSubmission";
+import consultation from "../../backend/Consultation";
 
 
 export function ConsultationAppointment() {
-    const [authenticated, setAuthenticated] = useState(Auth.isTokenValid);
     const [step, setStep] = useState(1);
-    const navigate = useNavigate();
-
     const [form1Data, setForm1Data] = useState([]);
     const [form2Data, setForm2Data] = useState("");
     const [form3Data, setForm3Data] = useState("");
     const [selectedConsultation, setSelectedConsultation] = useState([]);
-    const [selectedDate, setSelectedDate] = useState(null);
     const [chosenPsychologistId, setChosenPsychologistId] = useState(null);
-    const { userProfilePicture, setUserProfilePicture } = useUserContext();
-    const [problemsFromBackend, setProblemsFromBackend] = useState([]);
+    const navigate = useNavigate();
+    const [hasActiveConsultation, setHasActiveConsultation] = useState(null);
 
+    useEffect(() => {
+        const checkActiveConsultation = async () => {
+            try {
+                // Assuming you have access to the user ID in your component
+                const stringUserId = auth.getUserId(); // Replace with the actual user ID
+                await consultation.hasActiveConsultationSetUp(stringUserId);
+                setHasActiveConsultation(true); // Set to true if the user has an active consultation
+            } catch (error) {
+                console.error(error);
+                setHasActiveConsultation(false); // Set to false if there's an error or no active consultation
+            } finally {
+                // Show an alert and navigate back
+                alert("У вас уже есть активная запись\nВы не можете записаться до посещения консултации");
+                navigate(-1); // Navigates back one step in the history stack
+            }
+        };
+
+        checkActiveConsultation();
+    }, [navigate]);
 
 
     const handleForm1Data = (data) => {
@@ -67,45 +84,6 @@ export function ConsultationAppointment() {
         setStep((prevStep) => prevStep + 1);
     };
 
-    useEffect(() => {
-        const intervalId = setInterval(() => {
-            const tokenValid = Auth.isTokenValid();
-            setAuthenticated(tokenValid);
-            if (!tokenValid) {
-                navigate("/auth")
-            }
-        }, 1000); // Check every second
-
-        return () => {
-            clearInterval(intervalId);
-        };
-    }, []);
-
-    const handleSubmission = async () => {
-
-        try{
-            const userId = auth.getUserId();
-            const psychProblems = form1Data;
-            const description = form2Data.description;
-
-            // Create ConsultationRequest object
-            const consultationRequest = {
-                userId,
-                psychProblems,
-                description,
-            };
-
-
-            const response = await axios.post(`${baseUrl}/consultations/setUp/${selectedConsultation.id}`, consultationRequest);
-
-            // Handle the response as needed
-            console.log('Consultation setup response:', response.data);
-        } catch (error) {
-            console.error('Error setting up consultation:', error);
-        }
-
-
-    };
 
 
     return (
@@ -189,79 +167,20 @@ export function ConsultationAppointment() {
                         )}
                     </div>
                     {step === 1 && (
-                        <Form1 onSubmit={handleForm1Data} />
+                        <Form1 onSubmit={handleForm1Data} initialData={form1Data}/>
                     )}
                     {step === 2 && (
-                        <Form2 onSubmit={handleForm2Data} />
+                        <Form2 onSubmit={handleForm2Data} initialData={form2Data} />
                     )}
                     {step === 3 && (
-                        <Form3 onSubmit={handleForm3Data}/>
+                        <Form3 onSubmit={handleForm3Data} initialData={form3Data}/>
                     )}
                     {step === 4 && (
                         <Calendar onConsultationSelect={handleConsultationSelect} chosenPsychologistId={chosenPsychologistId}
                         />
                     )}
                     {step === 5 && (
-                        <div className="button calendar">
-
-                            <div className="container main calendar">
-                                <div className="form__page__title">Зпись на прием</div>
-
-                                <form className="form main forms one" >
-                                    <div className="problems">
-                                        <div className='select__time'>
-                                            <div className="articles__form calendar">Подтвердите данные</div>
-                                        </div>
-                                        <div className='form__page__subtitle calendar'>
-                                            информация о приеме будет выслана на вашу почту
-                                        </div>
-                                        <div className="display__flex__mt">
-                                            <div className="profile__photo">
-                                               <img  className='spec__img' height="80%" width="70%" src="/img/морозовабез.png"/>
-                                                <div className='form__theme'>Ваш врач</div>
-                                            </div>
-                                            <div className='read__input__data'>
-                                                <div className='worker forms'>Данные о времени и дате записи</div>
-                                                <div className='data__info'>
-                                                    <div className="form time forms">
-                                                        10:00
-                                                    </div>
-                                                    <div className='worker'>12 ноября 2023</div>
-                                                </div>
-                                                <div className='worker forms'>Выбранные данные</div>
-                                                <div className="display__inline">
-                                                    <div className="problem__button forms">
-                                                            <div className="form info problem forms">Алкоголизм</div>
-                                                    </div>
-                                                    <div className="problem__button forms">
-                                                        <div className="form info problem forms">Алкоголизм</div>
-                                                    </div>
-                                                </div>
-                                                <div className="problems__input forms">
-                                                        <textarea
-                                                            name="textarea"
-                                                            className="form__page__subtitle input forms"
-                                                            defaultValue={""}
-                                                            placeholder={"Начните писать (необязательно)"}
-                                                            readOnly
-                                                        ></textarea>
-                                                </div>
-                                            </div>
-
-                                        </div>
-                                    </div>
-                                    <div className='space__between'>
-                                        <button className="next__step back" onClick={handleFourthStep}>
-                                            Назад
-                                        </button>
-                                        <button className="next__step" onClick={handleSubmission}>
-                                            Подтвердить
-                                        </button>
-                                    </div>
-
-                                </form>
-                            </div>
-                        </div>
+                        <FormSubmission selectedConsultation={selectedConsultation} thoughts={form2Data} problems={form1Data} onBackStep={handleFirstStep}/>
                     )}
                 </div>
 

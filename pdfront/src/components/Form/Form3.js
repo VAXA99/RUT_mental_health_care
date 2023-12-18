@@ -1,9 +1,10 @@
 import React, {useEffect, useState} from 'react';
 import {getPsychologistsProfiles, getUserProfilePhoto} from "../../backend/UserProfile";
 
-export function Form3({onSubmit}) {
+export function Form3({onSubmit, initialData}) {
     const [psychologists, setPsychologists] = useState([]);
-    const [selectedPsychologist, setSelectedPsychologist] = useState(null);
+    const [selectedPsychologist, setSelectedPsychologist] = useState(initialData || null);
+    console.log(selectedPsychologist);
 
 
     useEffect(() => {
@@ -17,7 +18,7 @@ export function Form3({onSubmit}) {
             // Fetch profile pictures for psychologists
             const psychologistsWithPictures = await Promise.all(
                 psychologistsData.map(async (psychologist) => {
-                    const profilePicture = await getUserProfilePhoto(psychologist.userId);
+                    const profilePicture = await getUserProfilePhoto(psychologist.username);
                     return {...psychologist, profilePicture};
                 })
             );
@@ -39,6 +40,7 @@ export function Form3({onSubmit}) {
     };
 
     const handlePsychologistSelect = (psychologist) => {
+        console.log("selectedPsychologist:", psychologist);
         setSelectedPsychologist(psychologist);
     };
 
@@ -71,14 +73,19 @@ export function Form3({onSubmit}) {
                                                 />
                                                 <div className="spec__link name">{`${psychologist.surname}`}</div>
                                                 <div className="spec__link middlename"> {`${psychologist.name}`}</div>
-                                                <input className="checkbox__none" type="radio" name={1}/>
+                                                <input
+                                                    type="radio"
+                                                    name="psychologist"
+                                                    checked={selectedPsychologist && selectedPsychologist.userId === psychologist.userId}
+                                                    onChange={() => handlePsychologistSelect(psychologist)}
+                                                />
                                             </div>
                                         ))}
                                     </div>
                                 </div>
                             </div>
                             <div className="button calendar">
-                                <button className="next__step" type={"submit"}>
+                            <button className="next__step" type={"submit"}>
                                     Следующий шаг
                                 </button>
                             </div>

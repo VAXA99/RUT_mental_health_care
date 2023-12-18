@@ -1,12 +1,11 @@
-import {useNavigate} from "react-router-dom"
 import {useEffect, useState} from "react";
-import auth from "../../backend/Auth";
 import consultation from "../../backend/Consultation";
 
-export function Form1({ onSubmit }) {
+export function Form1({ onSubmit, initialData }) {
 
-    const [selectedProblems, setSelectedProblems] = useState([]);
-    const [problemsFromBackend, setProblemsFromBackend] = useState([]);
+    const [selectedProblems, setSelectedProblems] = useState(
+        initialData || [] // Set initialData as the default value if provided
+    );    const [problemsFromBackend, setProblemsFromBackend] = useState([]);
 
     useEffect(() => {
         // Fetch problems from the backend when the component mounts
@@ -63,6 +62,7 @@ export function Form1({ onSubmit }) {
                                             type="checkbox"
                                             value={problem.description}
                                             onChange={() => handleCheckboxChange(problem.description)}
+                                            checked={selectedProblems.includes(problem.description)}
                                         />
                                         <div className="form info problem">{problem.description}</div>
                                     </label>
