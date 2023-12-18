@@ -9,6 +9,7 @@ import {Form3} from "../Form/Form3";
 import auth from "../../backend/Auth";
 import axios from "axios";
 import baseUrl from "../../backend/base-url";
+import {useUserContext} from "../../UserProvider";
 
 
 export function ConsultationAppointment() {
@@ -22,6 +23,10 @@ export function ConsultationAppointment() {
     const [selectedConsultation, setSelectedConsultation] = useState([]);
     const [selectedDate, setSelectedDate] = useState(null);
     const [chosenPsychologistId, setChosenPsychologistId] = useState(null);
+    const { userProfilePicture, setUserProfilePicture } = useUserContext();
+    const [problemsFromBackend, setProblemsFromBackend] = useState([]);
+
+
 
     const handleForm1Data = (data) => {
         setForm1Data(data);
@@ -198,12 +203,64 @@ export function ConsultationAppointment() {
                     )}
                     {step === 5 && (
                         <div className="button calendar">
-                            <button className="next__step" onClick={handleSubmission}>
-                                Записаться
-                            </button>
-                            <button onClick={handleFourthStep}>
-                                fuck go back
-                            </button>
+
+                            <div className="container main calendar">
+                                <div className="form__page__title">Зпись на прием</div>
+
+                                <form className="form main forms one" >
+                                    <div className="problems">
+                                        <div className='select__time'>
+                                            <div className="articles__form calendar">Подтвердите данные</div>
+                                        </div>
+                                        <div className='form__page__subtitle calendar'>
+                                            информация о приеме будет выслана на вашу почту
+                                        </div>
+                                        <div className="display__flex__mt">
+                                            <div className="profile__photo">
+                                               <img  className='spec__img' height="80%" width="70%" src="/img/морозовабез.png"/>
+                                                <div className='form__theme'>Ваш врач</div>
+                                            </div>
+                                            <div className='read__input__data'>
+                                                <div className='worker forms'>Данные о времени и дате записи</div>
+                                                <div className='data__info'>
+                                                    <div className="form time forms">
+                                                        10:00
+                                                    </div>
+                                                    <div className='worker'>12 ноября 2023</div>
+                                                </div>
+                                                <div className='worker forms'>Выбранные данные</div>
+                                                <div className="display__inline">
+                                                    <div className="problem__button forms">
+                                                            <div className="form info problem forms">Алкоголизм</div>
+                                                    </div>
+                                                    <div className="problem__button forms">
+                                                        <div className="form info problem forms">Алкоголизм</div>
+                                                    </div>
+                                                </div>
+                                                <div className="problems__input forms">
+                                                        <textarea
+                                                            name="textarea"
+                                                            className="form__page__subtitle input forms"
+                                                            defaultValue={""}
+                                                            placeholder={"Начните писать (необязательно)"}
+                                                            readOnly
+                                                        ></textarea>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                    <div className='space__between'>
+                                        <button className="next__step back" onClick={handleFourthStep}>
+                                            Назад
+                                        </button>
+                                        <button className="next__step" onClick={handleSubmission}>
+                                            Подтвердить
+                                        </button>
+                                    </div>
+
+                                </form>
+                            </div>
                         </div>
                     )}
                 </div>

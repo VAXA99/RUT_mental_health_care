@@ -192,3 +192,64 @@ input[type=radio].checkbox__none{
 .spec__img.checkbox{
     border-radius: 20px;
 }
+
+.data__info{
+    display: flex;
+    align-items: center;
+    margin-top: -20px;
+}
+
+.worker.forms{
+    margin-bottom: 0;
+    font-size: 17px;
+    text-transform: none;
+}
+
+.profile__photo.forms{
+    text-align: left;
+}
+
+.profile__photo__img.forms{
+    border-radius: 50%;
+
+}
+
+.profile__photo.forms{
+    height: 120px;
+    width: 120px;
+}
+
+.next__step.back{
+    background-color: #DEDEDE;
+    color: #204757;
+}
+
+.space__between{
+    width: 90%;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+}
+
+.problems__input.forms{
+    width: 90%;
+    height: 120px;
+}
+
+.read__input__data{
+    width: 80%;
+}
+
+.problem__button.forms{
+    cursor: default;
+}
+.form__page__subtitle.input.forms{
+    cursor: default;
+}
+
+.form.info.problem.forms{
+    cursor: default;
+}
+.form.time.forms{
+    cursor: default;
+}

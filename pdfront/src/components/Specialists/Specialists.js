@@ -49,7 +49,7 @@ export function Specialists() {
                                     width="85%"
                                     height="90%"
                                 />
-                                <div className="spec__link img">{`${psychologist.surname}`}</div>
+                                <div className="spec__link">{`${psychologist.surname}`}</div>
                                 <div className="spec__link middlename"> {`${psychologist.name}`}</div>
                             </div>
                         ))}
