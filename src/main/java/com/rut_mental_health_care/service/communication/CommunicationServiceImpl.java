@@ -80,15 +80,12 @@ public class CommunicationServiceImpl implements CommunicationService {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new EntityNotFoundException("Post not found with ID: " + postId));
 
-        List<Comment> comments = commentRepository.findCommentByPostId(postId);
+        List<Comment> comments = commentRepository.findCommentByPostIdAndParentCommentIsNull(postId);
         List<String> tagNames = tagRepository.findTagsByPostId(postId);
 
-
-
         PostDto postDto = convertToPostDTO(post);
-        List<CommentDto> commentDtos = comments.stream()
-                .map(this::convertToCommentDTO)
-                .collect(Collectors.toList());
+
+        List<CommentDto> commentDtos = getCommentDtos(comments);
 
         postDto.setScrollingUserHasLiked(likeRepository.existsByPostIdAndUserId(postDto.getId(), scrollingUserId));
         postDto.setCommentDtos(commentDtos);
@@ -252,7 +249,7 @@ public class CommunicationServiceImpl implements CommunicationService {
         return postDto;
     }
 
-    public CommentDto convertToCommentDTO(Comment comment) {
+    private CommentDto convertToCommentDTO(Comment comment, Boolean includeReplies) {
         CommentDto commentDto = modelMapper.map(comment, CommentDto.class);
         if (comment.getUser() != null) {
             UserDto userDto = modelMapper.map(comment.getUser(), UserDto.class);
@@ -263,12 +260,11 @@ public class CommunicationServiceImpl implements CommunicationService {
         commentDto.setContent(comment.getContent());
         commentDto.setCreatedAt(comment.getCreatedAt());
 
-        // Set the postDto based on the relationships in Comment
-//        commentDto.setPostDto(convertToPostDTO(comment.getPost()));
-
-        // Check if there is a parent comment and avoid infinite recursion
-        if (comment.getParentComment() != null) {
-            commentDto.setParentCommentDto(convertToCommentDTO(comment.getParentComment()));
+        if (includeReplies) {
+            List<CommentDto> replyDtos = comment.getReplies().stream()
+                    .map(reply -> convertToCommentDTO(reply, true))
+                    .collect(Collectors.toList());
+            commentDto.setReplies(replyDtos);
         }
 
         return commentDto;
@@ -284,5 +280,12 @@ public class CommunicationServiceImpl implements CommunicationService {
         }
 
         return postDtos;
+    }
+
+    private List<CommentDto> getCommentDtos(List<Comment> comments) {
+
+        return comments.stream()
+                .map(comment -> convertToCommentDTO(comment, true))
+                .collect(Collectors.toList());
     }
 }
