@@ -204,10 +204,14 @@ export function Comms() {
                                     onChange={(e) => setCommentContent(e.target.value)}
                                     placeholder={"Начните что думаете"}
                                 ></textarea>
+
+                                <div className='display__flex__mt'>
+                                    <button className="next__step " onClick={handleCommentSubmit}>
+                                        Опубликовать комментарий
+                                    </button>
+                                </div>
                             </div>
-                            <button className="next__step" onClick={handleCommentSubmit}>
-                                Submit Comment
-                            </button>
+
                         </div>
                     </div>
                 </div>
