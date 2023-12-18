@@ -52,8 +52,14 @@ public class ConsultationServiceImpl implements ConsultationService {
         this.modelMapper = modelMapper;
     }
 
+    @Override
     public List<ConsultationNotification> getAllConsNotifications() {
         return consultationNotificationRepository.findAll();
+    }
+
+    @Override
+    public List<PsychProblem> getAllProblems() {
+        return psychProblemRepository.findAll();
     }
 
     @Override

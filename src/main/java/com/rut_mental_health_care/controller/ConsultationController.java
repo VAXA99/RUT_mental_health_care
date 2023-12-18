@@ -3,16 +3,14 @@ package com.rut_mental_health_care.controller;
 import com.rut_mental_health_care.controller.request.ConsultationRequest;
 import com.rut_mental_health_care.dto.ConsultationDto;
 import com.rut_mental_health_care.model.ConsultationNotification;
-import com.rut_mental_health_care.model.Tag;
+import com.rut_mental_health_care.model.PsychProblem;
 import com.rut_mental_health_care.service.consultation.ConsultationService;
-import com.rut_mental_health_care.service.tag.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Locale;
@@ -23,19 +21,17 @@ import java.util.Locale;
 public class ConsultationController {
 
     private final ConsultationService consultationService;
-    private final TagService tagService;
 
     @Autowired
-    public ConsultationController(ConsultationService consultationService, TagService tagService) {
+    public ConsultationController(ConsultationService consultationService) {
         this.consultationService = consultationService;
-        this.tagService = tagService;
     }
 
     @GetMapping("/getProblems")
-    public ResponseEntity<List<Tag>> getAllTags() {
+    public ResponseEntity<List<PsychProblem>> getAllPsychProblems() {
         try {
-            List<Tag> tags = tagService.getAllTags();
-            return ResponseEntity.ok(tags);
+            List<PsychProblem> psychProblems = consultationService.getAllProblems();
+            return ResponseEntity.ok(psychProblems);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
@@ -79,8 +75,6 @@ public class ConsultationController {
             List<ConsultationDto> consultations = consultationService.getAvailableConsultationsForDate(localDate, psychologistId);
             return ResponseEntity.ok(consultations);
         } catch (IllegalArgumentException e) {
-            // Log the exception or print the value of chosenDate
-            e.printStackTrace();
             return ResponseEntity.badRequest().body("Invalid date format or null date");
         }
     }
