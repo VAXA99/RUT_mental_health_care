@@ -166,6 +166,14 @@ export default function Sign_up() {
                                     onChange={(e) => setDob(e.target.value)}
                                 />
                             </div>
+                            <div><select
+                                className="auth__input"
+                                placeholder='почта'
+                            >
+                                <option value="1">men</option>
+                                <option value="2">women</option>
+                            </select>
+                            </div>
 
                             {emptyCredentialsError && <div className="auth__error sign__up">{emptyCredentialsError}</div>}
                         </div>
