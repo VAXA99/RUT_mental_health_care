@@ -31,5 +31,14 @@ public interface ConsultationRepository extends JpaRepository<Consultation, Long
                                                             @Param("nextDay") LocalDateTime nextDay,
                                                             @Param("psychologist") User psychologist);
 
+    @Query("SELECT cons FROM Consultation cons " +
+            "WHERE cons.startsAt >= :startDate " +
+            "AND cons.endsAt < :nextDay " +
+            "AND cons.available = false " +
+            "AND cons.psychologist = :psychologist")
+    List<Consultation> findAllUnavailableConsultationsForDate(@Param("startDate") LocalDateTime startDate,
+                                                            @Param("nextDay") LocalDateTime nextDay,
+                                                            @Param("psychologist") User psychologist);
+
     List<Consultation> findAllByAvailableAndStartsAtBetweenAndPsychologistId(boolean available, LocalDateTime startOfMonth, LocalDateTime endOfMonth, Long psychologistId);
 }

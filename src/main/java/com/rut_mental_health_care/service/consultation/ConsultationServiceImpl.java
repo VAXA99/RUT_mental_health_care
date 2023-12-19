@@ -98,6 +98,17 @@ public class ConsultationServiceImpl implements ConsultationService {
     }
 
     @Override
+    public List<ConsultationDto> getUnavailableConsultationsForDate(LocalDate chosenDate, Long psychologistId) {
+        LocalDateTime startDateTime = chosenDate.atStartOfDay(); // Convert LocalDate to LocalDateTime
+        LocalDateTime nextDay = startDateTime.plusDays(1); // Get the next day
+        User psychologist = userRepository.findById(psychologistId)
+                .orElseThrow(() -> new EntityNotFoundException("Psychologist not found with id: " + psychologistId));
+
+        List<Consultation> consultations = consultationRepository.findAllUnavailableConsultationsForDate(startDateTime, nextDay, psychologist);
+        return getConsultationDtos(consultations);
+    }
+
+    @Override
     @Async
     @Transactional
     public void setUpConsultation(Long consultationId, ConsultationRequest consultationRequest) {

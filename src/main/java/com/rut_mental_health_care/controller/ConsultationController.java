@@ -74,6 +74,17 @@ public class ConsultationController {
         }
     }
 
+    @GetMapping("/allUnavailable")
+    public ResponseEntity<?> getUnavailableConsultationsForDate(@RequestParam String chosenDate, Long psychologistId) {
+        try {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.ENGLISH);
+            LocalDate localDate = LocalDate.parse(chosenDate, formatter);
+            List<ConsultationDto> consultations = consultationService.getUnavailableConsultationsForDate(localDate, psychologistId);
+            return ResponseEntity.ok(consultations);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body("Invalid date format or null date");
+        }
+    }
 
     @PostMapping("/setUp/{consultationId}")
     public ResponseEntity<String> setUpConsultation(@PathVariable Long consultationId, @RequestBody ConsultationRequest consultationRequest) {
