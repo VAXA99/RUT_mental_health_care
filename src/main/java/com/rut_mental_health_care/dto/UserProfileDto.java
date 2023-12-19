@@ -24,8 +24,6 @@ public class UserProfileDto {
     private LocalDate dateOfBirth;
     private int age;
     private int sex;
-    private List<PostDto> postDtos;
-    private List<ArticleDto> articleDtos;
     private long totalPosts;
     private long totalComments;
     private long totalLikes;

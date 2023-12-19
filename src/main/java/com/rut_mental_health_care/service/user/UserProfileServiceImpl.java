@@ -1,16 +1,12 @@
 package com.rut_mental_health_care.service.user;
 
-import com.rut_mental_health_care.dto.ArticleDto;
 import com.rut_mental_health_care.dto.PostDto;
 import com.rut_mental_health_care.dto.UserDto;
 import com.rut_mental_health_care.dto.UserProfileDto;
-import com.rut_mental_health_care.model.Article;
 import com.rut_mental_health_care.model.File;
 import com.rut_mental_health_care.model.Post;
 import com.rut_mental_health_care.model.User;
-import com.rut_mental_health_care.repository.ArticleRepository;
 import com.rut_mental_health_care.repository.PostRepository;
-import com.rut_mental_health_care.repository.TagRepository;
 import com.rut_mental_health_care.repository.UserRepository;
 import com.rut_mental_health_care.service.file.FileService;
 import jakarta.persistence.EntityNotFoundException;
@@ -30,23 +26,17 @@ import java.util.stream.Collectors;
 public class UserProfileServiceImpl implements UserProfileService {
 
     private final PostRepository postRepository;
-    private final ArticleRepository articleRepository;
     private final UserRepository userRepository;
-    private final TagRepository tagRepository;
     private final FileService fileService;
     private final ModelMapper modelMapper;
 
     @Autowired
     public UserProfileServiceImpl(PostRepository postRepository,
-                                  ArticleRepository articleRepository,
                                   UserRepository userRepository,
-                                  TagRepository tagRepository,
                                   FileService fileService,
                                   ModelMapper modelMapper) {
         this.postRepository = postRepository;
-        this.articleRepository = articleRepository;
         this.userRepository = userRepository;
-        this.tagRepository = tagRepository;
         this.fileService = fileService;
         this.modelMapper = modelMapper;
     }
@@ -116,16 +106,6 @@ public class UserProfileServiceImpl implements UserProfileService {
         return user.getSex();
     }
 
-    private List<PostDto> getUserPosts(Long userId) {
-        List<Post> posts = postRepository.findAllByUserId(userId);
-        return getPostDtos(posts);
-    }
-
-    private List<ArticleDto> getUserArticles(Long userId) {
-        List<Article> articles = articleRepository.findAllByUserId(userId);
-        return getArticleDtos(articles);
-    }
-
     private long getUserPostCount(Long userId) {
         return postRepository.getUserPostCount(userId);
     }
@@ -152,8 +132,6 @@ public class UserProfileServiceImpl implements UserProfileService {
         LocalDate dateOfBirth = getUserDateOfBirth(userId);
         int age = getUserAge(userId);
         int sex = getUserSex(userId);
-        List<PostDto> postDtos = getUserPosts(userId);
-        List<ArticleDto> articleDtos = getUserArticles(userId);
         long totalPosts = getUserPostCount(userId);
         long totalComments = getTotalCommentsOnUserPosts(userId);
         long totalLikes = getTotalLikesOnUserPosts(userId);
@@ -172,8 +150,6 @@ public class UserProfileServiceImpl implements UserProfileService {
                 dateOfBirth,
                 age,
                 sex,
-                postDtos,
-                articleDtos,
                 totalPosts,
                 totalComments,
                 totalLikes);
@@ -287,49 +263,5 @@ public class UserProfileServiceImpl implements UserProfileService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("User not found with ID:" + userId));
         user.setProfilePicture(fileService.deleteByUserId(userId));
-    }
-
-
-    private PostDto convertToPostDTO(Post post) {
-        PostDto postDto = modelMapper.map(post, PostDto.class);
-        if (post.getUser() != null) {
-            UserDto userDto = modelMapper.map(post.getUser(), UserDto.class);
-            postDto.setUserDto(userDto);
-        }
-        postDto.setLikeCount(postRepository.getLikeCount(post));
-        postDto.setDislikeCount(postRepository.getDislikeCount(post));
-        postDto.setCommentCount(postRepository.getCommentCount(post));
-
-        return postDto;
-    }
-
-    private List<PostDto> getPostDtos(List<Post> posts) {
-        List<PostDto> postDtos = posts.stream()
-                .map(this::convertToPostDTO)
-                .collect(Collectors.toList());
-        for (PostDto postDto: postDtos) {
-            List<String> tagNames = tagRepository.findTagsByPostId(postDto.getId());
-            postDto.setTagNames(tagNames);
-        }
-
-        return postDtos;
-    }
-
-    private ArticleDto convertToArticleDTO(Article article) {
-        ArticleDto articleDto = modelMapper.map(article, ArticleDto.class);
-
-        if (article.getUser() != null) {
-            UserDto userDto = modelMapper.map(article.getUser(), UserDto.class);
-            articleDto.setUserDto(userDto);
-        }
-
-        return articleDto;
-    }
-
-    private List<ArticleDto> getArticleDtos(List<Article> articles) {
-
-        return articles.stream()
-                .map(this::convertToArticleDTO)
-                .collect(Collectors.toList());
     }
 }

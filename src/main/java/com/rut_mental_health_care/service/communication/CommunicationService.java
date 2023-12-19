@@ -9,6 +9,7 @@ public interface CommunicationService {
     List<PostDto> getFeed(Long scrollingUserId, String feedType, List<String> tagNames);
     List<Tag> getAllAvailableTags();
     PostDto getPostWithComments(Long scrollingUserId, Long postId);
+    List<PostDto> getUserPosts(Long userId);
     void likePost(Long postId, Long userId, Boolean isLike);
     void commentPost(Long postId, Long userId, String content);
     void replyToComment(Long parentCommentId, Long userId, String content);
