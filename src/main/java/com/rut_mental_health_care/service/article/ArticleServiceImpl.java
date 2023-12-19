@@ -48,8 +48,7 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    @Async
-    public void writeArticle(Long userId, String title, String content) {
+    public Long writeArticle(Long userId, String title, String content) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("User not found with ID:" + userId));
 
@@ -59,6 +58,8 @@ public class ArticleServiceImpl implements ArticleService {
         article.setUser(user);
 
         articleRepository.save(article);
+
+        return article.getId();
     }
 
     @Override

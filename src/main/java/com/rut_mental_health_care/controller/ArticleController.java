@@ -38,20 +38,24 @@ public class ArticleController {
     }
 
     @PostMapping("/write")
+/*
     @PreAuthorize("hasRole('ROLE_PSYCHOLOGIST')")
-    public ResponseEntity<String> writeArticle(@RequestBody ArticleRequest articleRequest) {
+*/
+    public ResponseEntity<?> writeArticle(@RequestBody ArticleRequest articleRequest) {
         try {
-            articleService.writeArticle(articleRequest.getUserId(),
+            Long articleId = articleService.writeArticle(articleRequest.getUserId(),
                     articleRequest.getTitle(),
                     articleRequest.getContent());
-            return ResponseEntity.status(HttpStatus.CREATED).body("Article created successfully");
+            return ResponseEntity.ok(articleId);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error creating article");
         }
     }
 
     @PatchMapping("/edit/{articleId}")
+/*
     @PreAuthorize("hasRole('ROLE_PSYCHOLOGIST')")
+*/
     public ResponseEntity<String> editArticle(@PathVariable Long articleId, @RequestBody ArticleRequest articleRequest) {
         try {
             articleService.editArticle(articleId,
@@ -64,7 +68,9 @@ public class ArticleController {
     }
 
     @DeleteMapping("/delete/{articleId}")
+/*
     @PreAuthorize("hasRole('ROLE_PSYCHOLOGIST')")
+*/
     public ResponseEntity<String> deleteArticle(@PathVariable Long articleId) {
         try {
             articleService.deleteArticle(articleId);

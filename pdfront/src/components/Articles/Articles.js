@@ -1,10 +1,51 @@
-import React, {useEffect} from 'react'
-import './articles.css'
-import Menu from "../Menu/Menu";
-import RightForm from "../Right form/RightForm";
-import {Link} from "react-router-dom";
+import React, { useEffect, useState } from 'react';
+import './articles.css';
+import Menu from '../Menu/Menu';
+import RightForm from '../Right form/RightForm';
+import { Link } from 'react-router-dom';
+import ArticleService from "../../backend/Article";
 
 export default function Articles() {
+    const [articles, setArticles] = useState([]);
+    const [articlePictures, setArticlePictures] = useState({});
+
+
+    useEffect(() => {
+        // Fetch articles when the component mounts
+        const fetchArticles = async () => {
+            try {
+                const fetchedArticles = await ArticleService.getAllArticles();
+                setArticles(fetchedArticles);
+            } catch (error) {
+                console.error('Error fetching articles: ', error);
+            }
+        };
+
+        fetchArticles();
+    }, []);
+
+    useEffect(() => {
+        const fetchArticlePicture = async (articleId) => {
+            try {
+                const imgElement = await ArticleService.getArticlePicture(articleId);
+                setArticlePictures((prevArticlePictures) => ({
+                    ...prevArticlePictures,
+                    [articleId]: imgElement,
+                }));
+            } catch (error) {
+                console.error('Error fetching article picture: ', error);
+            }
+        };
+
+        // Fetch article picture for each article
+        for (const article of articles) {
+            const articleId = article.id;
+            if (!articlePictures[articleId]) {
+                fetchArticlePicture(articleId);
+            }
+        }
+    }, [articles, articlePictures]);
+
     return (
         <>
             <link href="https://fonts.cdnfonts.com/css/sf-pro-display" rel="stylesheet"/>
@@ -17,25 +58,31 @@ export default function Articles() {
 
             <div className="display__flex__mt">
                 <div className="container left">
-                   <Menu/>
+                    <Menu/>
 
                 </div>
                 <div className="container main">
-                    <div className='display__flex article'>
+                    <div className="display__flex article">
                         <div className="articles__form">Статьи</div>
-                        <Link to={'/create_article'} className="next__step article">Создать</Link>
+                        <Link to={'/create_article'} className="next__step article">
+                            Создать
+                        </Link>
                     </div>
-
-                    <div className="form main article">
-                        <div className="img__position"><img src="/img/Rectangle 183.png" alt="" width="100%"
-                                                            height="100%"/></div>
-                        <div className="form__page__title">Как не потерять себя</div>
-                    </div>
-                    <div className="form main article">
-                        <div className="img__position"><img src="/img/Rectangle 183 (1).png" alt="" width="100%"
-                                                            height="100%"/></div>
-                        <div className="form__page__title">Я увилился, что делать?</div>
-                    </div>
+                    {articles.map((article) => (
+                        <div key={article.id} className="form main article">
+                            <div className="img__position">
+                                {articlePictures[article.id] && (
+                                    <img
+                                        src={articlePictures[article.id].src}
+                                        alt=""
+                                        width="100%"
+                                        height="100%"
+                                    />
+                                )}
+                            </div>
+                            <div className="form__page__title">{article.title}</div>
+                        </div>
+                    ))}
                 </div>
                 <div className="container right">
                     <RightForm/>

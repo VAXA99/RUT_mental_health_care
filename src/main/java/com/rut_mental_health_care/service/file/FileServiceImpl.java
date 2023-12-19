@@ -66,7 +66,7 @@ public class FileServiceImpl implements FileService {
     @Override
     public File findByArticleId(Long articleId) {
         return fileRepository.findByArticleId(articleId)
-                .orElseThrow(() -> new EntityNotFoundException("File not found for user with ID:" + articleId));
+                .orElseThrow(() -> new EntityNotFoundException("File not found for article with ID:" + articleId));
     }
 
     @Override

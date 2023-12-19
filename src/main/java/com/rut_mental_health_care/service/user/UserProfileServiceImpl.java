@@ -153,7 +153,7 @@ public class UserProfileServiceImpl implements UserProfileService {
         int age = getUserAge(userId);
         int sex = getUserSex(userId);
         List<PostDto> postDtos = getUserPosts(userId);
-        List<ArticleDto> articleDtos =getUserArticles(userId);
+        List<ArticleDto> articleDtos = getUserArticles(userId);
         long totalPosts = getUserPostCount(userId);
         long totalComments = getTotalCommentsOnUserPosts(userId);
         long totalLikes = getTotalLikesOnUserPosts(userId);

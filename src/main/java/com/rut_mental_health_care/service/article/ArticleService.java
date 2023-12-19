@@ -11,7 +11,7 @@ import java.util.List;
 public interface ArticleService {
     List<ArticleDto> getAllArticles();
 
-    void writeArticle(Long userId, String title, String content);
+    Long writeArticle(Long userId, String title, String content);
 
     void editArticle(Long articleId, String title, String newContent);
 

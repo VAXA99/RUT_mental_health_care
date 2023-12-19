@@ -1,19 +1,66 @@
+import React, {useState} from "react";
+import {useNavigate} from 'react-router-dom';
 import Menu from "../Menu/Menu";
-import './articles.css'
-import React from "react";
+import './articles.css';
 import RightForm from "../Right form/RightForm";
-
+import ArticleService from "../../backend/Article";
+import auth from "../../backend/Auth";
 
 export function CreateArticle() {
+    const [title, setTitle] = useState('');
+    const [content, setContent] = useState('');
+    const [coverImage, setCoverImage] = useState(null);
+    const navigate = useNavigate();
+
+    const handleFileChange = (e) => {
+        const file = e.target.files[0];
+        setCoverImage(file);
+    };
+
+/*    const handleFileUpload = async (articleId) => {
+        /!*try {
+            if (coverImage) {
+                await ArticleService.uploadArticlePicture(articleId, coverImage);
+            }
+        } catch (error) {
+            console.error('Error uploading article picture:', error);
+        }*!/
+    };*/
+
+    const handleCreateArticle = async () => {
+        try {
+            const articleRequest = {
+                userId: auth.getUserId(),
+                title: title,
+                content: content,
+            };
+
+            const createdArticle = await ArticleService.writeArticle(articleRequest);
+
+            if (createdArticle && coverImage) {
+                try {
+                    if (coverImage) {
+                        await ArticleService.uploadArticlePicture(createdArticle, coverImage);
+                    }
+                } catch (error) {
+                    console.error('Error uploading article picture:', error);
+                }
+            }
+
+            navigate('/articles');  // Use navigate instead of history.push
+        } catch (error) {
+            console.error('Error creating article: ', error);
+        }
+    };
 
     return (
         <>
+            <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@900&display=swap" rel="stylesheet"/>
+            <link href="https://fonts.cdnfonts.com/css/sf-pro-display" rel="stylesheet"/>
+            <img className="angle top center" src="/img/Star%201.png"/>
+            <img className="angle right__home" src="/img/Ellipse 6.png"/>
+
             <div className="display__flex__mt">
-                <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@900&display=swap"
-                      rel="stylesheet"/>
-                <link href="https://fonts.cdnfonts.com/css/sf-pro-display" rel="stylesheet"/>
-                <img className="angle top center" src="/img/Star%201.png"/>
-                <img className="angle right__home" src="/img/Ellipse 6.png"/>
                 <div className="container left">
                     <Menu/>
                 </div>
@@ -22,57 +69,49 @@ export function CreateArticle() {
                         <div className="display__flex thread__flex">
                             <div className="form__theme">Создание статьи</div>
                         </div>
-
                     </div>
                     <div className="form main">
                         <div className="theme__container main__page">
                             <textarea
-                                name="textarea"
+                                name="title"
                                 className="form__page__subtitle input forum__page title"
-                                defaultValue={""}
-                                placeholder={"Название статьи"}
-                            ></textarea>
-                            <br/>
-                            <textarea
-                                name="textarea"
-                                className="form__page__subtitle input forum__page title"
-                                defaultValue={""}
-                                placeholder={"Поле заголовка"}
+                                value={title}
+                                onChange={(e) => setTitle(e.target.value)}
+                                placeholder={"Заголовок статьи"}
                             ></textarea>
                             <textarea
-                                name="textarea"
+                                name="content"
                                 className="form__page__subtitle input forum__page"
-                                defaultValue={""}
+                                value={content}
+                                onChange={(e) => setContent(e.target.value)}
                                 placeholder={"Напишите что думаете"}
                             ></textarea>
                             <div className='display__flex__mt'>
                                 <label className="input-file article">
-                                    <input type="file" className="input-file article"/>
+                                    <input
+                                        type="file"
+                                        className="input-file article"
+                                        onChange={handleFileChange}
+                                    />
                                     <span className="input-file-btn article">Прикрепите обложку</span>
-                                    {/*TODO изменить handleFileChange, добавить в него метод изменения ласт спан
-                                    <div><span className="input-file-text">{fileName}}</span></div>*/}
-                                    {/*<span className="input-file-text">Максимум 10мб</span>*/}
-                                    {/* <span>Выберите файл</span>*/}
-
                                 </label>
                             </div>
                         </div>
-
                     </div>
                     <div>
-
-
+                        <button
+                            className="next__step thread__creation"
+                            type="submit"
+                            onClick={handleCreateArticle}
+                        >
+                            Создать
+                        </button>
                     </div>
-                    <button className="next__step thread__creation" type={"submit"} >
-                        Создать
-                    </button>
-
                 </div>
                 <div className="container right">
                     <RightForm/>
                 </div>
             </div>
         </>
-
     )
 }
