@@ -59,22 +59,17 @@ export const ResetPassword = () => {
                     <div className="auth__title">Цифровая система психологической поддержки РУТ</div>
                 </Link>
                 <form className="auth__form" /*onSubmit={handleLogin}*/>
-                    <div className="form__block__title" >Введите новый пароль</div>
+                    <div className="form__block__title" >Введите почту указанную при регистрации</div>
                     <div className="input__block">
                         <input className="auth__input"
-                               placeholder="пароль"
-                               type="password" /*value={username}*/
+                               placeholder="Введите почту"
+                               type="email" /*value={username}*/
                                /*onChange={(e) => setUsername(e.target.value)}*//>
-                        <input className="auth__input"
-                               placeholder="повторите пароль"
-                               type="password"
-                               /*value={password}*/
-                               /*onChange={(e) => setPassword(e.target.value)}*//>
                     </div>
                 </form>
                 <div className="form__buttons">
                         <button type="submit" className="auth__button">
-                            Изменить пароль
+                           Отправить письмо
                         </button>
                         <div className="auth__link">
                             <Link to={'/auth'} >

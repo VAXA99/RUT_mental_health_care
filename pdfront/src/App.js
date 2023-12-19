@@ -12,6 +12,7 @@ import {Specialists} from './components/Specialists/Specialists.js';
 import {Comms} from './components/Threads/comms.js';
 import {Login} from './components/Login/Login.js';
 import {ResetPassword} from './components/ResetPassword/ResetPassword.js';
+import {ResetPasswordInput} from './components/ResetPassword/ResetPasswordInput.js';
 
 import {Route, Routes} from "react-router-dom";
 import {SendEmail} from './components/Send email/SendEmail.js';
@@ -56,6 +57,8 @@ function App() {
                 <Route path='/article/:articleId' element={<ProtectedRoute element={<ArticleDetails/>}/>} />
                 <Route path='/edit_article/:articleId' element={<ProtectedRoute element={<EditArticle/>}/>} />
                 <Route path='/edit_thread/:threadId' element={<ProtectedRoute element={<EditThread/>}/>} />
+                <Route path='/reset_password' element=<ResetPassword/>/>
+                <Route path='/reset_password_input' element=<ResetPasswordInput/>/>
             </Routes>
 
         </div>

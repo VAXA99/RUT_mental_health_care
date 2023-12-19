@@ -42,3 +42,47 @@
     margin-top: 10px;
 
 }
+
+.article__img{
+    height: 200px;
+}
+
+.edit__img__container{
+    position: relative;
+    bottom: 120px;
+    right: 0;
+    z-index: 100;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    border: none;
+    background-color: inherit;
+}
+.edit__img__container.article{
+    position: static;
+    margin-left: 30px;
+
+}
+
+.parametr__buttons__container.article{
+    position: static;
+    background-color: inherit;
+    display: flex;
+    margin-right: 60px;
+}
+
+.form__page__title.article{
+    display: flex;
+    justify-content: space-between;
+}
+
+.post.article{
+    margin-left: 10px;
+    padding: 5px 10px;
+}
+.article__detail{
+    width: 100%;
+}
+.form.main.article.cont{
+    width: 90%;
+}

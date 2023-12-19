@@ -77,6 +77,12 @@ export const Login = () => {
                                 Региcтрация
                             </Link>
                         </div>
+                        <div>
+                            <Link to={'/reset_password'} className="auth__link">
+                                Забыли пароль?
+                            </Link>
+                        </div>
+
                         <div className="auth__link" onClick={goBack}>Назад</div>
                     </div>
                 </form>

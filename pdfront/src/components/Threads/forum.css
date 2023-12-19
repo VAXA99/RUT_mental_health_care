@@ -179,7 +179,7 @@ a:hover {
 
 .parametr__buttons__container {
     position: absolute;
-    top: 50px; /* Выберите подходящее значение для расположения кнопок относительно троеточия */
+    top: 70px; /* Выберите подходящее значение для расположения кнопок относительно троеточия */
     right: 0;
     z-index: 100;
     background-color: white;

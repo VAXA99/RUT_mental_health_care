@@ -4,13 +4,18 @@ import Menu from '../Menu/Menu';
 import RightForm from '../Right form/RightForm';
 import { Link } from 'react-router-dom';
 import ArticleService from "../../backend/Article";
-import auth from "../../backend/Auth";
 
 export default function Articles() {
     const [articles, setArticles] = useState([]);
+    const [articlesWithPopup, setArticlesWithPopup] = useState({});
     const [articlePictures, setArticlePictures] = useState({});
-    const scrollingUserId = auth.getUserId();
-    const userRole = auth.getUserRole();
+
+    const togglePopup = (articleId) => {
+        setArticlesWithPopup((prevArticlesWithPopup) => ({
+            ...prevArticlesWithPopup,
+            [articleId]: !prevArticlesWithPopup[articleId],
+        }));
+    };
 
 
     useEffect(() => {
@@ -19,7 +24,6 @@ export default function Articles() {
             try {
                 const fetchedArticles = await ArticleService.getAllArticles();
                 setArticles(fetchedArticles);
-                console.log(fetchedArticles);
             } catch (error) {
                 console.error('Error fetching articles: ', error);
             }
@@ -78,11 +82,9 @@ export default function Articles() {
                 <div className="container main">
                     <div className="display__flex article">
                         <div className="articles__form">Статьи</div>
-                        {userRole === "ROLE_PSYCHOLOGIST" &&
-                            <Link to={'/create_article'} className="next__step article">
-                                Создать
-                            </Link>
-                        }
+                        <Link to={'/create_article'} className="next__step article">
+                            Создать
+                        </Link>
                     </div>
                     {articles.map((article) => (
                         <div key={article.id} className="form main article">
@@ -93,27 +95,39 @@ export default function Articles() {
                                         alt=""
                                         width="100%"
                                         height="100%"
+                                        className='article__img'
                                     />
                                 )}
                             </div>
-                            <div className="form__page__title">
+                            <div className="form__page__title article">
                                 <Link to={`/article/${article.id}`}>{article.title}</Link>
-                            </div>
-                            {userRole === "ROLE_PSYCHOLOGIST" && scrollingUserId === article.userDto.id &&
-                            <>
-                                <Link to={`/edit_article/${article.id}`} className="edit__link">
-                                    Редактировать
-                                </Link>
+                                <div className='display__flex'>
+                                    {articlesWithPopup[article.id] && (
+                                    <div className='parametr__buttons__container article'>
+                                        <div>
+                                            <button type={"button"} className='post article'>
+                                                <Link to={`/edit_article/${article.id}`}>Изменить</Link>
+                                            </button>
+                                        </div>
+                                        <div>
+                                            <button type={"button"} className='post article delete'onClick={() => handleDeleteClick(article.id)}>
+                                                Удалить
+                                            </button>
+                                        </div>
+                                    </div>
+                                    )}
+                                    <button className='edit__img__container article' onClick={() => togglePopup(article.id)}>
+                                        <img src="/img/троеточие.png" alt="" width='100%' height='100%'/>
+                                    </button>
+                                </div>
 
-                                {/* Add the delete button */}
-                                <button onClick={() => handleDeleteClick(article.id)} className="delete__button">
-                                    Удалить
-                                </button>
-                            </>
-                            }
+                            </div>
                         </div>
                     ))}
                 </div>
+
+
+
                 <div className="container right">
                 <RightForm/>
                 </div>

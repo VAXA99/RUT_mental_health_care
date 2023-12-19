@@ -35,7 +35,6 @@ export default function Home() {
             <div className="display__flex__mt overflow">
                 <div className="container left">
                     <Menu/>
-                    <TestingForm/>
 
                 </div>
                 <div className="container main main__page">
@@ -50,15 +49,16 @@ export default function Home() {
                             </div>
                         </div>
                     ) : userRole === "ROLE_PSYCHOLOGIST" ? (
-                        <div className="form main">
-                            <div className="form__block">
-                                <div className="form__block__title">Ваше расписание</div>
+                            <div className="form main">
+                                <div className="form__block">
+                                    <div className="form__block__title">Ваше расписание</div>
+                                    <div className="form__block__info">Здесь вы можете просмотреть свои сеансы</div>
+                                </div>
+                                <div className="form__block__link">
+                                    <Link to={'/consultation_appointment'}>Расписание</Link>
+                                </div>
                             </div>
-                            <div className="form__block__link">
-                                <Link to={'/psycho_schedule'}>Расписание</Link>
-                            </div>
-                        </div>
-                    ) : (
+                                            ) : (
                         <div></div>
                     )}
                     <div className="main__links">
