@@ -1,6 +1,6 @@
 import Menu from "../Menu/Menu";
 import React, {useEffect, useState} from "react";
-import {useParams} from "react-router-dom";
+import {Link, useParams} from "react-router-dom";
 import communication from "../../backend/Communication";
 import auth from "../../backend/Auth";
 import {getUserProfilePhoto} from "../../backend/UserProfile";
@@ -13,6 +13,7 @@ export function Comms() {
     const scrollingUsername = auth.getUsernameFromToken();
     const [commentContent, setCommentContent] = useState("");
     const [comments, setComments] = useState([]);
+    const [commentsWithPopup, setCommentsWithPopup] = useState({});
 
     useEffect(() => {
         // Load existing comments when the component mounts
@@ -52,23 +53,30 @@ export function Comms() {
         }
     };
 
+    const togglePopup = (commentId) => {
+        setCommentsWithPopup((prevCommentsWithPopup) => ({
+            ...prevCommentsWithPopup,
+            [commentId]: !prevCommentsWithPopup[commentId],
+        }));
+    };
 
     useEffect(() => {
         const fetchPost = async () => {
             const userId = auth.getUserId();
             const data = await communication.getPost(postId, userId);
+            console.log(data);
             setPost(data);
         }
         fetchPost();
     }, [postId]);
 
     useEffect(() => {
-        const fetchUserProfilePhoto = async (userId) => {
+        const fetchUserProfilePhoto = async (username) => {
             try {
-                const imgElement = await getUserProfilePhoto(userId);
+                const imgElement = await getUserProfilePhoto(username);
                 setUserProfilePictures((prevProfilePictures) => ({
                     ...prevProfilePictures,
-                    [userId]: imgElement,
+                    [username]: imgElement,
                 }));
             } catch (error) {
                 console.error("Error fetching user profile photo:", error);
@@ -77,22 +85,35 @@ export function Comms() {
 
         // Fetch user profile picture for the post owner
         if (post && post.userDto) {
-            const userId = post.userDto.id;
-            if (!userProfilePictures[userId]) {
-                fetchUserProfilePhoto(userId);
+            const username = post.userDto.username;
+            if (!userProfilePictures[username]) {
+                fetchUserProfilePhoto(username);
             }
         }
 
         // Fetch user profile pictures for comments
         if (post && post.commentDtos) {
             for (const comment of post.commentDtos) {
-                const userId = comment.userDto.id;
-                if (!userProfilePictures[userId]) {
-                    fetchUserProfilePhoto(userId);
+                const username = comment.userDto.username;
+                if (!userProfilePictures[username]) {
+                    fetchUserProfilePhoto(username);
                 }
             }
         }
     }, [post, userProfilePictures]);
+
+    const handleDelete = async (commentId) => {
+        try {
+            // Call the deletePost API
+            await communication.deleteComment(commentId);
+
+            // Update the state to remove the deleted post
+            setComments((prevComments) => prevComments.filter((comment) => comment.id !== commentId));
+        } catch (error) {
+            console.error("Error deleting post:", error);
+        }
+    };
+
 
     return (
         <>
@@ -128,9 +149,9 @@ export function Comms() {
                         <div className="form main">
                             <div className="theme__container">
                                 <div className="display__flex">
-                                    {userProfilePictures[post.userDto.id] && (
+                                    {userProfilePictures[post.userDto.username] && (
                                         <div className="theme__img">
-                                            <img src={userProfilePictures[post.userDto.id].src} width="100%"
+                                            <img src={userProfilePictures[post.userDto.username].src} width="100%"
                                                  height="100%" alt=""/>
                                         </div>
                                     )}
@@ -139,13 +160,14 @@ export function Comms() {
                                 <div className="theme__title">{post.title}</div>
                                 <div className="theme__info">{post.content}</div>
                                 <div className="action__button">
-                                    <button className="action__button__element">
-                                        <img src="/img/icons8-заполненная-тема-96 1.png" width="110%" height="110%"/>
-                                    </button>
-                                    <button className="action__button__element">
-                                        <img src="/img/Vector.png" width="90%" height="90%"/>
-                                    </button>
-                                    <div className="like__count">{post.likeCount}</div>
+                                    {/*<button className="action__button__element">*/}
+                                    {/*    <img src="/img/icons8-заполненная-тема-96 1.png" width="110%" height="110%"/>*/}
+                                    {/*</button>*/}
+                                    {/*<button className="action__button__element"*/}
+                                    {/*        onClick={() => handleLike(post.id, !post.isLiked)}>*/}
+                                    {/*<img src="/img/Vector.png" width="90%" height="90%"/>*/}
+                                    {/*</button>*/}
+                                    {/*<div className="like__count">{post.likeCount}</div>*/}
                                 </div>
                             </div>
                         </div>
@@ -155,31 +177,53 @@ export function Comms() {
                             <div key={comment.id} className="form main">
                                 <div className="theme__container main__page">
                                     <div className="display__flex">
-                                        {userProfilePictures[comment.userDto.id] && (
+                                        {userProfilePictures[comment.userDto.username] && (
                                             <div className="theme__img">
-                                                <img src={userProfilePictures[comment.userDto.id].src} width="100%"
+                                                <img src={userProfilePictures[comment.userDto.username].src} width="100%"
                                                      height="100%" alt=""/>
                                             </div>
                                         )}
                                         <div className="form__theme">{comment.userDto.username}</div>
                                     </div>
                                     <div className="theme__info">{comment.content}</div>
-                                    <div className="action__button">
-                                        <button className="action__button__element">
-                                            <img src='/img/icons8-заполненная-тема-96 1.png' width="110%"
-                                                 height="110%"/>
-                                        </button>
-                                    </div>
+                                    {/*<div className="action__button">*/}
+                                    {/*    <button className="action__button__element">*/}
+                                    {/*        <img src='/img/icons8-заполненная-тема-96 1.png' width="110%"*/}
+                                    {/*             height="110%"/>*/}
+                                    {/*    </button>*/}
+                                    {/*</div>*/}
                                     <div className="display__flex">
                                         <div className="form__date">
                                             {comment.createdAt && (
-                                                <>
+                                                <div>
                                                     <div>{new Date(comment.createdAt).toLocaleDateString()}</div>
                                                     <div>{new Date(comment.createdAt).toLocaleTimeString()}</div>
-                                                </>
+                                                </div>
                                             )}
                                         </div>
                                     </div>
+                                    {scrollingUserId === comment.userDto.id ? (
+                                        <>
+                                            <button className='edit__img__container' onClick={() => togglePopup(comment.id)}>
+                                                <img src="/img/троеточие.png" alt="" width='100%' height='100%'/>
+                                            </button>
+                                            {commentsWithPopup[comment.id] && (
+                                                <div className='parametr__buttons__container'>
+                                                    <div>
+                                                        <button type={"button"} className='post'>
+                                                            {/*<Link to={`/edit_thread/${comment.id}`}>Изменить</Link>*/}
+                                                            Изменить
+                                                        </button>
+                                                    </div>
+                                                    <div>
+                                                        <button type={"button"} className='post delete' onClick={() => handleDelete(comment.id)}>
+                                                            Удалить
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            )}
+                                        </>
+                                    ) : (<></>)}
                                 </div>
                             </div>
                         ))}

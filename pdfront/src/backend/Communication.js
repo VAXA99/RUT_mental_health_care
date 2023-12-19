@@ -86,6 +86,16 @@ export default {
             console.error("Error editing post: ", error);
             return false;
         }
+    },
+
+    deleteComment: async (commentId) => {
+        try {
+            const response = await api.delete(`/delete/comment/${commentId}`)
+            return response.data;
+        } catch (error) {
+            console.error("Error deleting comment: ", error);
+            return false;
+        }
     }
 
 }

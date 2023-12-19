@@ -4,10 +4,13 @@ import Menu from '../Menu/Menu';
 import RightForm from '../Right form/RightForm';
 import { Link } from 'react-router-dom';
 import ArticleService from "../../backend/Article";
+import auth from "../../backend/Auth";
 
 export default function Articles() {
     const [articles, setArticles] = useState([]);
     const [articlePictures, setArticlePictures] = useState({});
+    const scrollingUserId = auth.getUserId();
+    const userRole = auth.getUserRole();
 
 
     useEffect(() => {
@@ -16,6 +19,7 @@ export default function Articles() {
             try {
                 const fetchedArticles = await ArticleService.getAllArticles();
                 setArticles(fetchedArticles);
+                console.log(fetchedArticles);
             } catch (error) {
                 console.error('Error fetching articles: ', error);
             }
@@ -74,9 +78,11 @@ export default function Articles() {
                 <div className="container main">
                     <div className="display__flex article">
                         <div className="articles__form">Статьи</div>
-                        <Link to={'/create_article'} className="next__step article">
-                            Создать
-                        </Link>
+                        {userRole === "ROLE_PSYCHOLOGIST" &&
+                            <Link to={'/create_article'} className="next__step article">
+                                Создать
+                            </Link>
+                        }
                     </div>
                     {articles.map((article) => (
                         <div key={article.id} className="form main article">
@@ -93,14 +99,18 @@ export default function Articles() {
                             <div className="form__page__title">
                                 <Link to={`/article/${article.id}`}>{article.title}</Link>
                             </div>
-                            <Link to={`/edit_article/${article.id}`} className="edit__link">
-                                Редактировать
-                            </Link>
+                            {userRole === "ROLE_PSYCHOLOGIST" && scrollingUserId === article.userDto.id &&
+                            <>
+                                <Link to={`/edit_article/${article.id}`} className="edit__link">
+                                    Редактировать
+                                </Link>
 
-                            {/* Add the delete button */}
-                            <button onClick={() => handleDeleteClick(article.id)} className="delete__button">
-                                Удалить
-                            </button>
+                                {/* Add the delete button */}
+                                <button onClick={() => handleDeleteClick(article.id)} className="delete__button">
+                                    Удалить
+                                </button>
+                            </>
+                            }
                         </div>
                     ))}
                 </div>
