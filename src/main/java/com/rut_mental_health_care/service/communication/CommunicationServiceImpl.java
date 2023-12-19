@@ -95,6 +95,12 @@ public class CommunicationServiceImpl implements CommunicationService {
     }
 
     @Override
+    public List<PostDto> getUserPosts(Long userId) {
+        List<Post> posts = postRepository.findAllByUserId(userId);
+        return getPostDtos(posts);
+    }
+
+    @Override
     @Async
     @Transactional
     public void likePost(Long postId, Long userId, Boolean isLike) {

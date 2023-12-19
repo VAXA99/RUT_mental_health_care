@@ -48,6 +48,12 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
+    public List<ArticleDto> getUserArticles(Long userId) {
+        List<Article> articles = articleRepository.findAllByUserId(userId);
+        return getArticleDtos(articles);
+    }
+
+    @Override
     public ArticleDto getArticle(Long articleId) {
         Article article = articleRepository.findById(articleId)
                 .orElseThrow(() -> new EntityNotFoundException("Article not found with ID:" + articleId));

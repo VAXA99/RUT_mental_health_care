@@ -10,6 +10,7 @@ import java.util.List;
 
 public interface ArticleService {
     List<ArticleDto> getAllArticles();
+    List<ArticleDto> getUserArticles(Long userId);
 
     ArticleDto getArticle(Long articleId);
 
