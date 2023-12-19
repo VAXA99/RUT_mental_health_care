@@ -4,6 +4,7 @@ import com.rut_mental_health_care.controller.request.ArticleRequest;
 import com.rut_mental_health_care.dto.ArticleDto;
 import com.rut_mental_health_care.model.File;
 import com.rut_mental_health_care.service.article.ArticleService;
+import com.zaxxer.hikari.util.SuspendResumeLock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -37,6 +38,16 @@ public class ArticleController {
         }
     }
 
+    @GetMapping("{articleId}")
+    public ResponseEntity<?> getArticle(@PathVariable Long articleId) {
+        try {
+            ArticleDto articleDto = articleService.getArticle(articleId);
+            return ResponseEntity.ok(articleDto);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error searching article with ID: " + articleId);
+        }
+    }
+
     @PostMapping("/write")
 /*
     @PreAuthorize("hasRole('ROLE_PSYCHOLOGIST')")
@@ -61,6 +72,8 @@ public class ArticleController {
             articleService.editArticle(articleId,
                     articleRequest.getTitle(),
                     articleRequest.getContent());
+            System.out.println(articleRequest.getTitle());
+            System.out.println(articleRequest.getContent());
             return ResponseEntity.ok("Article edited successfully");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error editing article");

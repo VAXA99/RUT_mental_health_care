@@ -17,6 +17,16 @@ const ArticleService = {
         }
     },
 
+    getArticle: async (articleId) => {
+        try {
+            const response = await api.get(`/${articleId}`);
+            return response.data;
+        } catch (error) {
+            console.error(`Error getting article with ID ${articleId}: `, error);
+            throw error;
+        }
+    },
+
     writeArticle: async (articleRequest) => {
         try {
             const response = await api.post('/write', articleRequest);

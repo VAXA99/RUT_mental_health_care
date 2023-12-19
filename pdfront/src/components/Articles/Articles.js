@@ -46,6 +46,16 @@ export default function Articles() {
         }
     }, [articles, articlePictures]);
 
+    const handleDeleteClick = async (articleId) => {
+        try {
+            await ArticleService.deleteArticle(articleId);
+            const updatedArticles = await ArticleService.getAllArticles();
+            setArticles(updatedArticles);
+        } catch (error) {
+            console.error('Error deleting article: ', error);
+        }
+    };
+
     return (
         <>
             <link href="https://fonts.cdnfonts.com/css/sf-pro-display" rel="stylesheet"/>
@@ -80,12 +90,22 @@ export default function Articles() {
                                     />
                                 )}
                             </div>
-                            <div className="form__page__title">{article.title}</div>
+                            <div className="form__page__title">
+                                <Link to={`/article/${article.id}`}>{article.title}</Link>
+                            </div>
+                            <Link to={`/edit_article/${article.id}`} className="edit__link">
+                                Редактировать
+                            </Link>
+
+                            {/* Add the delete button */}
+                            <button onClick={() => handleDeleteClick(article.id)} className="delete__button">
+                                Удалить
+                            </button>
                         </div>
                     ))}
                 </div>
                 <div className="container right">
-                    <RightForm/>
+                <RightForm/>
                 </div>
             </div>
         </>

@@ -1,37 +1,55 @@
-import React, {useState} from "react";
-import {useNavigate} from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import { useNavigate, useParams } from 'react-router-dom';
 import Menu from "../Menu/Menu";
 import './articles.css';
 import RightForm from "../Right form/RightForm";
 import ArticleService from "../../backend/Article";
 import auth from "../../backend/Auth";
 
-export function CreateArticle() {
+export function EditArticle() {
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
     const [coverImage, setCoverImage] = useState(null);
     const navigate = useNavigate();
+    const { articleId } = useParams();
+
+    useEffect(() => {
+        // Fetch article details using articleId and populate the state
+        const fetchArticleDetails = async () => {
+            try {
+                const article = await ArticleService.getArticle(articleId);
+                setTitle(article.title);
+                setContent(article.content);
+                // You may want to handle cover image separately if needed
+            } catch (error) {
+                console.error('Error fetching article details: ', error);
+            }
+        };
+
+        fetchArticleDetails();
+    }, [articleId]);
 
     const handleFileChange = (e) => {
         const file = e.target.files[0];
         setCoverImage(file);
     };
 
-    const handleCreateArticle = async () => {
+    const handleEditArticle = async () => {
+        console.log('Editing article with ID:', articleId);
         try {
             const articleRequest = {
                 userId: auth.getUserId(),
                 title: title,
                 content: content,
             };
+            console.log('Article request:', articleRequest);
 
-            const createdArticle = await ArticleService.writeArticle(articleRequest);
+            await ArticleService.editArticle(articleId, articleRequest);
+            await ArticleService.getAllArticles();
 
-            if (createdArticle && coverImage) {
+            if (coverImage) {
                 try {
-                    if (coverImage) {
-                        await ArticleService.uploadArticlePicture(createdArticle, coverImage);
-                    }
+                    await ArticleService.uploadArticlePicture(articleId, coverImage);
                 } catch (error) {
                     console.error('Error uploading article picture:', error);
                 }
@@ -39,7 +57,7 @@ export function CreateArticle() {
 
             navigate('/articles');  // Use navigate instead of history.push
         } catch (error) {
-            console.error('Error creating article: ', error);
+            console.error('Error editing article: ', error);
         }
     };
 
@@ -57,7 +75,7 @@ export function CreateArticle() {
                 <div className="container main">
                     <div className="form main">
                         <div className="display__flex thread__flex">
-                            <div className="form__theme">Создание статьи</div>
+                            <div className="form__theme">Редактирование статьи</div>
                         </div>
                     </div>
                     <div className="form main">
@@ -92,9 +110,9 @@ export function CreateArticle() {
                         <button
                             className="next__step thread__creation"
                             type="submit"
-                            onClick={handleCreateArticle}
+                            onClick={handleEditArticle}
                         >
-                            Создать
+                            Сохранить изменения
                         </button>
                     </div>
                 </div>

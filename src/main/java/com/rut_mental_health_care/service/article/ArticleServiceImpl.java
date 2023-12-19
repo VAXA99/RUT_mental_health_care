@@ -48,6 +48,14 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
+    public ArticleDto getArticle(Long articleId) {
+        Article article = articleRepository.findById(articleId)
+                .orElseThrow(() -> new EntityNotFoundException("Article not found with ID:" + articleId));
+
+        return convertToArticleDTO(article);
+    }
+
+    @Override
     public Long writeArticle(Long userId, String title, String content) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("User not found with ID:" + userId));
@@ -64,12 +72,14 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     @Async
-    public void editArticle(Long articleId,String title,  String newContent) {
+    public void editArticle(Long articleId, String title,  String content) {
         Article article = articleRepository.findById(articleId)
                 .orElseThrow(() -> new EntityNotFoundException("Article not found with ID:" + articleId));
 
         article.setTitle(title);
-        article.setContent(newContent);
+        article.setContent(content);
+
+        articleRepository.save(article);
     }
 
     @Override

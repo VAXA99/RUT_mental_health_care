@@ -166,7 +166,8 @@ export function ThreadFeed() {
                                     </label>
                                 </button>
                             ))}
-                            <button className='border__none input__search' type="button" onClick={() => handleSearch(selectedProblems, "BY_TAGS")}>
+                            <button className='border__none input__search' type="button"
+                                    onClick={() => handleSearch(selectedProblems, "BY_TAGS")}>
                                 <img src="/img/Search%20icon.png" width='25%'/>
 
                             </button>
@@ -213,9 +214,13 @@ export function ThreadFeed() {
                             </button>
                             {postsWithPopup[post.id] &&
                                 <div className='parametr__buttons__container'>
-                                <div><button className='post'>edit</button></div>
-                                <div><button className='post delete'>delete</button></div>
-                            </div>}
+                                    <div>
+                                        <button className='post'>edit</button>
+                                    </div>
+                                    <div>
+                                        <button className='post delete'>delete</button>
+                                    </div>
+                                </div>}
 
                         </div>
                     ))}

@@ -17,7 +17,6 @@ import {Route, Routes} from "react-router-dom";
 import {SendEmail} from './components/Send email/SendEmail.js';
 import Articles from './components/Articles/Articles.js';
 import {CreateArticle} from "./components/Articles/CreateArticle";
-import Calendar from './components/Calendar/Calendar.js';
 import UserProfile from "./components/UserProfile/UserProfile";
 import {ConsultationAppointment} from "./components/ConsultationAppointment/ConsultationAppointment";
 import {ThreadFeed} from "./components/Threads/ThreadFeed";
@@ -25,6 +24,8 @@ import {ThreadCreation} from "./components/Threads/ThreadCreation";
 import Header from "./components/Header/Header";
 import PsychoSchedule from "./components/PsychoForm/psychoSchedule";
 import ProtectedRoute from "./ProtectedRoute";
+import {EditArticle} from "./components/Articles/EditArticle";
+import ArticleDetails from "./components/Articles/ArticleDetails";
 
 function App() {
 
@@ -52,6 +53,8 @@ function App() {
                 <Route path='/thread/:postId' element={<ProtectedRoute element={<Comms />} />} />
                 <Route path='/psycho_schedule' element={<ProtectedRoute element={<PsychoSchedule />} />} />
                 <Route path='/create_article' element={<ProtectedRoute element={<CreateArticle/>}/>} />
+                <Route path='/article/:id' element={<ProtectedRoute element={<ArticleDetails/>}/>} />
+                <Route path='/edit_article/:articleId' element={<ProtectedRoute element={<EditArticle/>}/>} />
             </Routes>
 
         </div>
