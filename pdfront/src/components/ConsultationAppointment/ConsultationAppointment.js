@@ -29,15 +29,21 @@ export function ConsultationAppointment() {
             try {
                 // Assuming you have access to the user ID in your component
                 const stringUserId = auth.getUserId(); // Replace with the actual user ID
-                await consultation.hasActiveConsultationSetUp(stringUserId);
-                setHasActiveConsultation(true); // Set to true if the user has an active consultation
+                const hasActiveConsultation = await consultation.hasActiveConsultationSetUp(stringUserId);
+                console.log(hasActiveConsultation);
+                if (hasActiveConsultation.data) {
+                    // User has an active consultation, show an alert and navigate back
+                    alert("У вас уже есть активная запись\nВы не можете записаться до посещения консультации");
+                    navigate(-1); // Navigates back one step in the history stack
+                } else {
+                    // User does not have an active consultation, continue with your logic
+                    setHasActiveConsultation(false);
+                    // Additional logic or state updates if needed
+                }
             } catch (error) {
                 console.error(error);
-                setHasActiveConsultation(false); // Set to false if there's an error or no active consultation
-            } finally {
-                // Show an alert and navigate back
-                alert("У вас уже есть активная запись\nВы не можете записаться до посещения консултации");
-                navigate(-1); // Navigates back one step in the history stack
+                setHasActiveConsultation(false); // Set to false if there's an error
+                // Handle errors or additional logic if needed
             }
         };
 

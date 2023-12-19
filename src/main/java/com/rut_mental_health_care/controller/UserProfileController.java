@@ -15,7 +15,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Locale;
 
 @RestController
 @RequestMapping("/api/profile")
@@ -42,6 +44,9 @@ public class UserProfileController {
     @PutMapping("/edit/{userId}")
     public ResponseEntity<?> editUserProfile(@PathVariable Long userId, @RequestBody UserProfileRequest userProfileRequest) {
         try {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.ENGLISH);
+            LocalDate dateOfBirth = LocalDate.parse(userProfileRequest.getDateOfBirth(), formatter);
+            System.out.println(userProfileRequest.getSex());
             userProfileService.editUserProfile(userId,
                     userProfileRequest.getUsername(),
                     userProfileRequest.getPhoneNumber(),
@@ -50,7 +55,7 @@ public class UserProfileController {
                     userProfileRequest.getMiddleName(),
                     userProfileRequest.getEmail(),
                     userProfileRequest.getBio(),
-                    userProfileRequest.getDateOfBirth(),
+                    dateOfBirth,
                     userProfileRequest.getSex()
             );
 

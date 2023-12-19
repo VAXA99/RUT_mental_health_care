@@ -71,7 +71,7 @@ async function getPsychologistsProfiles() {
 
 async function updateUserProfile(userId, userProfileRequest) {
     try {
-        const response = await api.post(`/edit/${userId}`, userProfileRequest);
+        const response = await api.put(`/edit/${userId}`, userProfileRequest);
         return response.data;
     } catch (error) {
         console.error('Error updating user profile: ', error);

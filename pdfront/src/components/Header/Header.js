@@ -3,16 +3,16 @@ import {Link, useNavigate} from 'react-router-dom';
 import Auth from '../../backend/Auth';
 import Popup from '../Popup/Popup';
 import {getUserProfilePhoto} from '../../backend/UserProfile';
-import {useUserContext} from '../../UserProvider';
+import auth from "../../backend/Auth";
+import {useHeaderContext} from "../../UserProvider";
 
 export default function Header() {
     const [authenticated, setAuthenticated] = useState(Auth.isTokenValid);
     const [showPopup, setShowPopup] = useState(false);
     const username = Auth.getUsernameFromToken();
     const navigate = useNavigate();
-    const userId = Auth.getUserId();
+    const { headerUserProfilePicture, setHeaderUserProfilePicture, userProfilePictureUpdated } = useHeaderContext();
 
-    const {userProfilePicture, setUserProfilePicture} = useUserContext();
 
     const togglePopup = () => {
         setShowPopup(!showPopup);
@@ -33,21 +33,27 @@ export default function Header() {
         };
     }, []);
 
+    const scrollingUserUsername = auth.getUsernameFromToken(); // Replace with your method
+
     useEffect(() => {
         // Fetch user profile photo only when authenticated
-        if (authenticated) {
-            const fetchUserProfilePhoto = async () => {
-                try {
-                    const imgElement = await getUserProfilePhoto(username);
-                    setUserProfilePicture(imgElement);
-                } catch (error) {
-                    console.error('Error fetching user profile photo:', error);
-                }
-            };
+        const fetchUserProfilePhoto = async () => {
+            try {
+                // Fetch user profile photo for the header
+                const imgElement = await getUserProfilePhoto(scrollingUserUsername);
+                setHeaderUserProfilePicture(imgElement);
+            } catch (error) {
+                console.error('Error fetching user profile photo for header:', error);
+            }
+        };
 
-            fetchUserProfilePhoto();
+        if (authenticated) {
+            // If userProfilePicture is not available, fetch it
+            if (!headerUserProfilePicture) {
+                fetchUserProfilePhoto();
+            }
         }
-    }, [authenticated, userId, setUserProfilePicture]);
+    }, [authenticated, headerUserProfilePicture, scrollingUserUsername, setHeaderUserProfilePicture]);
 
     //todo figure out how to make header not to disappear when you are navigated back to main page from /auth and /signup
 
@@ -78,12 +84,12 @@ export default function Header() {
                                 </button>
                                 <div className="img__container">
                                     <Link to={`/user_profile/${username}`}>
-                                        {userProfilePicture && (
+                                        {headerUserProfilePicture && (
                                             <img
                                                 className="header__nav__img profile"
                                                 height="100%"
                                                 width="100%"
-                                                src={userProfilePicture.src}
+                                                src={headerUserProfilePicture.src}
                                                 alt=""
                                             />
                                         )}

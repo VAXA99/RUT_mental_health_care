@@ -3,6 +3,7 @@ import Menu from '../Menu/Menu';
 import './specialists.css'
 import RightForm from '../Right form/RightForm';
 import {getPsychologistsProfiles, getUserProfilePhoto} from "../../backend/UserProfile";
+import {Link} from "react-router-dom";
 
 export function Specialists() {
     const [psychologists, setPsychologists] = useState([]);
@@ -14,7 +15,7 @@ export function Specialists() {
                 // Fetch profile pictures for psychologists
                 const psychologistsWithPictures = await Promise.all(
                     psychologistsData.map(async (psychologist) => {
-                        const profilePicture = await getUserProfilePhoto(psychologist.userId);
+                        const profilePicture = await getUserProfilePhoto(psychologist.username);
                         return {...psychologist, profilePicture};
                     })
                 );
@@ -42,15 +43,18 @@ export function Specialists() {
                         {psychologists.map((psychologist, index) => (
                             <div className="spec__element"
                                  key={index}>
-                                <img
-                                    className="spec__img"
-                                    src={psychologist.profilePicture.src}
-                                    alt=""
-                                    width="85%"
-                                    height="90%"
-                                />
-                                <div className="spec__link">{`${psychologist.surname}`}</div>
-                                <div className="spec__link middlename"> {`${psychologist.name}`}</div>
+                                <Link to={`/user_profile/${psychologist.username}`}>
+                                    <img
+                                        className="spec__img"
+                                        src={psychologist.profilePicture.src}
+                                        alt=""
+                                        width="85%"
+                                        height="90%"
+                                    />
+
+                                    <div className="spec__link">{`${psychologist.surname}`}</div>
+                                    <div className="spec__link middlename"> {`${psychologist.name}`}</div>
+                                </Link>
                             </div>
                         ))}
                     </div>

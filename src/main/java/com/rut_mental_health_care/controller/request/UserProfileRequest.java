@@ -13,6 +13,6 @@ public class UserProfileRequest {
     private String middleName;
     private String email;
     private String bio;
-    private LocalDate dateOfBirth;
-    private int sex;
+    private String dateOfBirth;
+    private Integer sex;
 }

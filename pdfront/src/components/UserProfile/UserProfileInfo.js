@@ -26,7 +26,6 @@ export default function UserProfileInfo({toggleEditProfile}) {
             getUserProfile(username)
                 .then((data) => {
                     setUserData(data);
-                    console.log(data)
                 })
                 .catch((error) => {
                     // Handle error if needed
@@ -35,7 +34,7 @@ export default function UserProfileInfo({toggleEditProfile}) {
         };
 
         fetchUserProfile();
-    }, []);
+    }, [username]);
 
 
     return (
@@ -44,10 +43,7 @@ export default function UserProfileInfo({toggleEditProfile}) {
             <div className="profile__info">
                 <div className="edit__info">
                     <div className="main__title profile">
-                        {userData.name} {userData.surname}
-                        <div>
-                            {userData.email}
-                        </div>
+                        {userData.name} {userData.surname} {userData.middleName}
                     </div>
                     {username === scrollingUserUsername &&
                         <div className="edit__profile__info">

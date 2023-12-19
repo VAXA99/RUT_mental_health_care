@@ -81,6 +81,7 @@ export default {
         try {
             const userId = Number(stringUserId);
             const response = await api.get(`/hasActiveConsultationSetUp?userId=${userId}`);
+            return response;
         } catch (error) {
             console.error(error);
         }

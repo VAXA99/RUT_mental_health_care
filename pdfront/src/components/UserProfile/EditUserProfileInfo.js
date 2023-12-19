@@ -8,6 +8,7 @@ export default function EditUserProfileInfo({ toggleEditProfile }) {
 
     const username = Auth.getUsernameFromToken();
     const userId = Auth.getUserId();
+
     const [userData, setUserData] = useState({
         username: '',
         surname: '',
@@ -26,7 +27,6 @@ export default function EditUserProfileInfo({ toggleEditProfile }) {
                     setUserData(data);
                 })
                 .catch((error) => {
-                    // Handle error if needed
                     console.error('Error fetching user profile:', error);
                 });
         };
@@ -41,10 +41,30 @@ export default function EditUserProfileInfo({ toggleEditProfile }) {
         }));
     };
 
+    const handleSelectChange = (e) => {
+        const { name, value } = e.target;
+        setUserData((prevData) => ({
+            ...prevData,
+            [name]: parseInt(value, 10), // Convert the value to an integer if needed
+        }));
+    };
+
     const handleUpdateProfile = async () => {
         try {
             // Send the updated data to the server
-            await updateUserProfile(userId, userData);
+            const userProfileRequest = {
+                username: userData.username,
+                phoneNumber: userData.phoneNumber,
+                name: userData.name,
+                surname: userData.surname,
+                middleName: userData.middleName,
+                email: userData.email,
+                bio: userData.bio,
+                dateOfBirth: userData.dateOfBirth,
+                sex: userData.sex
+            }
+            console.log(userProfileRequest);
+            await updateUserProfile(userId, userProfileRequest);
             toggleEditProfile();
         } catch (error) {
             console.error('Error updating user profile:', error);
@@ -88,6 +108,7 @@ export default function EditUserProfileInfo({ toggleEditProfile }) {
                         <input className="profile__edit__input edit"
                                type="text"
                                name="middleName"
+                               onChange={handleChange}
                                placeholder={userData.middleName}/>
                     </div>
                 </div>
@@ -101,14 +122,6 @@ export default function EditUserProfileInfo({ toggleEditProfile }) {
                                placeholder={userData.dateOfBirth}
                                max={(new Date(new Date().setFullYear(new Date().getFullYear() - 16))).toISOString().split('T')[0]}
                                value={userData.dateOfBirth}/>
-                    </div>
-                    <div className="profile__edit__info">
-                        <div className="profile__edit__title">Никнейм</div>
-                        <input className="profile__edit__input edit"
-                               type="text"
-                               name="username"
-                               onChange={handleChange}
-                               placeholder={userData.username}/>
                     </div>
                 </div>
                 <div className="profile__edit">
@@ -135,15 +148,19 @@ export default function EditUserProfileInfo({ toggleEditProfile }) {
                     <div className="profile__edit__title">Пол</div>
                     <select
                         className="profile__edit__input edit"
-                        value={userData.sex}
-                        onChange={handleChange}
+                        onChange={handleSelectChange}
+                        value={userData.sex !== null ? userData.sex : 0}
+                        name="sex"
                     >
+                        <option value={0} disabled hidden>
+                            Выберите пол
+                        </option>
                         <option value={1}>Мужчина</option>
                         <option value={2}>Женщина</option>
                     </select>
                 </div>
                 <div className="profile__edit__info textarea">
-                <div className="profile__edit__title">Обо мне</div>
+                    <div className="profile__edit__title">Обо мне</div>
                     <div className="problems__input profile">
                         <textarea className="profile__edit__title"
                                   name="bio"

@@ -1,17 +1,42 @@
+// UserContext.js
 import React, { createContext, useContext, useState } from 'react';
 
-const UserContext = createContext();
+const UserProfileContext = createContext();
+const HeaderContext = createContext();
 
-export const UserProvider = ({ children }) => {
+export const UserProfileProvider = ({ children }) => {
     const [userProfilePicture, setUserProfilePicture] = useState(null);
+    const [profilePictureUpdated, setProfilePictureUpdated] = useState(true); // Initialize to true
+
+    const contextValue = {
+        userProfilePicture,
+        setUserProfilePicture,
+        profilePictureUpdated,
+        setProfilePictureUpdated,
+    };
 
     return (
-        <UserContext.Provider value={{ userProfilePicture, setUserProfilePicture }}>
+        <UserProfileContext.Provider value={contextValue}>
             {children}
-        </UserContext.Provider>
+        </UserProfileContext.Provider>
     );
 };
 
-export const useUserContext = () => {
-    return useContext(UserContext);
+export const useUserProfileContext = () => useContext(UserProfileContext);
+
+export const HeaderProvider = ({ children }) => {
+    const [headerUserProfilePicture, setHeaderUserProfilePicture] = useState(null);
+
+    const contextValue = {
+        headerUserProfilePicture,
+        setHeaderUserProfilePicture,
+    };
+
+    return (
+        <HeaderContext.Provider value={contextValue}>
+            {children}
+        </HeaderContext.Provider>
+    );
 };
+
+export const useHeaderContext = () => useContext(HeaderContext);
