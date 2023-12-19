@@ -105,16 +105,16 @@ export default function UserProfileInfo({toggleEditProfile}) {
                         <div className="profile__edit__title">{userData.bio}</div>
                     </div>
                 </div>
-                {username === scrollingUserUsername &&
-                    <button onClick={handleLogoutAndNavigate} className="nav__img profile">
-                        <div className="display__flex">
-                            <div className="log__out">Выйти из аккаунта</div>
-                            <div>
-                                <img src="/img/Group 89.png" alt="Group 89"/>
-                            </div>
-                        </div>
-                    </button>
-                }
+                {/*{username === scrollingUserUsername &&*/}
+                {/*    <button onClick={handleLogoutAndNavigate} className="nav__img profile">*/}
+                {/*        <div className="display__flex">*/}
+                {/*            <div className="log__out">Выйти из аккаунта</div>*/}
+                {/*            <div>*/}
+                {/*                <img src="/img/Group 89.png" alt="Group 89"/>*/}
+                {/*            </div>*/}
+                {/*        </div>*/}
+                {/*    </button>*/}
+                {/*}*/}
             </div>
         </>
     )

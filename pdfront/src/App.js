@@ -26,6 +26,7 @@ import PsychoSchedule from "./components/PsychoForm/psychoSchedule";
 import ProtectedRoute from "./ProtectedRoute";
 import {EditArticle} from "./components/Articles/EditArticle";
 import ArticleDetails from "./components/Articles/ArticleDetails";
+import {EditThread} from "./components/Threads/EditThread";
 
 function App() {
 
@@ -53,8 +54,9 @@ function App() {
                 <Route path='/thread/:postId' element={<ProtectedRoute element={<Comms />} />} />
                 <Route path='/psycho_schedule' element={<ProtectedRoute element={<PsychoSchedule />} />} />
                 <Route path='/create_article' element={<ProtectedRoute element={<CreateArticle/>}/>} />
-                <Route path='/article/:id' element={<ProtectedRoute element={<ArticleDetails/>}/>} />
+                <Route path='/article/:articleId' element={<ProtectedRoute element={<ArticleDetails/>}/>} />
                 <Route path='/edit_article/:articleId' element={<ProtectedRoute element={<EditArticle/>}/>} />
+                <Route path='/edit_thread/:threadId' element={<ProtectedRoute element={<EditThread/>}/>} />
             </Routes>
 
         </div>

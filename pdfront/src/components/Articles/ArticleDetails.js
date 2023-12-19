@@ -1,42 +1,40 @@
 // ArticleDetails.js
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import ArticleService from '../../backend/Article';
+import {useParams} from "react-router-dom";
+import Menu from "../Menu/Menu";
 
-const ArticleDetails = ({ match }) => {
+const ArticleDetails = () => {
     const [article, setArticle] = useState(null);
     const [articlePicture, setArticlePicture] = useState(null);
+    const {articleId} = useParams();
+
 
     useEffect(() => {
         const fetchArticleDetails = async () => {
-            try {
-                const { params } = match;
-                const articleId = params.id;
+            // Fetch article details
+            const fetchedArticle = await ArticleService.getArticle(articleId);
+            setArticle(fetchedArticle);
 
-                // Fetch article details
-                const fetchedArticle = await ArticleService.getArticle(articleId);
-                setArticle(fetchedArticle);
+            // Fetch article picture
+            const imgElement = await ArticleService.getArticlePicture(articleId);
+            setArticlePicture(imgElement);
 
-                // Fetch article picture
-                const imgElement = await ArticleService.getArticlePicture(articleId);
-                setArticlePicture(imgElement);
-            } catch (error) {
-                console.error('Error fetching article details: ', error);
-            }
         };
 
         fetchArticleDetails();
-    }, [match]);
+    }, [articleId]);
 
-    if (!article) {
-        return <div>Loading...</div>;
-    }
 
     return (
         <div>
-            {/* Display article details, title, content, and picture */}
-            <h1>{article.title}</h1>
-            <div>{article.content}</div>
-            {articlePicture && <img src={articlePicture.src} alt="" />}
+            {article &&
+                <>
+                    <h1>{article.title}</h1>
+                    {articlePicture && <img height={"20%"} width={"30%"} src={articlePicture.src} alt=""/>}
+                    <div>{article.content}</div>
+                </>
+            }
         </div>
     );
 };

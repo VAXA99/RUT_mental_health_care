@@ -59,6 +59,17 @@ public class CommunicationController {
         }
     }
 
+    @GetMapping("/userPosts/{userId}")
+    public ResponseEntity<List<PostDto>> getUserPosts(@PathVariable Long userId) {
+        try {
+            List<PostDto> posts = communicationService.getUserPosts(userId);
+            return ResponseEntity.ok(posts);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+
+
     @PostMapping("/like/post/{postId}")
     public ResponseEntity<String> likePost(@PathVariable Long postId, @RequestParam Long userId, @RequestParam Boolean isLike) {
         try {
@@ -134,7 +145,8 @@ public class CommunicationController {
         try {
             communicationService.editPost(postId,
                     postRequest.getTitle(),
-                    postRequest.getContent());
+                    postRequest.getContent(),
+                    postRequest.getTagNames());
             return ResponseEntity.ok("Post edited successfully");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error editing post");

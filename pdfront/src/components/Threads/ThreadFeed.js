@@ -81,7 +81,7 @@ export function ThreadFeed() {
         };
 
         fetchPosts();
-    }, [sortType]);
+    }, [sortType, scrollingUserID]);
 
 
     useEffect(() => {
@@ -129,6 +129,17 @@ export function ThreadFeed() {
         }
     };
 
+    const handleDelete = async (postId) => {
+        try {
+            // Call the deletePost API
+            await communication.deleteThread(postId);
+
+            // Update the state to remove the deleted post
+            setPosts((prevPosts) => prevPosts.filter((post) => post.id !== postId));
+        } catch (error) {
+            console.error("Error deleting post:", error);
+        }
+    };
 
     return (
         <>
@@ -215,11 +226,20 @@ export function ThreadFeed() {
                                     <button className='edit__img__container' onClick={() => togglePopup(post.id)}>
                                         <img src="/img/троеточие.png" alt="" width='100%' height='100%'/>
                                     </button>
-                                    {postsWithPopup[post.id] &&
+                                    {postsWithPopup[post.id] && (
                                         <div className='parametr__buttons__container'>
-                                            <div><button className='post'>edit</button></div>
-                                            <div><button className='post delete'>delete</button></div>
-                                        </div>}
+                                            <div>
+                                                <button type={"button"} className='post'>
+                                                    <Link to={`/edit_thread/${post.id}`}>Изменить</Link>
+                                                </button>
+                                            </div>
+                                            <div>
+                                                <button type={"button"} className='post delete' onClick={() => handleDelete(post.id)}>
+                                                    Удалить
+                                                </button>
+                                            </div>
+                                        </div>
+                                    )}
                                 </>
                             ) : (<></>)}
                         </div>

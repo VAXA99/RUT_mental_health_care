@@ -68,4 +68,24 @@ export default {
         }
     },
 
+    deleteThread: async (threadId) => {
+        try {
+            const response = await api.delete(`/delete/post/${threadId}`)
+            return response.data;
+        } catch (error) {
+            console.error('Error deleting thread: ', error);
+            return false;
+        }
+    },
+
+    editThread: async (threadId, postRequest) => {
+        try{
+            const response = await api.patch(`/edit/post/${threadId}`, postRequest);
+            return response.data;
+        } catch (error) {
+            console.error("Error editing post: ", error);
+            return false;
+        }
+    }
+
 }

@@ -4,15 +4,17 @@ import React, {useEffect, useState} from "react";
 import consultation from "../../backend/Consultation";
 import communication from "../../backend/Communication";
 import auth from "../../backend/Auth";
-import {useNavigate} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 
-export function ThreadCreation() {
+export function EditThread() {
     const [selectedProblems, setSelectedProblems] = useState([]);
     const [problemsFromBackend, setProblemsFromBackend] = useState([]);
     const [customTags, setCustomTags] = useState([]);
     const [currentTag, setCurrentTag] = useState('');
     const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
+    const {threadId} = useParams();
+    const scrollingUserId = auth.getUserId();
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -29,6 +31,22 @@ export function ThreadCreation() {
 
         fetchProblems();
     }, []);
+
+    useEffect(() => {
+        const getThreadData = async () => {
+            try {
+                const response = await communication.getPost(threadId, scrollingUserId);
+                console.log(response);
+                setSelectedProblems(response.tagNames);
+                setContent(response.content);
+                setTitle(response.title);
+            } catch (error) {
+                return false;
+            }
+        }
+        getThreadData();
+
+    }, [threadId, scrollingUserId])
 
     const handleCheckboxChange = (problem) => {
         // Update the selected problems based on checkbox changes
@@ -90,7 +108,9 @@ export function ThreadCreation() {
                 tagNames: allTags,
             };
 
-            await communication.writePost(postRequest);
+            const response = await communication.editThread(threadId, postRequest);
+            console.log(response); // Handle the response as needed
+            await communication.getFeed(scrollingUserId, "NEWEST_TO_OLDEST", []);
             navigate("/feed");
         } catch (error) {
             console.error('Error creating post', error); // Handle errors as needed
@@ -125,7 +145,7 @@ export function ThreadCreation() {
                                 className="form__page__subtitle input forum__page title"
                                 defaultValue={""}
                                 onChange={handleTitleChange}
-                                placeholder={"Напишите заголовок"}
+                                placeholder={title}
                             ></textarea>
                             <br/>
                             <textarea
@@ -133,7 +153,7 @@ export function ThreadCreation() {
                                 className="form__page__subtitle input forum__page"
                                 defaultValue={""}
                                 onChange={handleContentChange}
-                                placeholder={"Начните, что думаете"}
+                                placeholder={content}
                             ></textarea>
                         </div>
                     </div>
@@ -149,6 +169,7 @@ export function ThreadCreation() {
                                                 type="checkbox"
                                                 value={problem.description}
                                                 onChange={() => handleCheckboxChange(problem.description)}
+                                                checked={selectedProblems.includes(problem.description)}
                                             />
                                             <div className="form info problem">{problem.description}</div>
                                         </label>
@@ -181,7 +202,7 @@ export function ThreadCreation() {
                         </div>
                     </div>
                     <button className="next__step thread__creation" type={"submit"} onClick={handleSubmit}>
-                        Опубликовать
+                        Изменить
                     </button>
 
                 </div>

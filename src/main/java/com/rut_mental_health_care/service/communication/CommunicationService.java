@@ -16,6 +16,6 @@ public interface CommunicationService {
     void editComment(Long commentId, String newContent);
     void deleteComment(Long commentId);
     void writePost(Long userId, String title, String content, List<String> tagNames);
-    void editPost(Long postId, String newTitle, String newContent);
+    void editPost(Long postId, String newTitle, String newContent, List<String> tagNames);
     void deletePost(Long postId);
 }

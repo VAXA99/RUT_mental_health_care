@@ -11,10 +11,19 @@ export function CreateArticle() {
     const [content, setContent] = useState('');
     const [coverImage, setCoverImage] = useState(null);
     const navigate = useNavigate();
+    const [fileName, setFileName] = useState('');
 
-    const handleFileChange = (e) => {
-        const file = e.target.files[0];
+
+    const handleFileChange = (event) => {
+        const file = event.target.files[0];
         setCoverImage(file);
+
+        // Update the filename
+        if (file) {
+            setFileName(file.name);
+        } else {
+            setFileName('');
+        }
     };
 
     const handleCreateArticle = async () => {
@@ -83,6 +92,7 @@ export function CreateArticle() {
                                         className="input-file article"
                                         onChange={handleFileChange}
                                     />
+                                    <div><span className="input-file-text">{fileName}</span></div>
                                     <span className="input-file-btn article">Прикрепите обложку</span>
                                 </label>
                             </div>

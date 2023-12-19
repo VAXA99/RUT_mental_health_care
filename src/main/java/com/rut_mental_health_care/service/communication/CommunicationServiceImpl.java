@@ -218,13 +218,25 @@ public class CommunicationServiceImpl implements CommunicationService {
     @Override
     @Async
     @Transactional
-    public void editPost(Long postId, String newTitle, String newContent) {
+    public void editPost(Long postId, String newTitle, String newContent, List<String> tagNames) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new EntityNotFoundException("Post not found with ID: " + postId));
 
         post.setTitle(newTitle);
         post.setContent(newContent);
         post.setIsEdited(true);
+
+        List<Tag> tags = new ArrayList<>();
+        for (String tagName : tagNames) {
+            Tag tag = tagRepository.findByDescription(tagName).orElseGet(() -> {
+                Tag newTag = new Tag();
+                newTag.setDescription(tagName);
+                return tagRepository.save(newTag);
+            });
+            tags.add(tag);
+        }
+
+        post.setTags(tags);
 
         postRepository.save(post);
     }

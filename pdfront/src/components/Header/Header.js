@@ -70,18 +70,18 @@ export default function Header() {
                     <div className="header__nav">
                         {authenticated ? (
                             <div className="display__flex align__items">
-                                <button
-                                    type="button"
-                                    id="popup_link"
-                                    className="nav__img focus"
-                                    onClick={togglePopup}
-                                >
-                                    <img
-                                        className="header__nav__img focus"
-                                        src="/img/иконка_уведомление.png"
-                                        alt=""
-                                    />
-                                </button>
+                                {/*<button*/}
+                                {/*    type="button"*/}
+                                {/*    id="popup_link"*/}
+                                {/*    className="nav__img focus"*/}
+                                {/*    onClick={togglePopup}*/}
+                                {/*>*/}
+                                {/*    <img*/}
+                                {/*        className="header__nav__img focus"*/}
+                                {/*        src="/img/иконка_уведомление.png"*/}
+                                {/*        alt=""*/}
+                                {/*    />*/}
+                                {/*</button>*/}
                                 <div className="img__container">
                                     <Link to={`/user_profile/${username}`}>
                                         {headerUserProfilePicture && (
