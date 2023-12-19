@@ -11,7 +11,7 @@ import Sign_up from './components/SignUp/Sign_up.js';
 import {Specialists} from './components/Specialists/Specialists.js';
 import {Comms} from './components/Threads/comms.js';
 import {Login} from './components/Login/Login.js';
-import {ChangePassword} from './components/Change password/ChangePassword.js';
+import {ResetPassword} from './components/ResetPassword/ResetPassword.js';
 
 import {Route, Routes} from "react-router-dom";
 import {SendEmail} from './components/Send email/SendEmail.js';
@@ -45,7 +45,6 @@ function App() {
                 <Route exact path='/sign_up' element={<Sign_up/>}/>
                 <Route exact path='/spec' element={<Specialists/>}/>
                 <Route path='/articles' element={<Articles/>}/>
-                <Route path='/change_pass' element={<ProtectedRoute element={<ChangePassword />} />} />
                 <Route path='/send_email' element={<ProtectedRoute element={<SendEmail />} />} />
                 <Route path='/consultation_appointment' element={<ProtectedRoute element={<ConsultationAppointment />} />} />
                 <Route path='/user_profile/:username' element={<ProtectedRoute element={<UserProfile />} />} />

@@ -1,7 +1,7 @@
 import React, {useState} from 'react'
 import {Link, useNavigate} from 'react-router-dom'
 
-export const ChangePassword = () => {
+export const ResetPassword = () => {
     /*
     // State to manage user input
     const [username, setUsername] = useState('');

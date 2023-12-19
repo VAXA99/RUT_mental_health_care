@@ -116,9 +116,9 @@ public class AuthController {
         // Get the server name
         String serverName = request.getServerName();
         // Get the server port
-        int serverPort = request.getServerPort();
+        // int serverPort = request.getServerPort();
 
-        return scheme + "://" + serverName + ":" + serverPort;
+        return scheme + "://" + serverName + ":" + "3030";
     }
 
     @PostMapping("/user/savePassword")
