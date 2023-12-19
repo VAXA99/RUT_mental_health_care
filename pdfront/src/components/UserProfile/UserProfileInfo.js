@@ -83,11 +83,21 @@ export default function UserProfileInfo({toggleEditProfile}) {
                         <input className="profile__edit__input email" type="email" readOnly value={userData.email}
                                placeholder="Емэил"/>
                     </div>
-                    <div className="profile__edit__info age">
-                        <div className="profile__edit__title">Количество постов</div>
-                        <input className="profile__edit__input age" type="text" value={userData.totalPosts}
-                               placeholder="---" readOnly/>
-                    </div>
+                </div>
+                <div className="profile__edit__info age">
+                    <div className="profile__edit__title">Количество постов</div>
+                    <input className="profile__edit__input age" type="text" value={userData.totalPosts}
+                           placeholder="---" readOnly/>
+                </div>
+                <div className="profile__edit__info age">
+                    <div className="profile__edit__title">Количество комментариев</div>
+                    <input className="profile__edit__input age" type="text" value={userData.totalComments}
+                           placeholder="---" readOnly/>
+                </div>
+                <div className="profile__edit__info age">
+                    <div className="profile__edit__title">Количество лайков</div>
+                    <input className="profile__edit__input age" type="text" value={userData.totalLikes}
+                           placeholder="---" readOnly/>
                 </div>
                 <div className="profile__edit__info textarea">
                     <div className="profile__edit__title">Обо мне</div>

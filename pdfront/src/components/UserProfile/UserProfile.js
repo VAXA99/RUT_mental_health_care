@@ -97,7 +97,10 @@ export default function UserProfile() {
                     {isEditing ? (
                         <EditUserProfileInfo toggleEditProfile={toggleEditProfile}/>
                     ) : (
-                        <UserProfileInfo toggleEditProfile={toggleEditProfile}/>
+                        <>
+                            <UserProfileInfo toggleEditProfile={toggleEditProfile}/>
+
+                        </>
                     )}
                 </div>
             </div>

@@ -31,7 +31,7 @@ export default {
         }
     },
 
-    getAllTags: async () => {
+    getAllProblems: async () => {
         try {
             const response = await api.get(`/getProblems`)
             return response.data;
@@ -67,6 +67,20 @@ export default {
         try {
             const formattedDate = format(chosenDate, 'yyyy-MM-dd', { timeZone: 'Europe/Moscow' });
             return await axios.get(`${baseUrl}/consultations/allAvailable`, {
+                params: {
+                    chosenDate: formattedDate,
+                    psychologistId,
+                },
+            });
+        } catch (error) {
+            console.error('Error fetching available consultations:', error);
+        }
+    },
+
+    getAllUnavailable: async (chosenDate, psychologistId) => {
+        try {
+            const formattedDate = format(chosenDate, 'yyyy-MM-dd', { timeZone: 'Europe/Moscow' });
+            return await api.get(`/allUnavailable`, {
                 params: {
                     chosenDate: formattedDate,
                     psychologistId,

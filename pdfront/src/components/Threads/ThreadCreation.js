@@ -18,7 +18,7 @@ export function ThreadCreation() {
         const fetchProblems = async () => {
             try {
                 // Assuming your backend API provides a function to get problems
-                const problems = await consultation.getAllTags();
+                const problems = await communication.getAllTags();
                 setProblemsFromBackend(problems);
             } catch (error) {
                 console.error("Error fetching problems from the backend", error);

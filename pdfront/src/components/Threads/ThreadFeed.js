@@ -15,13 +15,14 @@ export function ThreadFeed() {
     const [userProfilePictures, setUserProfilePictures] = useState({});
     const [problemsFromBackend, setProblemsFromBackend] = useState([]);
     const [selectedProblems, setSelectedProblems] = useState([]);
+    const scrollingUserID = auth.getUserId();
 
 
     useEffect(() => {
         // Fetch problems from the backend when the component mounts
         const fetchProblems = async () => {
             // Assuming your backend API provides a function to get problems
-            const problems = await consultation.getAllTags();
+            const problems = await communication.getAllTags();
             setProblemsFromBackend(problems);
         };
 
@@ -84,19 +85,19 @@ export function ThreadFeed() {
 
 
     useEffect(() => {
-        const fetchUserProfilePhoto = async (userId) => {
-            const imgElement = await getUserProfilePhoto(userId);
+        const fetchUserProfilePhoto = async (username) => {
+            const imgElement = await getUserProfilePhoto(username);
             setUserProfilePictures((prevProfilePictures) => ({
                 ...prevProfilePictures,
-                [userId]: imgElement,
+                [username]: imgElement,
             }));
         };
 
         // Fetch user profile picture for each post
         for (const post of posts) {
-            const userId = post.userDto.id;
-            if (!userProfilePictures[userId]) {
-                fetchUserProfilePhoto(userId);
+            const username = post.userDto.username;
+            if (!userProfilePictures[username]) {
+                fetchUserProfilePhoto(username);
             }
         }
     }, [posts, userProfilePictures]);
@@ -183,10 +184,10 @@ export function ThreadFeed() {
                         <div key={post.id} className="form main">
                             <div className="theme__container main__page">
                                 <div className="display__flex">
-                                    {userProfilePictures[post.userDto.id] && (
+                                    {userProfilePictures[post.userDto.username] && (
                                         <div className="theme__img">
                                             <img
-                                                src={userProfilePictures[post.userDto.id].src}
+                                                src={userProfilePictures[post.userDto.username].src}
                                                 width="100%"
                                                 height="100%"
                                             />
@@ -209,19 +210,18 @@ export function ThreadFeed() {
                                     <div className="like__count">{post.likeCount}</div>
                                 </div>
                             </div>
-                            <button className='edit__img__container' onClick={() => togglePopup(post.id)}>
-                                <img src="/img/троеточие.png" alt="" width='100%' height='100%'/>
-                            </button>
-                            {postsWithPopup[post.id] &&
-                                <div className='parametr__buttons__container'>
-                                    <div>
-                                        <button className='post'>edit</button>
-                                    </div>
-                                    <div>
-                                        <button className='post delete'>delete</button>
-                                    </div>
-                                </div>}
-
+                            {scrollingUserID === post.userDto.id ? (
+                                <>
+                                    <button className='edit__img__container' onClick={() => togglePopup(post.id)}>
+                                        <img src="/img/троеточие.png" alt="" width='100%' height='100%'/>
+                                    </button>
+                                    {postsWithPopup[post.id] &&
+                                        <div className='parametr__buttons__container'>
+                                            <div><button className='post'>edit</button></div>
+                                            <div><button className='post delete'>delete</button></div>
+                                        </div>}
+                                </>
+                            ) : (<></>)}
                         </div>
                     ))}
                 </div>

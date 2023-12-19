@@ -56,6 +56,16 @@ export default {
         } catch (error) {
             console.error("error commenting", error);
         }
-    }
+    },
+
+    getAllTags: async () => {
+        try {
+            const response = await api.get(`/allAvailableTags`)
+            return response.data;
+        } catch (error) {
+            console.error('Error getting tags: ', error);
+            return false;
+        }
+    },
 
 }

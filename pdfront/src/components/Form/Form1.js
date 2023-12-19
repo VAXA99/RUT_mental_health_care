@@ -12,7 +12,7 @@ export function Form1({ onSubmit, initialData }) {
         const fetchProblems = async () => {
             try {
                 // Assuming your backend API provides a function to get problems
-                const problems = await consultation.getAllTags();
+                const problems = await consultation.getAllProblems();
                 setProblemsFromBackend(problems);
             } catch (error) {
                 console.error("Error fetching problems from the backend", error);
