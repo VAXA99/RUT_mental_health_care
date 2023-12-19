@@ -9,5 +9,6 @@ public interface FileService {
     File uploadFile(MultipartFile multipartFile) throws IOException;
     File uploadDefaultProfilePicture() throws IOException;
     File findByUserId(Long userId);
+    File findByArticleId(Long articleId);
     File deleteByUserId(Long userId) throws IOException;
 }

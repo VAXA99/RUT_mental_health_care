@@ -4,16 +4,21 @@ import com.rut_mental_health_care.dto.ArticleDto;
 import com.rut_mental_health_care.dto.PostDto;
 import com.rut_mental_health_care.dto.UserDto;
 import com.rut_mental_health_care.model.Article;
+import com.rut_mental_health_care.model.File;
 import com.rut_mental_health_care.model.Post;
 import com.rut_mental_health_care.model.User;
 import com.rut_mental_health_care.repository.ArticleRepository;
 import com.rut_mental_health_care.repository.UserRepository;
+import com.rut_mental_health_care.service.file.FileService;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -21,16 +26,18 @@ import java.util.stream.Collectors;
 public class ArticleServiceImpl implements ArticleService {
     private final ArticleRepository articleRepository;
     private final UserRepository userRepository;
-
+    private final FileService fileService;
     private final ModelMapper modelMapper;
 
 
     @Autowired
     public ArticleServiceImpl(ArticleRepository articleRepository,
                               UserRepository userRepository,
+                              FileService fileService,
                               ModelMapper modelMapper) {
         this.articleRepository = articleRepository;
         this.userRepository = userRepository;
+        this.fileService = fileService;
         this.modelMapper = modelMapper;
     }
 
@@ -68,6 +75,22 @@ public class ArticleServiceImpl implements ArticleService {
     @Async
     public void deleteArticle(Long articleId) {
         articleRepository.deleteById(articleId);
+    }
+
+    @Override
+    @Transactional
+    public File getArticlePicture(Long articleId) {
+        return fileService.findByArticleId(articleId);
+    }
+
+    @Override
+    public void uploadArticlePicture(Long articleId, MultipartFile file) throws IOException {
+        Article article = articleRepository.findById(articleId)
+                .orElseThrow(() -> new EntityNotFoundException("Article not found with ID:" + articleId));
+
+        article.setArticlePicture(fileService.uploadFile(file));
+
+        articleRepository.save(article);
     }
 
     private ArticleDto convertToArticleDTO(Article article) {

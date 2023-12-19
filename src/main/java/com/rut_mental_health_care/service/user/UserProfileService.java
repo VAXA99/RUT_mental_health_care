@@ -1,7 +1,6 @@
 package com.rut_mental_health_care.service.user;
 
 
-import com.rut_mental_health_care.dto.PostDto;
 import com.rut_mental_health_care.dto.UserProfileDto;
 import com.rut_mental_health_care.model.File;
 import org.springframework.web.multipart.MultipartFile;

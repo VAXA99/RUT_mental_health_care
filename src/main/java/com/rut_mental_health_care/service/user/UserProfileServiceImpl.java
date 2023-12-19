@@ -1,11 +1,14 @@
 package com.rut_mental_health_care.service.user;
 
+import com.rut_mental_health_care.dto.ArticleDto;
 import com.rut_mental_health_care.dto.PostDto;
 import com.rut_mental_health_care.dto.UserDto;
 import com.rut_mental_health_care.dto.UserProfileDto;
+import com.rut_mental_health_care.model.Article;
 import com.rut_mental_health_care.model.File;
 import com.rut_mental_health_care.model.Post;
 import com.rut_mental_health_care.model.User;
+import com.rut_mental_health_care.repository.ArticleRepository;
 import com.rut_mental_health_care.repository.PostRepository;
 import com.rut_mental_health_care.repository.TagRepository;
 import com.rut_mental_health_care.repository.UserRepository;
@@ -27,6 +30,7 @@ import java.util.stream.Collectors;
 public class UserProfileServiceImpl implements UserProfileService {
 
     private final PostRepository postRepository;
+    private final ArticleRepository articleRepository;
     private final UserRepository userRepository;
     private final TagRepository tagRepository;
     private final FileService fileService;
@@ -34,11 +38,13 @@ public class UserProfileServiceImpl implements UserProfileService {
 
     @Autowired
     public UserProfileServiceImpl(PostRepository postRepository,
+                                  ArticleRepository articleRepository,
                                   UserRepository userRepository,
                                   TagRepository tagRepository,
                                   FileService fileService,
                                   ModelMapper modelMapper) {
         this.postRepository = postRepository;
+        this.articleRepository = articleRepository;
         this.userRepository = userRepository;
         this.tagRepository = tagRepository;
         this.fileService = fileService;
@@ -112,16 +118,12 @@ public class UserProfileServiceImpl implements UserProfileService {
 
     private List<PostDto> getUserPosts(Long userId) {
         List<Post> posts = postRepository.findAllByUserId(userId);
-        List<PostDto> postDtos = posts.stream()
-                .map(post -> {
-                    PostDto postDto = convertToPostDTO(post);
-                    List<String> tagNames = tagRepository.findTagsByPostId(postDto.getId());
-                    postDto.setTagNames(tagNames);
-                    return postDto;
-                })
-                .collect(Collectors.toList());
+        return getPostDtos(posts);
+    }
 
-        return postDtos;
+    private List<ArticleDto> getUserArticles(Long userId) {
+        List<Article> articles = articleRepository.findAllByUserId(userId);
+        return getArticleDtos(articles);
     }
 
     private long getUserPostCount(Long userId) {
@@ -151,6 +153,7 @@ public class UserProfileServiceImpl implements UserProfileService {
         int age = getUserAge(userId);
         int sex = getUserSex(userId);
         List<PostDto> postDtos = getUserPosts(userId);
+        List<ArticleDto> articleDtos =getUserArticles(userId);
         long totalPosts = getUserPostCount(userId);
         long totalComments = getTotalCommentsOnUserPosts(userId);
         long totalLikes = getTotalLikesOnUserPosts(userId);
@@ -170,6 +173,7 @@ public class UserProfileServiceImpl implements UserProfileService {
                 age,
                 sex,
                 postDtos,
+                articleDtos,
                 totalPosts,
                 totalComments,
                 totalLikes);
@@ -259,6 +263,7 @@ public class UserProfileServiceImpl implements UserProfileService {
         user.setSex(sex);
     }
 
+    @Override
     @Transactional
     public File getProfilePicture(String username) {
         Long userId = userRepository.findUserIdByUsername(username);
@@ -298,4 +303,33 @@ public class UserProfileServiceImpl implements UserProfileService {
         return postDto;
     }
 
+    private List<PostDto> getPostDtos(List<Post> posts) {
+        List<PostDto> postDtos = posts.stream()
+                .map(this::convertToPostDTO)
+                .collect(Collectors.toList());
+        for (PostDto postDto: postDtos) {
+            List<String> tagNames = tagRepository.findTagsByPostId(postDto.getId());
+            postDto.setTagNames(tagNames);
+        }
+
+        return postDtos;
+    }
+
+    private ArticleDto convertToArticleDTO(Article article) {
+        ArticleDto articleDto = modelMapper.map(article, ArticleDto.class);
+
+        if (article.getUser() != null) {
+            UserDto userDto = modelMapper.map(article.getUser(), UserDto.class);
+            articleDto.setUserDto(userDto);
+        }
+
+        return articleDto;
+    }
+
+    private List<ArticleDto> getArticleDtos(List<Article> articles) {
+
+        return articles.stream()
+                .map(this::convertToArticleDTO)
+                .collect(Collectors.toList());
+    }
 }
