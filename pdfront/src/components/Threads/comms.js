@@ -14,6 +14,19 @@ export function Comms() {
     const [commentContent, setCommentContent] = useState("");
     const [comments, setComments] = useState([]);
     const [commentsWithPopup, setCommentsWithPopup] = useState({});
+    const [editingCommentId, setEditingCommentId] = useState(null);
+    const [editedCommentContent, setEditedCommentContent] = useState("");
+
+    const startEditingComment = (commentId, content) => {
+        setEditingCommentId(commentId);
+        setEditedCommentContent(content);
+    };
+
+    // Function to cancel editing a comment
+    const cancelEditingComment = () => {
+        setEditingCommentId(null);
+        setEditedCommentContent("");
+    };
 
     useEffect(() => {
         // Load existing comments when the component mounts
@@ -114,6 +127,37 @@ export function Comms() {
         }
     };
 
+    const submitEditedComment = async (commentId) => {
+        try {
+            // Make sure there is content before submitting the edited comment
+            if (editedCommentContent.trim() === "") {
+                return;
+            }
+
+            const commentRequest = {
+                userId: scrollingUserId,
+                content: editedCommentContent,
+            }
+
+            // Call the API to update the comment content
+            await communication.editComment(commentId, commentRequest);
+
+            // Update the UI to reflect the edited comment
+            setComments((prevComments) =>
+                prevComments.map((comment) =>
+                    comment.id === commentId
+                        ? {...comment, content: editedCommentContent}
+                        : comment
+                )
+            );
+
+            // Reset editing state
+            setEditingCommentId(null);
+            setEditedCommentContent("");
+        } catch (error) {
+            console.error("Error editing comment:", error);
+        }
+    };
 
     return (
         <>
@@ -179,13 +223,31 @@ export function Comms() {
                                     <div className="display__flex">
                                         {userProfilePictures[comment.userDto.username] && (
                                             <div className="theme__img">
-                                                <img src={userProfilePictures[comment.userDto.username].src} width="100%"
+                                                <img src={userProfilePictures[comment.userDto.username].src}
+                                                     width="100%"
                                                      height="100%" alt=""/>
                                             </div>
                                         )}
                                         <div className="form__theme">{comment.userDto.username}</div>
                                     </div>
-                                    <div className="theme__info">{comment.content}</div>
+                                    {editingCommentId === comment.id ? (
+                                        // Display input field for editing
+                                        <div className="theme__info">
+                                <textarea
+                                    value={editedCommentContent}
+                                    onChange={(e) => setEditedCommentContent(e.target.value)}
+                                ></textarea>
+                                            <div className="action__button">
+                                                <button onClick={() => submitEditedComment(comment.id)}>Подтвердить редактирование</button>
+                                                <button onClick={cancelEditingComment}>Отмена</button>
+                                            </div>
+                                        </div>
+                                    ) : (
+                                        // Display comment content as text
+                                        <div className="theme__info">
+                                            {comment.content}
+                                        </div>
+                                    )}
                                     {/*<div className="action__button">*/}
                                     {/*    <button className="action__button__element">*/}
                                     {/*        <img src='/img/icons8-заполненная-тема-96 1.png' width="110%"*/}
@@ -207,21 +269,26 @@ export function Comms() {
                                             <button className='edit__img__container' onClick={() => togglePopup(comment.id)}>
                                                 <img src="/img/троеточие.png" alt="" width='100%' height='100%'/>
                                             </button>
-                                            {commentsWithPopup[comment.id] && (
-                                                <div className='parametr__buttons__container'>
-                                                    <div>
-                                                        <button type={"button"} className='post'>
-                                                            {/*<Link to={`/edit_thread/${comment.id}`}>Изменить</Link>*/}
-                                                            Изменить
-                                                        </button>
-                                                    </div>
-                                                    <div>
-                                                        <button type={"button"} className='post delete' onClick={() => handleDelete(comment.id)}>
-                                                            Удалить
-                                                        </button>
-                                                    </div>
+                                            <div className='parametr__buttons__container'>
+                                                <div>
+                                                    <button
+                                                        type={"button"}
+                                                        className='post'
+                                                        onClick={() => startEditingComment(comment.id, comment.content)}
+                                                    >
+                                                        Изменить
+                                                    </button>
                                                 </div>
-                                            )}
+                                                <div>
+                                                    <button
+                                                        type={"button"}
+                                                        className='post delete'
+                                                        onClick={() => handleDelete(comment.id)}
+                                                    >
+                                                        Удалить
+                                                    </button>
+                                                </div>
+                                            </div>
                                         </>
                                     ) : (<></>)}
                                 </div>

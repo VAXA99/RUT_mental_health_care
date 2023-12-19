@@ -133,9 +133,8 @@ public class CommunicationServiceImpl implements CommunicationService {
     }
 
     @Override
-    @Async
     @Transactional
-    public void commentPost(Long postId, Long userId, String content) {
+    public Long commentPost(Long postId, Long userId, String content) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new EntityNotFoundException("Post not found with ID: " + postId));
 
@@ -149,6 +148,8 @@ public class CommunicationServiceImpl implements CommunicationService {
         comment.setContent(content);
 
         commentRepository.save(comment);
+
+        return comment.getId();
     }
 
     @Override

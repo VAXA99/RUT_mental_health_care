@@ -94,13 +94,13 @@ public class CommunicationController {
     }
 
     @PostMapping("/comment/post/{postId}")
-    public ResponseEntity<String> commentPost(@PathVariable Long postId, @RequestBody CommentRequest commentRequest) {
+    public ResponseEntity<?> commentPost(@PathVariable Long postId, @RequestBody CommentRequest commentRequest) {
         try {
-            communicationService.commentPost(postId,
+            Long commentId = communicationService.commentPost(postId,
                     commentRequest.getUserId(),
                     commentRequest.getContent()
             );
-            return ResponseEntity.ok("Comment added successfully");
+            return ResponseEntity.ok(commentId);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error adding comment");
         }

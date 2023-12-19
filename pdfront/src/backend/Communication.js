@@ -96,6 +96,16 @@ export default {
             console.error("Error deleting comment: ", error);
             return false;
         }
+    },
+
+    editComment: async (commentId, commentRequest) => {
+        try {
+            const response = await api.patch(`/edit/comment/${commentId}`, commentRequest);
+            return response.data;
+        } catch (error) {
+            console.error("Error editing comment", error);
+            return false;
+        }
     }
 
 }

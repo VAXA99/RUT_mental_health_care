@@ -11,7 +11,7 @@ public interface CommunicationService {
     PostDto getPostWithComments(Long scrollingUserId, Long postId);
     List<PostDto> getUserPosts(Long userId);
     void likePost(Long postId, Long userId, Boolean isLike);
-    void commentPost(Long postId, Long userId, String content);
+    Long commentPost(Long postId, Long userId, String content);
     void replyToComment(Long parentCommentId, Long userId, String content);
     void editComment(Long commentId, String newContent);
     void deleteComment(Long commentId);
